@@ -70,7 +70,7 @@ const TopNavbar = () => {
             className="p-2 max-[380px]:hidden"
             variant="light"
             icon={<FaDiscord className="size-full" />}
-            href="https://discord.gg/7tBsApQUnF"
+            href="https://discord.gg/5CETfHBD7R"
             target="_blank"
             rel="noopener noreferrer"
           />
