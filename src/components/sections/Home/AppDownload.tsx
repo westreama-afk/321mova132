@@ -21,7 +21,7 @@ const AppDownload: React.FC = () => {
           </h2>
           <p className="text-sm text-foreground/60">
             Download the 321movies Android app for the best streaming experience on your device.
-             fast, and always up to date.
+             fast, and always up to date working for both phone and tv.
           </p>
         </div>
 
