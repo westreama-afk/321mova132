@@ -1,0 +1,398 @@
+{
+  "generatedAt": "2026-02-19T22:33:09.750Z",
+  "summary": {
+    "total": 11,
+    "primaryOk": 5,
+    "secondaryOk": 6,
+    "bestOk": 11
+  },
+  "links": [
+    {
+      "service": "flowcast",
+      "source": "FlowCast",
+      "quality": 360,
+      "format": "mp4",
+      "directUrl": "https://bcdnxw.hakunaymatata.com/bt/550d78443111ca1b2818705688e561dc.mp4?sign=41cb782e9af1c45b95483ffbd0b39bf7&t=1771522124",
+      "wrapperUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D41cb782e9af1c45b95483ffbd0b39bf7%26t%3D1771522124&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "headers": {
+        "Referer": "https://filmboom.top/",
+        "Origin": "https://filmboom.top"
+      },
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D41cb782e9af1c45b95483ffbd0b39bf7%26t%3D1771522124&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "proxyRoute": "ts-proxy",
+      "proxyBasePrimary": "https://proxy1.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy2.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy1.fmoviez.online/ts-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D41cb782e9af1c45b95483ffbd0b39bf7%26t%3D1771522124&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "proxyUrlSecondary": "https://proxy2.fmoviez.online/ts-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D41cb782e9af1c45b95483ffbd0b39bf7%26t%3D1771522124&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "checks": {
+        "primary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        },
+        "secondary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/ts-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D41cb782e9af1c45b95483ffbd0b39bf7%26t%3D1771522124&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "source": "AsiaCloud",
+      "quality": "Hindi",
+      "format": "hls",
+      "directUrl": "https://lizer123.site/getm3u8/15P6FKU2",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Flizer123.site%2Fgetm3u8%2F15P6FKU2",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy2.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy1.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Flizer123.site%2Fgetm3u8%2F15P6FKU2",
+      "proxyUrlSecondary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Flizer123.site%2Fgetm3u8%2F15P6FKU2",
+      "checks": {
+        "primary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        },
+        "secondary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Flizer123.site%2Fgetm3u8%2F15P6FKU2",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "source": "AsiaCloud",
+      "quality": "English",
+      "format": "hls",
+      "directUrl": "https://i-arch-400.ekola405gmt.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP:1771530149:185.113.8.50:3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP%3A1771530149%3A185.113.8.50%3A3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy1.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy2.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP%3A1771530149%3A185.113.8.50%3A3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP%3A1771530149%3A185.113.8.50%3A3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        },
+        "secondary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP%3A1771530149%3A185.113.8.50%3A3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "source": "AsiaCloud",
+      "quality": "Bengali",
+      "format": "hls",
+      "directUrl": "https://i-arch-400.ekola405gmt.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP:1771530149:185.113.8.50:19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP%3A1771530149%3A185.113.8.50%3A19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy2.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy1.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP%3A1771530149%3A185.113.8.50%3A19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP%3A1771530149%3A185.113.8.50%3A19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        },
+        "secondary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP%3A1771530149%3A185.113.8.50%3A19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "source": "AsiaCloud",
+      "quality": "Tamil",
+      "format": "hls",
+      "directUrl": "https://i-arch-400.ekola405gmt.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP:1771530150:185.113.8.50:f586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP%3A1771530150%3A185.113.8.50%3Af586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy1.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy2.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP%3A1771530150%3A185.113.8.50%3Af586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP%3A1771530150%3A185.113.8.50%3Af586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        },
+        "secondary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP%3A1771530150%3A185.113.8.50%3Af586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "source": "AsiaCloud",
+      "quality": "Telugu",
+      "format": "hls",
+      "directUrl": "https://i-arch-400.ekola405gmt.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP:1771530150:185.113.8.50:a9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP%3A1771530150%3A185.113.8.50%3Aa9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy2.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy1.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP%3A1771530150%3A185.113.8.50%3Aa9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP%3A1771530150%3A185.113.8.50%3Aa9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        },
+        "secondary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP%3A1771530150%3A185.113.8.50%3Aa9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "source": "AsiaCloud",
+      "quality": "Hindi Subbed",
+      "format": "hls",
+      "directUrl": "https://i-arch-400.ekola405gmt.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP:1771530150:185.113.8.50:18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP%3A1771530150%3A185.113.8.50%3A18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy1.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy2.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP%3A1771530150%3A185.113.8.50%3A18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP%3A1771530150%3A185.113.8.50%3A18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        },
+        "secondary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fi-arch-400.ekola405gmt.com%2Fstream2%2Fi-arch-400%2Ff2309f6e1bf51879ce0396fca859e6e7%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP%3A1771530150%3A185.113.8.50%3A18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a%3A%3D%3DQTUdWMMpWR41Ue0QDTqV1d%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "primevids",
+      "source": "PrimeVids",
+      "quality": "HLS",
+      "format": "hls",
+      "directUrl": "https://67streams.online/movie/YEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2F67streams.online%2Fmovie%2FYEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy2.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy1.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2F67streams.online%2Fmovie%2FYEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2F67streams.online%2Fmovie%2FYEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        },
+        "secondary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2F67streams.online%2Fmovie%2FYEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "hindicast",
+      "source": "HindiCast",
+      "quality": 360,
+      "format": "mp4",
+      "directUrl": "https://bcdnxw.hakunaymatata.com/bt/550d78443111ca1b2818705688e561dc.mp4?sign=70247d68bbb6fed850f0da2f6ed68c30&t=1771522583",
+      "wrapperUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D70247d68bbb6fed850f0da2f6ed68c30%26t%3D1771522583&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "headers": {
+        "Referer": "https://filmboom.top/",
+        "Origin": "https://filmboom.top"
+      },
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D70247d68bbb6fed850f0da2f6ed68c30%26t%3D1771522583&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "proxyRoute": "ts-proxy",
+      "proxyBasePrimary": "https://proxy1.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy2.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy1.fmoviez.online/ts-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D70247d68bbb6fed850f0da2f6ed68c30%26t%3D1771522583&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "proxyUrlSecondary": "https://proxy2.fmoviez.online/ts-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D70247d68bbb6fed850f0da2f6ed68c30%26t%3D1771522583&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "checks": {
+        "primary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        },
+        "secondary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/ts-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F550d78443111ca1b2818705688e561dc.mp4%3Fsign%3D70247d68bbb6fed850f0da2f6ed68c30%26t%3D1771522583&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "guru",
+      "error": "No sources",
+      "checks": null,
+      "bestProxyUrl": null,
+      "bestProxyBase": null
+    },
+    {
+      "service": "ophim",
+      "source": "#Hà Nội (Vietsub) (Full)",
+      "quality": "HLS",
+      "format": "hls",
+      "directUrl": "https://s6.kkphimplayer6.com/20260203/45ROwPYw/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2F45ROwPYw%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy1.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy2.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2F45ROwPYw%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2F45ROwPYw%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        },
+        "secondary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2F45ROwPYw%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    },
+    {
+      "service": "ophim",
+      "source": "#Hà Nội (Thuyết Minh) (Full)",
+      "quality": "HLS",
+      "format": "hls",
+      "directUrl": "https://s6.kkphimplayer6.com/20260203/bxtEGMH7/index.m3u8",
+      "wrapperUrl": null,
+      "headers": null,
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2FbxtEGMH7%2Findex.m3u8",
+      "proxyRoute": "m3u8-proxy",
+      "proxyBasePrimary": "https://proxy2.fmoviez.online",
+      "proxyBaseSecondary": "https://proxy1.fmoviez.online",
+      "proxyUrlPrimary": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2FbxtEGMH7%2Findex.m3u8",
+      "proxyUrlSecondary": "https://proxy1.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2FbxtEGMH7%2Findex.m3u8",
+      "checks": {
+        "primary": {
+          "status": 206,
+          "ok": true,
+          "ct": "text/html; charset=utf-8"
+        },
+        "secondary": {
+          "status": 404,
+          "ok": false,
+          "ct": "text/html"
+        }
+      },
+      "bestProxyBase": "https://proxy2.fmoviez.online",
+      "bestProxyUrl": "https://proxy2.fmoviez.online/m3u8-proxy?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260203%2FbxtEGMH7%2Findex.m3u8",
+      "bestCheck": {
+        "status": 206,
+        "ok": true,
+        "ct": "text/html; charset=utf-8"
+      }
+    }
+  ]
+}

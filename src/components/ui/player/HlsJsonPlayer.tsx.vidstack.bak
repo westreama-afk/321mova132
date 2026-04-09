@@ -1,0 +1,1665 @@
+"use client";
+
+import { ContentType } from "@/types";
+import { cn } from "@/utils/helpers";
+import { Close, Server } from "@/utils/icons";
+import { decodePlayerStreamUrl } from "@/utils/playerUrlCodec";
+import { Spinner } from "@heroui/react";
+import { defineCustomElements } from "vidstack/elements";
+import { createElement, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+type LocalPlayerEventType = "play" | "pause" | "seeked" | "ended" | "timeupdate";
+
+interface PlaylistSource {
+  type?: string;
+  file?: string;
+  label?: string;
+  provider?: string;
+  default?: boolean;
+}
+
+interface PlaylistItem {
+  sources?: PlaylistSource[];
+}
+
+interface PlaylistResponse {
+  playlist?: PlaylistItem[];
+}
+
+interface HlsJsonPlayerProps {
+  playlistUrl: string;
+  mediaId: string | number;
+  mediaType: ContentType;
+  season?: number;
+  episode?: number;
+  startAt?: number;
+  className?: string;
+  onFatalError?: (message: string) => void;
+  showFloatingSourceButton?: boolean;
+  openSourceMenuSignal?: number;
+  disableVastAds?: boolean;
+}
+
+interface StreamSourceOption {
+  file: string;
+  label: string;
+  provider?: string;
+  isDefault?: boolean;
+}
+
+type AdSlot = "preroll" | "midroll";
+type VastTrackingEventKey =
+  | "start"
+  | "firstQuartile"
+  | "midpoint"
+  | "thirdQuartile"
+  | "complete"
+  | "skip"
+  | "closeLinear"
+  | "click";
+
+type VastTrackingEventMap = Partial<Record<VastTrackingEventKey, string[]>>;
+
+interface VastAdPayload {
+  enabled?: boolean;
+  slot?: AdSlot;
+  mediaUrl?: string;
+  clickThroughUrl?: string;
+  durationSeconds?: number;
+  skipOffsetSeconds?: number;
+  impressionUrls?: unknown;
+  errorUrls?: unknown;
+  clickTrackingUrls?: unknown;
+  tracking?: unknown;
+}
+
+interface ActiveVastAd {
+  slot: AdSlot;
+  mediaUrl: string;
+  clickThroughUrl?: string;
+  durationSeconds?: number;
+  skipOffsetSeconds?: number;
+  impressionUrls: string[];
+  errorUrls: string[];
+  clickTrackingUrls: string[];
+  tracking: VastTrackingEventMap;
+}
+
+let vidstackElementsPromise: Promise<void> | null = null;
+
+const ensureVidstackElements = (): Promise<void> => {
+  if (!vidstackElementsPromise) {
+    vidstackElementsPromise = defineCustomElements();
+  }
+
+  return vidstackElementsPromise;
+};
+
+const VAST_REQUEST_TIMEOUT_MS = 8000;
+const VAST_MAX_WRAPPER_DEPTH = 3;
+const VAST_TRACKING_ERROR_PLAYBACK = 405;
+const TRACKING_PIXEL_BUFFER: HTMLImageElement[] = [];
+const VAST_TRACKING_EVENT_KEYS: VastTrackingEventKey[] = [
+  "start",
+  "firstQuartile",
+  "midpoint",
+  "thirdQuartile",
+  "complete",
+  "skip",
+  "closeLinear",
+  "click",
+];
+const VAST_MEDIA_TYPE_PRIORITY = [
+  "video/mp4",
+  "application/x-mpegurl",
+  "application/vnd.apple.mpegurl",
+  "video/webm",
+] as const;
+
+const pickHlsSources = (payload: PlaylistResponse): StreamSourceOption[] => {
+  if (!Array.isArray(payload.playlist)) return [];
+
+  const collected: StreamSourceOption[] = [];
+
+  for (const item of payload.playlist) {
+    if (!Array.isArray(item.sources)) continue;
+
+    for (const source of item.sources) {
+      if (source?.type !== "hls" || typeof source.file !== "string" || source.file.length === 0) {
+        continue;
+      }
+
+      const decodedFile = decodePlayerStreamUrl(source.file);
+      if (!decodedFile || decodedFile.length === 0) {
+        continue;
+      }
+
+      collected.push({
+        file: decodedFile,
+        label: source.label?.trim() || "Auto",
+        provider: source.provider,
+        isDefault: Boolean(source.default),
+      });
+    }
+  }
+
+  const seen = new Set<string>();
+  return collected.filter((source) => {
+    if (seen.has(source.file)) return false;
+    seen.add(source.file);
+    return true;
+  });
+};
+
+interface PlayerElementLike extends HTMLElement {
+  currentTime?: number;
+  duration?: number;
+  paused?: boolean;
+  play?: () => Promise<void> | void;
+  pause?: () => void;
+}
+
+type VideoWithCastSupport = HTMLVideoElement & {
+  webkitShowPlaybackTargetPicker?: () => void;
+};
+
+const CAST_ICON_SVG = `
+<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+  <path d="M3 18h2.8a4.2 4.2 0 0 0-2.8-2.8V18Zm0-5.1a7.1 7.1 0 0 1 7.1 7.1H13A10 10 0 0 0 3 10v2.9Z" fill="currentColor"/>
+  <path d="M3 6v2.9A13.1 13.1 0 0 1 16.1 22H19A16 16 0 0 0 3 6Z" fill="currentColor"/>
+  <path d="M21 3H3a2 2 0 0 0-2 2v5h2V5h18v14h-5v2h5a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z" fill="currentColor"/>
+</svg>
+`;
+
+const getPlayerCurrentTime = (player: HTMLElement): number => {
+  const value = Number((player as PlayerElementLike).currentTime ?? 0);
+  return Number.isFinite(value) ? value : 0;
+};
+
+const getPlayerDuration = (player: HTMLElement): number => {
+  const value = Number((player as PlayerElementLike).duration ?? 0);
+  return Number.isFinite(value) ? value : 0;
+};
+
+const setPlayerCurrentTime = (player: HTMLElement, time: number): void => {
+  (player as PlayerElementLike).currentTime = time;
+};
+
+const normalizeTrackingUrls = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return [];
+
+  const seen = new Set<string>();
+  const urls: string[] = [];
+
+  for (const raw of value) {
+    if (typeof raw !== "string") continue;
+    const url = raw.trim();
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    urls.push(url);
+  }
+
+  return urls;
+};
+
+const normalizeTrackingMap = (value: unknown): VastTrackingEventMap => {
+  if (!value || typeof value !== "object") return {};
+
+  const record = value as Record<string, unknown>;
+  const tracking: VastTrackingEventMap = {};
+
+  for (const eventKey of VAST_TRACKING_EVENT_KEYS) {
+    const urls = normalizeTrackingUrls(record[eventKey]);
+    if (urls.length) {
+      tracking[eventKey] = urls;
+    }
+  }
+
+  return tracking;
+};
+
+const fireTrackingPixels = (urls: string[], errorCode?: number): void => {
+  if (!urls.length) return;
+
+  for (const baseUrl of urls) {
+    const trackedUrl =
+      typeof errorCode === "number"
+        ? baseUrl.replace(/\[ERRORCODE\]/gi, String(errorCode))
+        : baseUrl;
+    if (!trackedUrl) continue;
+
+    try {
+      const pixel = new Image();
+      const cleanup = () => {
+        const index = TRACKING_PIXEL_BUFFER.indexOf(pixel);
+        if (index >= 0) TRACKING_PIXEL_BUFFER.splice(index, 1);
+      };
+
+      pixel.onload = cleanup;
+      pixel.onerror = cleanup;
+      TRACKING_PIXEL_BUFFER.push(pixel);
+      pixel.src = trackedUrl;
+    } catch {
+      void fetch(trackedUrl, {
+        method: "GET",
+        mode: "no-cors",
+        cache: "no-store",
+        keepalive: true,
+        credentials: "omit",
+      }).catch(() => {});
+    }
+  }
+};
+
+const decodeXmlEntities = (value: string): string =>
+  value
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+
+const sanitizeXmlValue = (value: string): string =>
+  decodeXmlEntities(value.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/gi, "$1")).trim();
+
+const resolveUrl = (value: string, baseUrl: string): string => {
+  try {
+    return new URL(value, baseUrl).toString();
+  } catch {
+    return value;
+  }
+};
+
+const parseClockSeconds = (value?: string): number | undefined => {
+  if (!value) return undefined;
+
+  const normalized = sanitizeXmlValue(value);
+  const match = normalized.match(/^(\d{1,2}):(\d{2}):(\d{2})(?:\.(\d{1,3}))?$/);
+  if (!match) return undefined;
+
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const seconds = Number(match[3]);
+  const millis = match[4] ? Number(match[4].padEnd(3, "0")) : 0;
+  if (
+    !Number.isFinite(hours) ||
+    !Number.isFinite(minutes) ||
+    !Number.isFinite(seconds) ||
+    !Number.isFinite(millis)
+  ) {
+    return undefined;
+  }
+
+  return hours * 3600 + minutes * 60 + seconds + millis / 1000;
+};
+
+const parseDurationSeconds = (value?: string): number | undefined => parseClockSeconds(value);
+
+const parseSkipOffsetSeconds = (value: string, durationSeconds?: number): number | undefined => {
+  const normalized = sanitizeXmlValue(value);
+  if (!normalized) return undefined;
+
+  if (normalized.endsWith("%")) {
+    const percent = Number(normalized.slice(0, -1));
+    if (!Number.isFinite(percent) || percent < 0 || percent > 100) return undefined;
+    if (!Number.isFinite(durationSeconds) || !durationSeconds || durationSeconds <= 0) return undefined;
+    return (durationSeconds * percent) / 100;
+  }
+
+  const clockSeconds = parseClockSeconds(normalized);
+  if (typeof clockSeconds === "number" && Number.isFinite(clockSeconds)) {
+    return Math.max(0, clockSeconds);
+  }
+
+  const rawSeconds = Number(normalized);
+  if (Number.isFinite(rawSeconds)) return Math.max(0, rawSeconds);
+
+  return undefined;
+};
+
+const dedupeTrackingUrls = (urls: string[]): string[] => {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const rawUrl of urls) {
+    const url = rawUrl.trim();
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    result.push(url);
+  }
+
+  return result;
+};
+
+const extractTagValues = (xml: string, tagName: string): string[] => {
+  const pattern = new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${tagName}>`, "gi");
+  const values: string[] = [];
+  let match: RegExpExecArray | null = null;
+
+  while ((match = pattern.exec(xml)) !== null) {
+    const value = sanitizeXmlValue(match[1] || "");
+    if (value.length > 0) values.push(value);
+  }
+
+  return values;
+};
+
+const parseAttributes = (rawAttributes: string): Record<string, string> => {
+  const attributes: Record<string, string> = {};
+  const attrPattern = /([a-zA-Z0-9:_-]+)\s*=\s*["']([^"']+)["']/g;
+  let match: RegExpExecArray | null = null;
+
+  while ((match = attrPattern.exec(rawAttributes)) !== null) {
+    attributes[match[1].toLowerCase()] = match[2];
+  }
+
+  return attributes;
+};
+
+const normalizeTrackingEventName = (eventName: string): VastTrackingEventKey | null => {
+  const normalized = eventName.trim().toLowerCase();
+  if (!normalized) return null;
+
+  if (normalized === "start") return "start";
+  if (normalized === "firstquartile") return "firstQuartile";
+  if (normalized === "midpoint") return "midpoint";
+  if (normalized === "thirdquartile") return "thirdQuartile";
+  if (normalized === "complete") return "complete";
+  if (normalized === "skip") return "skip";
+  if (normalized === "closelinear") return "closeLinear";
+  if (normalized === "click") return "click";
+  return null;
+};
+
+const extractTrackingEvents = (xml: string, baseUrl: string): VastTrackingEventMap => {
+  const pattern = /<Tracking\b([^>]*)>([\s\S]*?)<\/Tracking>/gi;
+  const tracking: VastTrackingEventMap = {};
+  let match: RegExpExecArray | null = null;
+
+  while ((match = pattern.exec(xml)) !== null) {
+    const attributes = parseAttributes(match[1] || "");
+    const eventKey = normalizeTrackingEventName(attributes.event || "");
+    if (!eventKey) continue;
+
+    const rawUrl = sanitizeXmlValue(match[2] || "");
+    if (!rawUrl) continue;
+
+    const resolvedUrl = resolveUrl(rawUrl, baseUrl);
+    const current = tracking[eventKey] ?? [];
+    current.push(resolvedUrl);
+    tracking[eventKey] = current;
+  }
+
+  for (const key of Object.keys(tracking) as VastTrackingEventKey[]) {
+    tracking[key] = dedupeTrackingUrls(tracking[key] || []);
+  }
+
+  return tracking;
+};
+
+const mergeTrackingMaps = (base: VastTrackingEventMap, extra: VastTrackingEventMap): VastTrackingEventMap => {
+  const merged: VastTrackingEventMap = { ...base };
+  const keys = new Set<VastTrackingEventKey>([
+    ...(Object.keys(base) as VastTrackingEventKey[]),
+    ...(Object.keys(extra) as VastTrackingEventKey[]),
+  ]);
+
+  for (const key of keys) {
+    const urls = dedupeTrackingUrls([...(base[key] || []), ...(extra[key] || [])]);
+    if (urls.length) merged[key] = urls;
+  }
+
+  return merged;
+};
+
+interface MediaCandidate {
+  url: string;
+  type?: string;
+  bitrate?: number;
+  width?: number;
+  height?: number;
+}
+
+const extractMediaCandidates = (xml: string, baseUrl: string): MediaCandidate[] => {
+  const pattern = /<MediaFile\b([^>]*)>([\s\S]*?)<\/MediaFile>/gi;
+  const candidates: MediaCandidate[] = [];
+  let match: RegExpExecArray | null = null;
+
+  while ((match = pattern.exec(xml)) !== null) {
+    const attributes = parseAttributes(match[1] || "");
+    const rawUrl = sanitizeXmlValue(match[2] || "");
+    if (!rawUrl) continue;
+
+    candidates.push({
+      url: resolveUrl(rawUrl, baseUrl),
+      type: attributes.type?.toLowerCase(),
+      bitrate: Number(attributes.bitrate || attributes.minbitrate || 0) || undefined,
+      width: Number(attributes.width || 0) || undefined,
+      height: Number(attributes.height || 0) || undefined,
+    });
+  }
+
+  return candidates;
+};
+
+const rankMediaCandidate = (candidate: MediaCandidate): number => {
+  let score = 0;
+
+  const type = candidate.type?.toLowerCase();
+  if (type) {
+    const exactTypeIndex = VAST_MEDIA_TYPE_PRIORITY.indexOf(
+      type as (typeof VAST_MEDIA_TYPE_PRIORITY)[number],
+    );
+    if (exactTypeIndex >= 0) score += 200 - exactTypeIndex * 20;
+    if (type.includes("mp4")) score += 20;
+    if (type.includes("mpegurl")) score += 15;
+  }
+
+  if (candidate.url.toLowerCase().includes(".mp4")) score += 20;
+  if (candidate.url.toLowerCase().includes(".m3u8")) score += 15;
+  if (typeof candidate.bitrate === "number") score += Math.min(candidate.bitrate / 100, 20);
+  if (typeof candidate.width === "number" && typeof candidate.height === "number") {
+    score += Math.min((candidate.width * candidate.height) / 100000, 15);
+  }
+
+  return score;
+};
+
+const pickBestMediaUrl = (xml: string, baseUrl: string): string | null => {
+  const candidates = extractMediaCandidates(xml, baseUrl);
+  if (candidates.length > 0) {
+    const best = [...candidates].sort((a, b) => rankMediaCandidate(b) - rankMediaCandidate(a))[0];
+    return best?.url || null;
+  }
+
+  const directMatch = xml.match(/https?:\/\/[^"'\s]+(?:\.mp4|\.m3u8|\.webm)(?:\?[^"'\s]*)?/i)?.[0];
+  return directMatch ? resolveUrl(directMatch, baseUrl) : null;
+};
+
+const extractSkipOffsetSeconds = (xml: string, durationSeconds?: number): number | undefined => {
+  const linearPattern = /<Linear\b([^>]*)>/gi;
+  let linearMatch: RegExpExecArray | null = null;
+
+  while ((linearMatch = linearPattern.exec(xml)) !== null) {
+    const attributes = parseAttributes(linearMatch[1] || "");
+    const rawSkipOffset = attributes.skipoffset;
+    if (!rawSkipOffset) continue;
+
+    const skipOffsetSeconds = parseSkipOffsetSeconds(rawSkipOffset, durationSeconds);
+    if (typeof skipOffsetSeconds === "number" && Number.isFinite(skipOffsetSeconds)) {
+      return skipOffsetSeconds;
+    }
+  }
+
+  return undefined;
+};
+
+const getDirectVastUrlForSlot = (slot: AdSlot): string | null => {
+  const shared = process.env.NEXT_PUBLIC_PLAYER_VAST_URL?.trim();
+  const preroll = process.env.NEXT_PUBLIC_PLAYER_VAST_PREROLL_URL?.trim();
+  const midroll = process.env.NEXT_PUBLIC_PLAYER_VAST_MIDROLL_URL?.trim();
+
+  const resolved = slot === "midroll" ? midroll || shared || preroll : preroll || shared || midroll;
+  return resolved && resolved.length > 0 ? resolved : null;
+};
+
+const parseVastXmlToAd = (
+  slot: AdSlot,
+  xml: string,
+  baseUrl: string,
+): Omit<ActiveVastAd, "slot"> | null => {
+  const mediaUrl = pickBestMediaUrl(xml, baseUrl);
+  if (!mediaUrl) return null;
+
+  const clickThrough = extractTagValues(xml, "ClickThrough")[0];
+  const durationSeconds = parseDurationSeconds(extractTagValues(xml, "Duration")[0]);
+  const skipOffsetSeconds = extractSkipOffsetSeconds(xml, durationSeconds);
+  const impressionUrls = dedupeTrackingUrls(
+    extractTagValues(xml, "Impression")
+      .map((url) => resolveUrl(url, baseUrl))
+      .filter((url) => url.length > 0),
+  );
+  const errorUrls = dedupeTrackingUrls(
+    extractTagValues(xml, "Error")
+      .map((url) => resolveUrl(url, baseUrl))
+      .filter((url) => url.length > 0),
+  );
+  const clickTrackingUrls = dedupeTrackingUrls(
+    extractTagValues(xml, "ClickTracking")
+      .map((url) => resolveUrl(url, baseUrl))
+      .filter((url) => url.length > 0),
+  );
+  const tracking = extractTrackingEvents(xml, baseUrl);
+
+  return {
+    mediaUrl,
+    clickThroughUrl: clickThrough ? resolveUrl(clickThrough, baseUrl) : undefined,
+    durationSeconds,
+    skipOffsetSeconds,
+    impressionUrls,
+    errorUrls,
+    clickTrackingUrls,
+    tracking,
+  };
+};
+
+const resolveVastDirect = async (
+  slot: AdSlot,
+  sourceUrl: string,
+  signal: AbortSignal,
+  depth = 0,
+): Promise<Omit<ActiveVastAd, "slot"> | null> => {
+  if (depth > VAST_MAX_WRAPPER_DEPTH) return null;
+
+  let xml = "";
+  try {
+    const response = await fetch(sourceUrl, {
+      cache: "no-store",
+      redirect: "follow",
+      signal,
+      credentials: "include",
+      headers: {
+        accept: "application/xml,text/xml,text/plain,*/*",
+      },
+    });
+
+    if (!response.ok) return null;
+    xml = await response.text();
+  } catch {
+    return null;
+  }
+
+  if (!xml || !xml.trim()) return null;
+
+  const inline = parseVastXmlToAd(slot, xml, sourceUrl);
+  if (inline) return inline;
+
+  const wrapperTracking = {
+    impressionUrls: dedupeTrackingUrls(
+      extractTagValues(xml, "Impression")
+        .map((url) => resolveUrl(url, sourceUrl))
+        .filter((url) => url.length > 0),
+    ),
+    errorUrls: dedupeTrackingUrls(
+      extractTagValues(xml, "Error")
+        .map((url) => resolveUrl(url, sourceUrl))
+        .filter((url) => url.length > 0),
+    ),
+    clickTrackingUrls: dedupeTrackingUrls(
+      extractTagValues(xml, "ClickTracking")
+        .map((url) => resolveUrl(url, sourceUrl))
+        .filter((url) => url.length > 0),
+    ),
+    tracking: extractTrackingEvents(xml, sourceUrl),
+  };
+
+  const wrapperUrls = extractTagValues(xml, "VASTAdTagURI")
+    .map((url) => resolveUrl(url, sourceUrl))
+    .filter((url) => url.length > 0);
+
+  for (const wrapperUrl of wrapperUrls) {
+    const resolved = await resolveVastDirect(slot, wrapperUrl, signal, depth + 1);
+    if (!resolved) continue;
+
+    return {
+      ...resolved,
+      impressionUrls: dedupeTrackingUrls([
+        ...wrapperTracking.impressionUrls,
+        ...resolved.impressionUrls,
+      ]),
+      errorUrls: dedupeTrackingUrls([...wrapperTracking.errorUrls, ...resolved.errorUrls]),
+      clickTrackingUrls: dedupeTrackingUrls([
+        ...wrapperTracking.clickTrackingUrls,
+        ...resolved.clickTrackingUrls,
+      ]),
+      tracking: mergeTrackingMaps(wrapperTracking.tracking, resolved.tracking),
+    };
+  }
+
+  return null;
+};
+
+const fetchVastAd = async (slot: AdSlot): Promise<ActiveVastAd | null> => {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), VAST_REQUEST_TIMEOUT_MS);
+
+  try {
+    const directVastUrl = getDirectVastUrlForSlot(slot);
+    if (directVastUrl) {
+      const directAd = await resolveVastDirect(slot, directVastUrl, controller.signal);
+      if (directAd) {
+        return {
+          slot,
+          ...directAd,
+        };
+      }
+    }
+
+    const response = await fetch(`/api/player/vast?slot=${slot}`, {
+      cache: "no-store",
+      signal: controller.signal,
+    });
+
+    if (!response.ok) return null;
+
+    const payload = (await response.json()) as VastAdPayload;
+    if (!payload?.enabled) return null;
+    if (typeof payload.mediaUrl !== "string" || payload.mediaUrl.trim().length === 0) return null;
+
+    return {
+      slot,
+      mediaUrl: payload.mediaUrl.trim(),
+      clickThroughUrl:
+        typeof payload.clickThroughUrl === "string" && payload.clickThroughUrl.trim().length > 0
+          ? payload.clickThroughUrl.trim()
+          : undefined,
+      durationSeconds:
+        typeof payload.durationSeconds === "number" && Number.isFinite(payload.durationSeconds)
+          ? Math.max(0, payload.durationSeconds)
+          : undefined,
+      skipOffsetSeconds:
+        typeof payload.skipOffsetSeconds === "number" && Number.isFinite(payload.skipOffsetSeconds)
+          ? Math.max(0, payload.skipOffsetSeconds)
+          : undefined,
+      impressionUrls: normalizeTrackingUrls(payload.impressionUrls),
+      errorUrls: normalizeTrackingUrls(payload.errorUrls),
+      clickTrackingUrls: normalizeTrackingUrls(payload.clickTrackingUrls),
+      tracking: normalizeTrackingMap(payload.tracking),
+    };
+  } catch {
+    return null;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+};
+
+const HlsJsonPlayer: React.FC<HlsJsonPlayerProps> = ({
+  playlistUrl,
+  mediaId,
+  mediaType,
+  season,
+  episode,
+  startAt,
+  className,
+  onFatalError,
+  showFloatingSourceButton = false,
+  openSourceMenuSignal,
+  disableVastAds = false,
+}) => {
+  const [availableSources, setAvailableSources] = useState<StreamSourceOption[]>([]);
+  const [activeSourceIndex, setActiveSourceIndex] = useState(0);
+  const [isSourceDialogOpen, setIsSourceDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isVidstackReady, setIsVidstackReady] = useState(false);
+  const [playerElement, setPlayerElement] = useState<HTMLElement | null>(null);
+  const [activeAd, setActiveAd] = useState<ActiveVastAd | null>(null);
+  const [adSkipRemaining, setAdSkipRemaining] = useState<number | null>(null);
+  const [seekFeedback, setSeekFeedback] = useState<{ side: 'left' | 'right'; secs: number; key: number } | null>(null);
+
+  const adVideoRef = useRef<HTMLVideoElement | null>(null);
+  const seekFeedbackTimerRef = useRef<number | null>(null);
+  const lastTapInfoRef = useRef<{ time: number; x: number }>({ time: 0, x: 0 });
+  const activeAdRef = useRef<ActiveVastAd | null>(null);
+  const prerollAdRef = useRef<ActiveVastAd | null>(null);
+  const midrollAdRef = useRef<ActiveVastAd | null>(null);
+  const hasPrerollPlayedRef = useRef(false);
+  const hasMidrollPlayedRef = useRef(false);
+  const isFetchingPrerollRef = useRef(false);
+  const isFetchingMidrollRef = useRef(false);
+  const isAdPlayingRef = useRef(false);
+  const resumeMainAfterAdRef = useRef(false);
+  const resumeContentTimeRef = useRef<number | null>(null);
+  const adEventFiredRef = useRef<Record<string, boolean>>({});
+  const hasReportedErrorRef = useRef(false);
+  const hasAppliedStartAtRef = useRef(false);
+  const streamUrlRef = useRef<string | null>(null);
+  const disableVastAdsRef = useRef(disableVastAds);
+
+  const normalizedStartAt = useMemo(
+    () => (typeof startAt === "number" && Number.isFinite(startAt) && startAt > 0 ? startAt : 0),
+    [startAt],
+  );
+  const streamUrl = useMemo(
+    () => availableSources[activeSourceIndex]?.file ?? null,
+    [availableSources, activeSourceIndex],
+  );
+  const canSwitchSources = availableSources.length > 1;
+  const activeSource = availableSources[activeSourceIndex];
+  const canSkipAd = typeof adSkipRemaining === "number" && adSkipRemaining <= 0;
+
+  useEffect(() => {
+    streamUrlRef.current = streamUrl;
+  }, [streamUrl]);
+
+  useEffect(() => {
+    disableVastAdsRef.current = disableVastAds;
+  }, [disableVastAds]);
+
+  useEffect(() => {
+    activeAdRef.current = activeAd;
+  }, [activeAd]);
+
+  const reportFatalError = useCallback(
+    (message: string) => {
+      setError(message);
+
+      if (hasReportedErrorRef.current) return;
+      hasReportedErrorRef.current = true;
+      onFatalError?.(message);
+    },
+    [onFatalError],
+  );
+
+  const resetAdTrackingState = useCallback(() => {
+    adEventFiredRef.current = {};
+  }, []);
+
+  const fireAdEventTracking = useCallback((ad: ActiveVastAd | null, eventKey: VastTrackingEventKey) => {
+    if (!ad) return;
+
+    const trackerStateKey = `tracking:${eventKey}`;
+    if (adEventFiredRef.current[trackerStateKey]) return;
+    adEventFiredRef.current[trackerStateKey] = true;
+
+    const urls = ad.tracking[eventKey] || [];
+    fireTrackingPixels(urls);
+  }, []);
+
+  const fireAdImpression = useCallback((ad: ActiveVastAd | null) => {
+    if (!ad) return;
+
+    const trackerStateKey = "impression";
+    if (adEventFiredRef.current[trackerStateKey]) return;
+    adEventFiredRef.current[trackerStateKey] = true;
+
+    fireTrackingPixels(ad.impressionUrls);
+  }, []);
+
+  const fireAdError = useCallback((ad: ActiveVastAd | null, errorCode = VAST_TRACKING_ERROR_PLAYBACK) => {
+    if (!ad) return;
+
+    const trackerStateKey = "error";
+    if (adEventFiredRef.current[trackerStateKey]) return;
+    adEventFiredRef.current[trackerStateKey] = true;
+
+    fireTrackingPixels(ad.errorUrls, errorCode);
+  }, []);
+
+  const pauseMainPlayback = useCallback((player: HTMLElement | null) => {
+    if (!player) return;
+
+    try {
+      (player as PlayerElementLike).pause?.();
+    } catch {}
+  }, []);
+
+  const resumeMainPlayback = useCallback((player: HTMLElement | null) => {
+    if (!player) return;
+
+    try {
+      const playResult = (player as PlayerElementLike).play?.();
+      if (playResult && typeof (playResult as Promise<void>).catch === "function") {
+        void (playResult as Promise<void>).catch(() => {});
+      }
+    } catch {}
+  }, []);
+
+  const startAdBreak = useCallback(
+    (ad: ActiveVastAd, options?: { resumePlayback?: boolean; resumeTime?: number }) => {
+      if (isAdPlayingRef.current) return false;
+      if (!ad?.mediaUrl) return false;
+
+      isAdPlayingRef.current = true;
+      resumeMainAfterAdRef.current = Boolean(options?.resumePlayback);
+      resumeContentTimeRef.current =
+        typeof options?.resumeTime === "number" && Number.isFinite(options.resumeTime)
+          ? options.resumeTime
+          : null;
+      setAdSkipRemaining(
+        typeof ad.skipOffsetSeconds === "number" && Number.isFinite(ad.skipOffsetSeconds)
+          ? Math.max(0, Math.ceil(ad.skipOffsetSeconds))
+          : null,
+      );
+      resetAdTrackingState();
+
+      setActiveAd(ad);
+      return true;
+    },
+    [resetAdTrackingState],
+  );
+
+  const finishAdBreak = useCallback(() => {
+    const currentAd = activeAdRef.current;
+    if (!currentAd) return;
+
+    if (currentAd.slot === "preroll") hasPrerollPlayedRef.current = true;
+    if (currentAd.slot === "midroll") hasMidrollPlayedRef.current = true;
+
+    const shouldResumePlayback = resumeMainAfterAdRef.current;
+    const resumeTime = resumeContentTimeRef.current;
+
+    resumeMainAfterAdRef.current = false;
+    resumeContentTimeRef.current = null;
+    isAdPlayingRef.current = false;
+    resetAdTrackingState();
+    setAdSkipRemaining(null);
+    setActiveAd(null);
+
+    if (playerElement && typeof resumeTime === "number" && Number.isFinite(resumeTime)) {
+      try {
+        setPlayerCurrentTime(playerElement, resumeTime);
+      } catch {}
+    }
+
+    if (shouldResumePlayback) {
+      resumeMainPlayback(playerElement);
+    }
+  }, [playerElement, resetAdTrackingState, resumeMainPlayback]);
+
+  useEffect(() => {
+    let disposed = false;
+
+    const initVidstack = async () => {
+      try {
+        await ensureVidstackElements();
+        if (!disposed) setIsVidstackReady(true);
+      } catch {
+        if (disposed) return;
+        reportFatalError("Failed to initialize player.");
+      }
+    };
+
+    void initVidstack();
+    return () => {
+      disposed = true;
+    };
+  }, [reportFatalError]);
+
+  useEffect(() => {
+    let disposed = false;
+    hasReportedErrorRef.current = false;
+    hasAppliedStartAtRef.current = false;
+
+    const loadPlaylist = async () => {
+      setIsLoading(true);
+      setError(null);
+      setIsSourceDialogOpen(false);
+      setAvailableSources([]);
+      setActiveSourceIndex(0);
+
+      try {
+        const response = await fetch(playlistUrl, {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Playlist request failed (${response.status})`);
+        }
+
+        const payload = (await response.json()) as PlaylistResponse;
+        const parsedSources = pickHlsSources(payload);
+        const mergedSources = parsedSources;
+
+        if (!mergedSources.length) {
+          throw new Error("No HLS stream found in playlist response");
+        }
+
+        if (!disposed) {
+          const defaultIndex = mergedSources.findIndex((source) => source.isDefault);
+          setAvailableSources(mergedSources);
+          setActiveSourceIndex(defaultIndex >= 0 ? defaultIndex : 0);
+          setIsLoading(false);
+        }
+      } catch (caughtError) {
+        if (disposed) return;
+
+        reportFatalError(caughtError instanceof Error ? caughtError.message : "Failed to load stream");
+        setIsLoading(false);
+      }
+    };
+
+    void loadPlaylist();
+    return () => {
+      disposed = true;
+    };
+  }, [playlistUrl, reportFatalError]);
+
+  useEffect(() => {
+    if (!availableSources.length) return;
+    if (activeSourceIndex < availableSources.length) return;
+    setActiveSourceIndex(0);
+  }, [activeSourceIndex, availableSources.length]);
+
+  useEffect(() => {
+    hasPrerollPlayedRef.current = false;
+    hasMidrollPlayedRef.current = false;
+    isFetchingPrerollRef.current = false;
+    isFetchingMidrollRef.current = false;
+    isAdPlayingRef.current = false;
+    resumeMainAfterAdRef.current = false;
+    resumeContentTimeRef.current = null;
+    resetAdTrackingState();
+    setAdSkipRemaining(null);
+    prerollAdRef.current = null;
+    midrollAdRef.current = null;
+    setActiveAd(null);
+  }, [disableVastAds, resetAdTrackingState, streamUrl]);
+
+  useEffect(() => {
+    if (!openSourceMenuSignal) return;
+    setIsSourceDialogOpen(true);
+  }, [openSourceMenuSignal]);
+
+  useEffect(() => {
+    if (!disableVastAds) return;
+
+    prerollAdRef.current = null;
+    midrollAdRef.current = null;
+
+    if (isAdPlayingRef.current) {
+      finishAdBreak();
+    }
+  }, [disableVastAds, finishAdBreak]);
+
+  useEffect(() => {
+    if (!isSourceDialogOpen) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setIsSourceDialogOpen(false);
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [isSourceDialogOpen]);
+
+  useEffect(() => {
+    if (!activeAd) return;
+
+    const adVideo = adVideoRef.current;
+    if (!adVideo) return;
+
+    let disposed = false;
+    const ensureAdStartedTracking = () => {
+      fireAdImpression(activeAd);
+      fireAdEventTracking(activeAd, "start");
+    };
+    const handleComplete = () => {
+      if (disposed) return;
+      ensureAdStartedTracking();
+      fireAdEventTracking(activeAd, "complete");
+      finishAdBreak();
+    };
+    const handleError = () => {
+      if (disposed) return;
+      fireAdError(activeAd);
+      finishAdBreak();
+    };
+    const updateSkipCountdown = () => {
+      if (disposed) return;
+      if (typeof activeAd.skipOffsetSeconds !== "number") {
+        setAdSkipRemaining(null);
+        return;
+      }
+
+      const remaining = Math.max(0, Math.ceil(activeAd.skipOffsetSeconds - adVideo.currentTime));
+      setAdSkipRemaining(remaining);
+    };
+    const updateQuartileTracking = () => {
+      const duration =
+        (Number.isFinite(adVideo.duration) && adVideo.duration > 0 ? adVideo.duration : undefined) ??
+        (typeof activeAd.durationSeconds === "number" && activeAd.durationSeconds > 0
+          ? activeAd.durationSeconds
+          : undefined);
+      if (!duration) return;
+
+      const progress = adVideo.currentTime / duration;
+      if (!Number.isFinite(progress) || progress <= 0) return;
+
+      if (progress >= 0.25) fireAdEventTracking(activeAd, "firstQuartile");
+      if (progress >= 0.5) fireAdEventTracking(activeAd, "midpoint");
+      if (progress >= 0.75) fireAdEventTracking(activeAd, "thirdQuartile");
+    };
+    const handleTimeUpdate = () => {
+      if (disposed) return;
+      ensureAdStartedTracking();
+      updateSkipCountdown();
+      updateQuartileTracking();
+    };
+    const handlePlaying = () => {
+      if (disposed) return;
+      ensureAdStartedTracking();
+    };
+
+    adVideo.addEventListener("ended", handleComplete);
+    adVideo.addEventListener("error", handleError);
+    adVideo.addEventListener("abort", handleError);
+    adVideo.addEventListener("playing", handlePlaying);
+    adVideo.addEventListener("timeupdate", handleTimeUpdate);
+    adVideo.addEventListener("loadedmetadata", handleTimeUpdate);
+    adVideo.addEventListener("durationchange", handleTimeUpdate);
+
+    adVideo.currentTime = 0;
+    handleTimeUpdate();
+    const playPromise = adVideo.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      void playPromise.catch(handleError);
+    }
+
+    return () => {
+      disposed = true;
+      adVideo.removeEventListener("ended", handleComplete);
+      adVideo.removeEventListener("error", handleError);
+      adVideo.removeEventListener("abort", handleError);
+      adVideo.removeEventListener("playing", handlePlaying);
+      adVideo.removeEventListener("timeupdate", handleTimeUpdate);
+      adVideo.removeEventListener("loadedmetadata", handleTimeUpdate);
+      adVideo.removeEventListener("durationchange", handleTimeUpdate);
+    };
+  }, [activeAd, fireAdError, fireAdEventTracking, fireAdImpression, finishAdBreak]);
+
+  const switchSource = useCallback(
+    (nextIndex: number) => {
+      if (!Number.isFinite(nextIndex) || nextIndex < 0 || nextIndex >= availableSources.length) return;
+      if (nextIndex === activeSourceIndex) return;
+
+      hasReportedErrorRef.current = false;
+      hasAppliedStartAtRef.current = false;
+      setError(null);
+      setActiveSourceIndex(nextIndex);
+    },
+    [activeSourceIndex, availableSources.length],
+  );
+
+  const attachPlayerRef = useCallback((node: HTMLElement | null) => {
+    setPlayerElement(node);
+  }, []);
+
+  const triggerSeekFeedback = useCallback((side: 'left' | 'right', secs: number) => {
+    if (seekFeedbackTimerRef.current) window.clearTimeout(seekFeedbackTimerRef.current);
+    setSeekFeedback((prev) => ({
+      side,
+      secs: prev?.side === side ? prev.secs + secs : secs,
+      key: (prev?.key ?? 0) + 1,
+    }));
+    seekFeedbackTimerRef.current = window.setTimeout(() => setSeekFeedback(null), 800);
+  }, []);
+
+  const emitPlayerEvent = useCallback(
+    (eventType: LocalPlayerEventType, player: HTMLElement) => {
+      const eventPayload = {
+        type: "LOCAL_PLAYER_EVENT",
+        data: {
+          event: eventType,
+          currentTime: getPlayerCurrentTime(player),
+          duration: getPlayerDuration(player),
+          mediaId,
+          mediaType,
+          season,
+          episode,
+        },
+      };
+
+      window.dispatchEvent(new MessageEvent("message", { data: eventPayload }));
+    },
+    [episode, mediaId, mediaType, season],
+  );
+
+  useEffect(() => {
+    if (!playerElement || !streamUrl) return;
+
+    setError(null);
+
+    const maybeStartPreroll = () => {
+      if (disableVastAds) return false;
+      if (hasPrerollPlayedRef.current) return false;
+      hasPrerollPlayedRef.current = true;
+
+      const expectedStreamUrl = streamUrl;
+      const currentTime = getPlayerCurrentTime(playerElement);
+      pauseMainPlayback(playerElement);
+
+      const startPrerollAd = (ad: ActiveVastAd | null) => {
+        if (streamUrlRef.current !== expectedStreamUrl) return;
+        if (disableVastAdsRef.current) {
+          resumeMainPlayback(playerElement);
+          return;
+        }
+        if (!ad) {
+          resumeMainPlayback(playerElement);
+          return;
+        }
+
+        const started = startAdBreak(ad, {
+          resumePlayback: true,
+          resumeTime: currentTime > 0 ? currentTime : 0,
+        });
+        if (!started) {
+          resumeMainPlayback(playerElement);
+        }
+      };
+
+      if (prerollAdRef.current) {
+        startPrerollAd(prerollAdRef.current);
+        return true;
+      }
+
+      if (isFetchingPrerollRef.current) return true;
+      isFetchingPrerollRef.current = true;
+
+      void fetchVastAd("preroll")
+        .then((ad) => {
+          if (streamUrlRef.current !== expectedStreamUrl) return;
+          prerollAdRef.current = ad;
+          startPrerollAd(ad);
+        })
+        .catch(() => {
+          if (streamUrlRef.current !== expectedStreamUrl) return;
+          resumeMainPlayback(playerElement);
+        })
+        .finally(() => {
+          isFetchingPrerollRef.current = false;
+        });
+
+      return true;
+    };
+
+    const maybeStartMidroll = () => {
+      if (disableVastAds) return false;
+      if (hasMidrollPlayedRef.current) return false;
+
+      const duration = getPlayerDuration(playerElement);
+      const currentTime = getPlayerCurrentTime(playerElement);
+      if (!Number.isFinite(duration) || duration <= 0) return false;
+      if (!Number.isFinite(currentTime) || currentTime <= 0) return false;
+      if (currentTime < duration / 2) return false;
+
+      hasMidrollPlayedRef.current = true;
+      const expectedStreamUrl = streamUrl;
+
+      pauseMainPlayback(playerElement);
+
+      const startMidrollAd = (ad: ActiveVastAd | null) => {
+        if (streamUrlRef.current !== expectedStreamUrl) return;
+        if (disableVastAdsRef.current) {
+          resumeMainPlayback(playerElement);
+          return;
+        }
+        if (!ad) {
+          resumeMainPlayback(playerElement);
+          return;
+        }
+
+        const started = startAdBreak(ad, {
+          resumePlayback: true,
+          resumeTime: currentTime,
+        });
+        if (!started) {
+          resumeMainPlayback(playerElement);
+        }
+      };
+
+      if (midrollAdRef.current) {
+        startMidrollAd(midrollAdRef.current);
+        return true;
+      }
+
+      if (isFetchingMidrollRef.current) return true;
+      isFetchingMidrollRef.current = true;
+
+      void fetchVastAd("midroll")
+        .then((ad) => {
+          if (streamUrlRef.current !== expectedStreamUrl) return;
+          midrollAdRef.current = ad;
+          startMidrollAd(ad);
+        })
+        .catch(() => {
+          if (streamUrlRef.current !== expectedStreamUrl) return;
+          resumeMainPlayback(playerElement);
+        })
+        .finally(() => {
+          isFetchingMidrollRef.current = false;
+        });
+
+      return true;
+    };
+
+    const handlePlay = () => {
+      if (isAdPlayingRef.current) return;
+      if (maybeStartPreroll()) return;
+      emitPlayerEvent("play", playerElement);
+    };
+    const handlePause = () => {
+      if (isAdPlayingRef.current) return;
+      emitPlayerEvent("pause", playerElement);
+    };
+    const handleSeeked = () => {
+      if (isAdPlayingRef.current) return;
+      emitPlayerEvent("seeked", playerElement);
+    };
+    const handleEnded = () => {
+      if (isAdPlayingRef.current) return;
+      emitPlayerEvent("ended", playerElement);
+    };
+    const handleTimeUpdate = () => {
+      if (isAdPlayingRef.current) return;
+      if (maybeStartMidroll()) return;
+      emitPlayerEvent("timeupdate", playerElement);
+    };
+    const handleCanPlay = () => {
+      if (normalizedStartAt <= 0 || hasAppliedStartAtRef.current) return;
+
+      try {
+        setPlayerCurrentTime(playerElement, normalizedStartAt);
+        hasAppliedStartAtRef.current = true;
+      } catch {}
+    };
+    const handleError = (event: Event) => {
+      if (isAdPlayingRef.current) return;
+
+      if (activeSourceIndex + 1 < availableSources.length) {
+        switchSource(activeSourceIndex + 1);
+        return;
+      }
+
+      const fallback = "Stream playback failed. Please try another source.";
+      const detail = (event as CustomEvent<{ message?: string }>).detail;
+      if (typeof detail?.message === "string" && detail.message.trim()) {
+        reportFatalError(detail.message);
+        return;
+      }
+
+      reportFatalError(fallback);
+    };
+
+    const SEEK_SECONDS = 10;
+    const handleDblClick = (event: Event) => {
+      if (isAdPlayingRef.current) return;
+      const rect = playerElement.getBoundingClientRect();
+      const x = (event as MouseEvent).clientX - rect.left;
+      const side = x < rect.width / 2 ? 'left' : 'right';
+      const delta = side === 'left' ? -SEEK_SECONDS : SEEK_SECONDS;
+      setPlayerCurrentTime(playerElement, Math.max(0, getPlayerCurrentTime(playerElement) + delta));
+      triggerSeekFeedback(side, SEEK_SECONDS);
+    };
+    const handleTouchEnd = (event: Event) => {
+      if (isAdPlayingRef.current) return;
+      const touch = (event as TouchEvent).changedTouches[0];
+      if (!touch) return;
+      const now = Date.now();
+      const last = lastTapInfoRef.current;
+      const isDoubleTap = now - last.time < 300;
+      const rect = playerElement.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      if (isDoubleTap) {
+        const side = last.x < rect.width / 2 ? 'left' : 'right';
+        const delta = side === 'left' ? -SEEK_SECONDS : SEEK_SECONDS;
+        setPlayerCurrentTime(playerElement, Math.max(0, getPlayerCurrentTime(playerElement) + delta));
+        triggerSeekFeedback(side, SEEK_SECONDS);
+        lastTapInfoRef.current = { time: 0, x: 0 };
+      } else {
+        lastTapInfoRef.current = { time: now, x };
+      }
+    };
+
+    playerElement.addEventListener("play", handlePlay);
+    playerElement.addEventListener("pause", handlePause);
+    playerElement.addEventListener("seeked", handleSeeked);
+    playerElement.addEventListener("ended", handleEnded);
+    playerElement.addEventListener("time-update", handleTimeUpdate);
+    playerElement.addEventListener("timeupdate", handleTimeUpdate as EventListener);
+    playerElement.addEventListener("can-play", handleCanPlay);
+    playerElement.addEventListener("canplay", handleCanPlay as EventListener);
+    playerElement.addEventListener("error", handleError);
+    playerElement.addEventListener("dblclick", handleDblClick);
+    playerElement.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    const fallbackSeekTimer = window.setTimeout(() => {
+      if (normalizedStartAt <= 0 || hasAppliedStartAtRef.current) return;
+      if (getPlayerDuration(playerElement) <= 0 || getPlayerCurrentTime(playerElement) >= 1) return;
+
+      try {
+        setPlayerCurrentTime(playerElement, normalizedStartAt);
+        hasAppliedStartAtRef.current = true;
+      } catch {}
+    }, 1200);
+
+    return () => {
+      window.clearTimeout(fallbackSeekTimer);
+      playerElement.removeEventListener("play", handlePlay);
+      playerElement.removeEventListener("pause", handlePause);
+      playerElement.removeEventListener("seeked", handleSeeked);
+      playerElement.removeEventListener("ended", handleEnded);
+      playerElement.removeEventListener("time-update", handleTimeUpdate);
+      playerElement.removeEventListener("timeupdate", handleTimeUpdate as EventListener);
+      playerElement.removeEventListener("can-play", handleCanPlay);
+      playerElement.removeEventListener("canplay", handleCanPlay as EventListener);
+      playerElement.removeEventListener("error", handleError);
+      playerElement.removeEventListener("dblclick", handleDblClick);
+      playerElement.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [
+    activeSourceIndex,
+    availableSources.length,
+    disableVastAds,
+    emitPlayerEvent,
+    normalizedStartAt,
+    pauseMainPlayback,
+    playerElement,
+    reportFatalError,
+    resumeMainPlayback,
+    startAdBreak,
+    streamUrl,
+    switchSource,
+    triggerSeekFeedback,
+  ]);
+
+  const openCastPicker = useCallback(() => {
+    if (!playerElement) return;
+
+    const video = playerElement.querySelector("video") as VideoWithCastSupport | null;
+    if (!video) return;
+
+    if (typeof video.webkitShowPlaybackTargetPicker === "function") {
+      video.webkitShowPlaybackTargetPicker();
+      return;
+    }
+
+    if (typeof video.remote?.prompt === "function") {
+      void video.remote.prompt().catch(() => {});
+    }
+  }, [playerElement]);
+
+  useEffect(() => {
+    if (!playerElement) return;
+
+    let castClickHandler: ((event: Event) => void) | null = null;
+
+    const suppressNativeControls = (video: HTMLVideoElement | null): void => {
+      if (!video) return;
+      video.controls = false;
+      video.removeAttribute("controls");
+      video.setAttribute("playsinline", "");
+    };
+
+    const hasCastSupport = (video: VideoWithCastSupport | null): boolean =>
+      Boolean(
+        video &&
+          (typeof video.webkitShowPlaybackTargetPicker === "function" ||
+            typeof video.remote?.prompt === "function"),
+      );
+
+    const syncControlsLayout = () => {
+      const fullscreenButton = playerElement.querySelector("media-fullscreen-button");
+      if (!fullscreenButton) return;
+
+      const bottomControlsGroup = fullscreenButton.parentElement;
+      if (!bottomControlsGroup) return;
+
+      const settingsMenu = playerElement.querySelector("media-menu[part='settings-menu']");
+      if (settingsMenu) {
+        if (settingsMenu.parentElement !== bottomControlsGroup) {
+          bottomControlsGroup.insertBefore(settingsMenu, fullscreenButton);
+        }
+
+        settingsMenu.setAttribute("position", "top");
+        const settingsTooltip = settingsMenu.querySelector("media-menu-button media-tooltip");
+        if (settingsTooltip instanceof HTMLElement) {
+          settingsTooltip.setAttribute("position", "top right");
+        }
+      }
+
+      const video = playerElement.querySelector("video") as VideoWithCastSupport | null;
+      suppressNativeControls(video);
+      const existingCastButton = bottomControlsGroup.querySelector(
+        "button[data-local-cast-button='true']",
+      ) as HTMLButtonElement | null;
+
+      if (!hasCastSupport(video)) {
+        if (existingCastButton) {
+          if (castClickHandler) existingCastButton.removeEventListener("click", castClickHandler);
+          existingCastButton.remove();
+        }
+        return;
+      }
+
+      let castButton = existingCastButton;
+      if (!castButton) {
+        castButton = document.createElement("button");
+        castButton.type = "button";
+        castButton.setAttribute("data-local-cast-button", "true");
+        castButton.setAttribute("data-media-button", "");
+        castButton.setAttribute("aria-label", "Cast");
+        castButton.setAttribute("title", "Cast");
+        castButton.innerHTML = CAST_ICON_SVG;
+        castClickHandler = () => openCastPicker();
+        castButton.addEventListener("click", castClickHandler);
+      }
+
+      if (castButton.parentElement !== bottomControlsGroup || castButton.nextElementSibling !== fullscreenButton) {
+        bottomControlsGroup.insertBefore(castButton, fullscreenButton);
+      }
+    };
+
+    syncControlsLayout();
+
+    const observer = new MutationObserver(() => {
+      syncControlsLayout();
+    });
+
+    observer.observe(playerElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["controls"],
+    });
+
+    return () => {
+      observer.disconnect();
+
+      const castButton = playerElement.querySelector(
+        "button[data-local-cast-button='true']",
+      ) as HTMLButtonElement | null;
+      if (castButton && castClickHandler) {
+        castButton.removeEventListener("click", castClickHandler);
+      }
+    };
+  }, [openCastPicker, playerElement, streamUrl]);
+
+  if (error) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black/90 p-4 text-center text-sm text-default-300">
+        {error}
+      </div>
+    );
+  }
+
+  if (isLoading || !streamUrl || !isVidstackReady) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black/90">
+        <Spinner color="primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("relative h-full w-full bg-black", className)}>
+      {/* Netflix-style double-tap seek feedback */}
+      {seekFeedback ? (
+        <div
+          key={seekFeedback.key}
+          className={cn(
+            "pointer-events-none absolute inset-y-0 z-[10090] flex w-1/2 items-center justify-center",
+            seekFeedback.side === 'left' ? 'left-0' : 'right-0',
+          )}
+        >
+          <div className="flex animate-seek-ripple flex-col items-center gap-1 rounded-full bg-white/10 p-8 backdrop-blur-xs">
+            <span className="text-2xl text-white">
+              {seekFeedback.side === 'left' ? '⏪' : '⏩'}
+            </span>
+            <span className="text-xs font-semibold text-white">
+              {seekFeedback.secs}s
+            </span>
+          </div>
+        </div>
+      ) : null}
+
+      {showFloatingSourceButton && availableSources.length > 0 ? (
+        <div className="absolute left-1/2 top-3 z-[72] -translate-x-1/2">
+          <button
+            type="button"
+            onClick={() => setIsSourceDialogOpen(true)}
+            className={cn(
+              "flex items-center gap-2 rounded-xl border border-white/15 bg-black/75 px-4 py-2 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition hover:bg-black/90",
+              !canSwitchSources && "cursor-default opacity-80",
+            )}
+            aria-label="Select stream source"
+          >
+            <Server size={14} />
+            <span>{canSwitchSources ? "Select a server" : "Current server"}</span>
+          </button>
+          {activeSource ? (
+            <p className="mt-1 max-w-48 truncate text-center text-[11px] text-white/80" title={activeSource.label}>
+              {activeSource.label}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {isSourceDialogOpen ? (
+        <div
+          className="absolute inset-0 z-[10100] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+          onClick={() => setIsSourceDialogOpen(false)}
+        >
+          <div
+            className="w-full max-w-4xl rounded-2xl border border-white/10 bg-[#0a0a0a]/98 p-4 shadow-2xl sm:p-6"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-5 flex items-center justify-between">
+              <p className="text-sm font-semibold text-white/70">Select Server</p>
+              <button
+                type="button"
+                onClick={() => setIsSourceDialogOpen(false)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold text-white/80 transition hover:bg-white/10"
+              >
+                <Close size={12} />
+                <span>Close</span>
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              {availableSources.map((source, index) => {
+                const isActive = index === activeSourceIndex;
+                const providerLabel = source.provider ? source.provider.toUpperCase() : "STREAM";
+
+                return (
+                  <button
+                    key={`${source.file}-${index}`}
+                    type="button"
+                    onClick={() => {
+                      switchSource(index);
+                      setIsSourceDialogOpen(false);
+                    }}
+                    className={cn(
+                      "flex min-h-24 flex-col items-start justify-between rounded-xl border px-3 py-3 text-left transition",
+                      isActive
+                        ? "border-[#e50914]/60 bg-[#e50914]/10 shadow-[0_0_0_1px_rgba(229,9,20,0.2)]"
+                        : "border-white/8 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.05]",
+                    )}
+                  >
+                    <span className="rounded border border-white/15 bg-black/50 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-white/80">
+                      {providerLabel}
+                    </span>
+                    <span className="w-full truncate text-sm font-semibold text-white" title={source.label}>
+                      {source.label}
+                    </span>
+                    <span className={cn("text-[11px]", isActive ? "text-[#e50914]" : "text-white/50")}>
+                      {isActive ? "● Active" : index === 0 ? "Primary" : "Secondary"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {activeAd ? (
+        <div className="absolute inset-0 z-[10110] flex flex-col bg-black">
+          <video
+            key={`${activeAd.slot}:${activeAd.mediaUrl}`}
+            ref={adVideoRef}
+            src={activeAd.mediaUrl}
+            playsInline
+            preload="auto"
+            className="h-full w-full bg-black object-contain"
+          />
+          <div className="pointer-events-none absolute left-3 top-3 flex items-center gap-2 rounded-md border border-white/20 bg-black/60 px-2 py-1 text-xs font-semibold text-white/90 backdrop-blur-sm">
+            <span>Advertisement</span>
+            <span className="rounded bg-white/15 px-1.5 py-0.5 text-[10px] uppercase tracking-wide">
+              {activeAd.slot}
+            </span>
+          </div>
+          {typeof activeAd.skipOffsetSeconds === "number" ? (
+            <button
+              type="button"
+              onClick={() => {
+                if (!canSkipAd) return;
+                fireAdEventTracking(activeAd, "skip");
+                fireAdEventTracking(activeAd, "closeLinear");
+                finishAdBreak();
+              }}
+              disabled={!canSkipAd}
+              className={cn(
+                "absolute bottom-3 left-3 z-10 rounded-md border px-2.5 py-1 text-xs font-semibold transition",
+                canSkipAd
+                  ? "border-[#e50914]/50 bg-[#e50914]/20 text-white hover:bg-[#e50914]/35"
+                  : "cursor-not-allowed border-white/20 bg-black/55 text-white/65",
+              )}
+            >
+              {canSkipAd
+                ? "Skip Ad"
+                : `Skip in ${Math.max(
+                    0,
+                    adSkipRemaining ?? Math.ceil(Math.max(0, activeAd.skipOffsetSeconds)),
+                  )}s`}
+            </button>
+          ) : null}
+          {activeAd.clickThroughUrl ? (
+            <a
+              href={activeAd.clickThroughUrl}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              onClick={() => {
+                fireTrackingPixels(activeAd.clickTrackingUrls);
+                fireAdEventTracking(activeAd, "click");
+              }}
+              className="absolute bottom-3 right-3 rounded-md border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-semibold text-white/90 transition hover:bg-white/20"
+            >
+              Visit Sponsor
+            </a>
+          ) : null}
+        </div>
+      ) : null}
+
+      {createElement(
+        "media-player",
+        {
+          key: streamUrl,
+          ref: attachPlayerRef,
+          src: streamUrl,
+          load: "eager",
+          playsinline: true,
+          crossorigin: "anonymous",
+          "stream-type": "on-demand",
+          "view-type": "video",
+          className: "v321-vidstack-player h-full w-full bg-black",
+        },
+        createElement("media-outlet"),
+        createElement("media-community-skin"),
+      )}
+    </div>
+  );
+};
+
+export default memo(HlsJsonPlayer);

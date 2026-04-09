@@ -1,0 +1,153 @@
+import { NextRequest, NextResponse } from "next/server";
+
+const VIXSRC_BASE_URL = "https://vixsrc.to";
+const REQUEST_TIMEOUT_MS = 12000;
+const USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
+const DEFAULT_WORKER_PROXY = "https://small-cake-fdee.piracya.workers.dev";
+
+type MediaType = "movie" | "tv";
+
+interface PlaylistResponse {
+  playlist: Array<{
+    sources: Array<{
+      type: "hls";
+      file: string;
+      label: string;
+    }>;
+  }>;
+}
+
+const isDigits = (value: string | null): value is string => !!value && /^\d+$/.test(value);
+
+const getVixsrcPageUrl = (params: URLSearchParams): string | null => {
+  const type = params.get("type") as MediaType | null;
+  const id = params.get("id");
+  if (!type || !isDigits(id)) return null;
+
+  if (type === "movie") {
+    return `${VIXSRC_BASE_URL}/movie/${id}`;
+  }
+
+  if (type === "tv") {
+    const season = params.get("season");
+    const episode = params.get("episode");
+    if (!isDigits(season) || !isDigits(episode)) return null;
+    return `${VIXSRC_BASE_URL}/tv/${id}/${season}/${episode}`;
+  }
+
+  return null;
+};
+
+const extractMasterPlaylistUrl = (html: string, pageUrl: string): string | null => {
+  const masterPlaylistBlock = html.match(/window\.masterPlaylist\s*=\s*\{([\s\S]*?)\};/i)?.[1];
+
+  if (masterPlaylistBlock) {
+    const urlMatch = masterPlaylistBlock.match(/url\s*:\s*['"]([^'"]+)['"]/i);
+    const tokenMatch = masterPlaylistBlock.match(/(?:['"]token['"]|token)\s*:\s*['"]([^'"]+)['"]/i);
+    const expiresMatch = masterPlaylistBlock.match(
+      /(?:['"]expires['"]|expires)\s*:\s*['"]([^'"]+)['"]/i,
+    );
+
+    if (urlMatch && tokenMatch && expiresMatch) {
+      const baseUrl = new URL(urlMatch[1], pageUrl);
+      baseUrl.searchParams.set("token", tokenMatch[1]);
+      baseUrl.searchParams.set("expires", expiresMatch[1]);
+      baseUrl.searchParams.set("h", "1");
+      baseUrl.searchParams.set("lang", "en");
+      return baseUrl.toString();
+    }
+  }
+
+  const directM3u8 = html.match(/https?:\/\/[^"'\s]+\.m3u8[^"'\s]*/i)?.[0];
+  if (directM3u8) return directM3u8;
+
+  return null;
+};
+
+const getWorkerBaseUrl = () =>
+  (process.env.PLAYER_PROXY_URL || process.env.NEXT_PUBLIC_PLAYER_PROXY_URL || DEFAULT_WORKER_PROXY).replace(
+    /\/+$/,
+    "",
+  );
+
+const buildWorkerM3u8ProxyUrl = (m3u8Url: string, refererUrl: string): string => {
+  const workerBase = getWorkerBaseUrl();
+  const targetOrigin = new URL(refererUrl).origin;
+
+  const headersParam = JSON.stringify({
+    Referer: refererUrl,
+    Origin: targetOrigin,
+  });
+
+  const params = new URLSearchParams({
+    url: m3u8Url,
+    headers: headersParam,
+  });
+
+  // Keep a .m3u8 suffix in the path so player libraries reliably detect HLS mode.
+  return `${workerBase}/m3u8-proxy/playlist.m3u8?${params.toString()}`;
+};
+
+const toPlaylistPayload = (sourceUrl: string): PlaylistResponse => ({
+  playlist: [
+    {
+      sources: [
+        {
+          type: "hls",
+          file: sourceUrl,
+          label: "Auto",
+        },
+      ],
+    },
+  ],
+});
+
+export const dynamic = "force-dynamic";
+
+export const GET = async (request: NextRequest) => {
+  const pageUrl = getVixsrcPageUrl(request.nextUrl.searchParams);
+  if (!pageUrl) {
+    return NextResponse.json({ error: "Invalid parameters" }, { status: 400 });
+  }
+
+  const timeout = new AbortController();
+  const timeoutId = setTimeout(() => timeout.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(pageUrl, {
+      cache: "no-store",
+      signal: timeout.signal,
+      headers: {
+        "user-agent": USER_AGENT,
+        accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      },
+    });
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: `Upstream page request failed (${response.status})` },
+        { status: 502 },
+      );
+    }
+
+    const html = await response.text();
+    const masterPlaylistUrl = extractMasterPlaylistUrl(html, pageUrl);
+
+    if (!masterPlaylistUrl) {
+      return NextResponse.json({ error: "Failed to extract Vixsrc playlist" }, { status: 502 });
+    }
+
+    const proxiedM3u8Url = buildWorkerM3u8ProxyUrl(masterPlaylistUrl, pageUrl);
+    return NextResponse.json(toPlaylistPayload(proxiedM3u8Url), {
+      headers: {
+        "cache-control": "no-store, max-age=0",
+      },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unexpected proxy error";
+    return NextResponse.json({ error: message }, { status: 500 });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};

@@ -1,0 +1,83 @@
+{
+  "checkedAt": "2026-02-19T22:32:39.184Z",
+  "total": 11,
+  "checks": [
+    {
+      "service": "flowcast",
+      "quality": 360,
+      "status": 404,
+      "ok": false,
+      "ct": "text/html"
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Hindi",
+      "status": 206,
+      "ok": true,
+      "ct": "text/html; charset=utf-8"
+    },
+    {
+      "service": "asiacloud",
+      "quality": "English",
+      "status": 404,
+      "ok": false,
+      "ct": "text/html"
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Bengali",
+      "status": 206,
+      "ok": true,
+      "ct": "text/html; charset=utf-8"
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Tamil",
+      "status": 404,
+      "ok": false,
+      "ct": "text/html"
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Telugu",
+      "status": 206,
+      "ok": true,
+      "ct": "text/html; charset=utf-8"
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Hindi Subbed",
+      "status": 404,
+      "ok": false,
+      "ct": "text/html"
+    },
+    {
+      "service": "primevids",
+      "quality": "HLS",
+      "status": 206,
+      "ok": true,
+      "ct": "text/html; charset=utf-8"
+    },
+    {
+      "service": "hindicast",
+      "quality": 360,
+      "status": 404,
+      "ok": false,
+      "ct": "text/html"
+    },
+    {
+      "service": "ophim",
+      "quality": "HLS",
+      "status": 404,
+      "ok": false,
+      "ct": "text/html"
+    },
+    {
+      "service": "ophim",
+      "quality": "HLS",
+      "status": 206,
+      "ok": true,
+      "ct": "text/html; charset=utf-8"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+
+> 321movies@1.0.0 build
+> patch-package && next build
+
+patch-package 8.0.1
+Applying patches...
+strataplayer@1.2.23 ✔
+   ▲ Next.js 15.5.7
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for server...
+ ✓ (pwa) Compiling for client (static)...
+ ○ (pwa) Service worker: /home/nika/Documents/321mova132/public/sw.js
+ ○ (pwa)   URL: /sw.js
+ ○ (pwa)   Scope: /
+Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully in 8.3s
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/16) ...
+   Generating static pages (4/16) 
+   Generating static pages (8/16) 
+   Generating static pages (12/16) 
+ ✓ Generating static pages (16/16)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    22.8 kB         340 kB
+├ ○ /_not-found                            178 B         106 kB
+├ ○ /about                               11.3 kB         161 kB
+├ ƒ /api/auth/callback                     178 B         106 kB
+├ ƒ /api/auth/confirm                      178 B         106 kB
+├ ƒ /api/billing/card2crypto/checkout      178 B         106 kB
+├ ƒ /api/billing/card2crypto/status        178 B         106 kB
+├ ƒ /api/billing/card2crypto/webhook       178 B         106 kB
+├ ƒ /api/billing/codes/redeem              178 B         106 kB
+├ ƒ /api/billing/sellauth/checkout         178 B         106 kB
+├ ƒ /api/billing/sellauth/status           178 B         106 kB
+├ ƒ /api/player/fmoviez-proxy              178 B         106 kB
+├ ƒ /api/player/save-history               178 B         106 kB
+├ ƒ /api/player/secure-proxy               178 B         106 kB
+├ ƒ /api/player/vast                       178 B         106 kB
+├ ƒ /api/player/vixsrc-playlist            178 B         106 kB
+├ ƒ /api/player/wolfflix-proxy             178 B         106 kB
+├ ƒ /api/sports/list                       178 B         106 kB
+├ ƒ /api/sports/live                       178 B         106 kB
+├ ƒ /api/sports/stream                     178 B         106 kB
+├ ○ /auth                                  202 B         379 kB
+├ ○ /auth/reset-password                   203 B         379 kB
+├ ƒ /billing                               14 kB         297 kB
+├ ○ /discover                            6.65 kB         443 kB
+├ ƒ /library                             6.04 kB         441 kB
+├ ƒ /movie/[id]                          3.65 kB         153 kB
+├ ƒ /movie/[id]/player                   15.6 kB         292 kB
+├ ○ /search                              7.53 kB         430 kB
+├ ○ /sports                               7.1 kB         127 kB
+├ ƒ /tv/[id]                              4.9 kB         154 kB
+└ ƒ /tv/[id]/[season]/[episode]/player   3.69 kB         153 kB
++ First Load JS shared by all             106 kB
+  ├ chunks/4696-8f5ccbc29e0f9ed8.js      47.9 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js  54.2 kB
+  └ other shared chunks (total)          4.08 kB
+
+
+ƒ Middleware                             80.7 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

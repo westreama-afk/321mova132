@@ -1,0 +1,206 @@
+{
+  "tmdbId": "1368166",
+  "generatedSecret": "LTU4N2VkMTUw",
+  "services": [
+    "flowcast",
+    "asiacloud",
+    "primevids",
+    "hindicast",
+    "guru",
+    "ophim"
+  ],
+  "links": [
+    {
+      "service": "flowcast",
+      "quality": 480,
+      "size": "468365829",
+      "source": "FlowCast",
+      "format": "mp4",
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F461174e2cfe80cd3576efec938b698b7.mp4%3Fsign%3Dc1693ce2f2107cd9706aaa7f01beebdb%26t%3D1771405994&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "directUrl": "https://bcdnxw.hakunaymatata.com/resource/461174e2cfe80cd3576efec938b698b7.mp4?sign=c1693ce2f2107cd9706aaa7f01beebdb&t=1771405994",
+      "headers": {
+        "Referer": "https://filmboom.top/",
+        "Origin": "https://filmboom.top"
+      }
+    },
+    {
+      "service": "flowcast",
+      "quality": 360,
+      "size": "365582930",
+      "source": "FlowCast",
+      "format": "mp4",
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fa4002c2894b538200d348baadd5a406e.mp4%3Fsign%3Dfbfa0de331e158b8f83c71dc9975aaa9%26t%3D1771405422&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "directUrl": "https://bcdnxw.hakunaymatata.com/resource/a4002c2894b538200d348baadd5a406e.mp4?sign=fbfa0de331e158b8f83c71dc9975aaa9&t=1771405422",
+      "headers": {
+        "Referer": "https://filmboom.top/",
+        "Origin": "https://filmboom.top"
+      }
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Hindi",
+      "size": null,
+      "source": "AsiaCloud",
+      "format": "hls",
+      "proxyUrl": "https://lizer123.site/getm3u8/15P6FKU2",
+      "directUrl": "https://lizer123.site/getm3u8/15P6FKU2",
+      "headers": null
+    },
+    {
+      "service": "asiacloud",
+      "quality": "English",
+      "size": null,
+      "source": "AsiaCloud",
+      "format": "hls",
+      "proxyUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP:1771415743:185.113.8.50:3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "directUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21keRpXTHV0MaREZspFVOxmTEhWaZpnSs5ERopWTykkMOdlWrlFVBBTTX1UP:1771415743:185.113.8.50:3faee64188ef303a40f25fa7d3995424e35a4e433e3186ea481b46d6d29625ec:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Bengali",
+      "size": null,
+      "source": "AsiaCloud",
+      "format": "hls",
+      "proxyUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP:1771415743:185.113.8.50:19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "directUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT21ERCl2TUxGaZR1Y510VJpnWqtGNZJTU04kMWpWWtlEeZdVUz4UbNBjTyUUP:1771415743:185.113.8.50:19fb2de0c0cf8151fdf5e3584c6567e72f9c1eeb9cdb1ed4a5bc65d6ca516bf4:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Tamil",
+      "size": null,
+      "source": "AsiaCloud",
+      "format": "hls",
+      "proxyUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP:1771415743:185.113.8.50:f586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "directUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210RRRTTEtmeaRlTtllMVl3TUxmaZRVRy40RJRTW6lUNadlTo1kaVdnTEVVP:1771415743:185.113.8.50:f586e3a88d959d5901f768580cbcff23c5dc1c51c0d5551baabd09990a559d0a:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Telugu",
+      "size": null,
+      "source": "AsiaCloud",
+      "format": "hls",
+      "proxyUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP:1771415743:185.113.8.50:a9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "directUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VahmWEZEaadUV6llaVJTWUlEMNdkSp5kaWxmTE10dOp3Y14kaRFjWH1UP:1771415743:185.113.8.50:a9a6cd5a60888e0ebbc7497cf2086714a6b16ada94b5cc7af514e5e43923e2e5:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "asiacloud",
+      "quality": "Hindi Subbed",
+      "size": null,
+      "source": "AsiaCloud",
+      "format": "hls",
+      "proxyUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP:1771415743:185.113.8.50:18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "directUrl": "https://i-arch-400.heast404jax.com/stream2/i-arch-400/f2309f6e1bf51879ce0396fca859e6e7/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25EVrBjTqVEeadUTwk1VSxmWt1EeORkWppFVFJzTEZkaOJTR39EVst2TEVUP:1771415743:185.113.8.50:18c4b9a4eda6a4c5b7fb7d1867ff1fb1ae9fba4e64849525cf114ae8b7a0fd7a:==QTUdWMMpWR41Ue0QDTqV1d/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "primevids",
+      "quality": "HLS",
+      "size": null,
+      "source": "PrimeVids",
+      "format": "hls",
+      "proxyUrl": "https://67streams.online/movie/YEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks/index.m3u8",
+      "directUrl": "https://67streams.online/movie/YEx9pxKEaxWkaPs8RrB79m4DxfVsEgLBpcN1v1vrwks/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "hindicast",
+      "quality": 480,
+      "size": "468365829",
+      "source": "HindiCast",
+      "format": "mp4",
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F461174e2cfe80cd3576efec938b698b7.mp4%3Fsign%3D502b763970838a793539cd3d3190334f%26t%3D1771417824&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "directUrl": "https://bcdnxw.hakunaymatata.com/resource/461174e2cfe80cd3576efec938b698b7.mp4?sign=502b763970838a793539cd3d3190334f&t=1771417824",
+      "headers": {
+        "Referer": "https://filmboom.top/",
+        "Origin": "https://filmboom.top"
+      }
+    },
+    {
+      "service": "hindicast",
+      "quality": 360,
+      "size": "365582930",
+      "source": "HindiCast",
+      "format": "mp4",
+      "proxyUrl": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fa4002c2894b538200d348baadd5a406e.mp4%3Fsign%3D27a8030a6a10440a8a2df13c7cbbf03c%26t%3D1771417956&headers=%7B%22Referer%22%3A%22https%3A%2F%2Ffilmboom.top%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Ffilmboom.top%22%7D",
+      "directUrl": "https://bcdnxw.hakunaymatata.com/resource/a4002c2894b538200d348baadd5a406e.mp4?sign=27a8030a6a10440a8a2df13c7cbbf03c&t=1771417956",
+      "headers": {
+        "Referer": "https://filmboom.top/",
+        "Origin": "https://filmboom.top"
+      }
+    },
+    {
+      "service": "guru",
+      "quality": "HLS 1",
+      "size": null,
+      "source": "Guru",
+      "format": "hls",
+      "proxyUrl": "https://cfbw.p2l.workers.dev/stream/MzxxHsXAOgHHH5BE3y026rTc6MbCIQhhiGU4BzomSfIXEVN4ZDNJNw",
+      "directUrl": "https://cfbw.p2l.workers.dev/stream/MzxxHsXAOgHHH5BE3y026rTc6MbCIQhhiGU4BzomSfIXEVN4ZDNJNw",
+      "headers": null
+    },
+    {
+      "service": "guru",
+      "quality": "HLS 2",
+      "size": null,
+      "source": "Guru",
+      "format": "hls",
+      "proxyUrl": "https://cfbw.p2l.workers.dev/stream/nXvb4q38unk6leHJeuZaZcdZy2LDoYc1VTjoohF3kRQZttAUuPBKHw",
+      "directUrl": "https://cfbw.p2l.workers.dev/stream/nXvb4q38unk6leHJeuZaZcdZy2LDoYc1VTjoohF3kRQZttAUuPBKHw",
+      "headers": null
+    },
+    {
+      "service": "guru",
+      "quality": "HLS 3",
+      "size": null,
+      "source": "Guru",
+      "format": "hls",
+      "proxyUrl": "https://cfbw.p2l.workers.dev/stream/qOiODquHuPKzeKlHEGXj1BtQBIuPl2hvXiELQKu7iAa6S0_7-wdSUA",
+      "directUrl": "https://cfbw.p2l.workers.dev/stream/qOiODquHuPKzeKlHEGXj1BtQBIuPl2hvXiELQKu7iAa6S0_7-wdSUA",
+      "headers": null
+    },
+    {
+      "service": "guru",
+      "quality": "HLS 4",
+      "size": null,
+      "source": "Guru",
+      "format": "hls",
+      "proxyUrl": "https://cfbw.p2l.workers.dev/stream/0h_WkfYtuTySMiPnRZD_o1fd6ILCj9G8Rj4ie8PVFJzPOBxVs4geLg",
+      "directUrl": "https://cfbw.p2l.workers.dev/stream/0h_WkfYtuTySMiPnRZD_o1fd6ILCj9G8Rj4ie8PVFJzPOBxVs4geLg",
+      "headers": null
+    },
+    {
+      "service": "guru",
+      "quality": "HLS 5",
+      "size": null,
+      "source": "Guru",
+      "format": "hls",
+      "proxyUrl": "https://cfbw.p2l.workers.dev/stream/-R3lligaygbMBLw9tozLE_-4U6EXejPBAxevxeGWJZPjTOJLkxaJpw",
+      "directUrl": "https://cfbw.p2l.workers.dev/stream/-R3lligaygbMBLw9tozLE_-4U6EXejPBAxevxeGWJZPjTOJLkxaJpw",
+      "headers": null
+    },
+    {
+      "service": "ophim",
+      "quality": "HLS",
+      "size": null,
+      "source": "#Hà Nội (Vietsub) (Full)",
+      "format": "hls",
+      "proxyUrl": "https://s6.kkphimplayer6.com/20260203/45ROwPYw/index.m3u8",
+      "directUrl": "https://s6.kkphimplayer6.com/20260203/45ROwPYw/index.m3u8",
+      "headers": null
+    },
+    {
+      "service": "ophim",
+      "quality": "HLS",
+      "size": null,
+      "source": "#Hà Nội (Thuyết Minh) (Full)",
+      "format": "hls",
+      "proxyUrl": "https://s6.kkphimplayer6.com/20260203/bxtEGMH7/index.m3u8",
+      "directUrl": "https://s6.kkphimplayer6.com/20260203/bxtEGMH7/index.m3u8",
+      "headers": null
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+"use client";
+
+import { ContentType } from "@/types";
+import { cn } from "@/utils/helpers";
+import { Spinner } from "@heroui/react";
+import { StrataPlayer, StrataCore } from "strataplayer";
+import { HlsPlugin } from "strataplayer/hls";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+type LocalPlayerEventType = "play" | "pause" | "seeked" | "ended" | "timeupdate";
+
+interface PlaylistSource {
+  type?: string;
+  file?: string;
+}
+
+interface PlaylistItem {
+  sources?: PlaylistSource[];
+}
+
+interface PlaylistResponse {
+  playlist?: PlaylistItem[];
+}
+
+interface HlsJsonPlayerProps {
+  playlistUrl: string;
+  mediaId: string | number;
+  mediaType: ContentType;
+  season?: number;
+  episode?: number;
+  startAt?: number;
+  className?: string;
+  onFatalError?: (message: string) => void;
+}
+
+const pickHlsSource = (payload: PlaylistResponse): string | null => {
+  if (!Array.isArray(payload.playlist)) return null;
+
+  for (const item of payload.playlist) {
+    if (!Array.isArray(item.sources)) continue;
+    for (const source of item.sources) {
+      if (source?.type === "hls" && typeof source.file === "string" && source.file.length > 0) {
+        return source.file;
+      }
+    }
+  }
+
+  return null;
+};
+
+const HlsJsonPlayer: React.FC<HlsJsonPlayerProps> = ({
+  playlistUrl,
+  mediaId,
+  mediaType,
+  season,
+  episode,
+  startAt,
+  className,
+  onFatalError,
+}) => {
+  const [streamUrl, setStreamUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const unsubscribeRef = useRef<Array<() => void>>([]);
+  const hasReportedErrorRef = useRef(false);
+
+  const normalizedStartAt = useMemo(
+    () => (typeof startAt === "number" && Number.isFinite(startAt) && startAt > 0 ? startAt : 0),
+    [startAt],
+  );
+  const plugins = useMemo(() => [new HlsPlugin()], []);
+
+  const cleanupSubscriptions = useCallback(() => {
+    unsubscribeRef.current.forEach((unsubscribe) => unsubscribe());
+    unsubscribeRef.current = [];
+  }, []);
+
+  const reportFatalError = useCallback(
+    (message: string) => {
+      setError(message);
+
+      if (hasReportedErrorRef.current) return;
+      hasReportedErrorRef.current = true;
+      onFatalError?.(message);
+    },
+    [onFatalError],
+  );
+
+  useEffect(() => {
+    let disposed = false;
+    hasReportedErrorRef.current = false;
+
+    const loadPlaylist = async () => {
+      setIsLoading(true);
+      setError(null);
+      setStreamUrl(null);
+
+      try {
+        const response = await fetch(playlistUrl, {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Playlist request failed (${response.status})`);
+        }
+
+        const payload = (await response.json()) as PlaylistResponse;
+        const nextStreamUrl = pickHlsSource(payload);
+        if (!nextStreamUrl) {
+          throw new Error("No HLS stream found in playlist response");
+        }
+
+        if (!disposed) {
+          setStreamUrl(nextStreamUrl);
+          setIsLoading(false);
+        }
+      } catch (caughtError) {
+        if (disposed) return;
+
+        reportFatalError(
+          caughtError instanceof Error ? caughtError.message : "Failed to load stream",
+        );
+        setIsLoading(false);
+      }
+    };
+
+    void loadPlaylist();
+    return () => {
+      disposed = true;
+    };
+  }, [playlistUrl, reportFatalError]);
+
+  useEffect(() => cleanupSubscriptions, [cleanupSubscriptions]);
+
+  const onGetInstance = useCallback(
+    (core: StrataCore) => {
+      cleanupSubscriptions();
+      setError(null);
+
+      const emitPlayerEvent = (eventType: LocalPlayerEventType) => {
+        const eventPayload = {
+          type: "LOCAL_PLAYER_EVENT",
+          data: {
+            event: eventType,
+            currentTime: core.currentTime || 0,
+            duration: Number.isFinite(core.duration) ? core.duration : 0,
+            mediaId,
+            mediaType,
+            season,
+            episode,
+          },
+        };
+
+        window.dispatchEvent(new MessageEvent("message", { data: eventPayload }));
+      };
+
+      unsubscribeRef.current.push(core.on("play", () => emitPlayerEvent("play")));
+      unsubscribeRef.current.push(core.on("pause", () => emitPlayerEvent("pause")));
+      unsubscribeRef.current.push(core.on("seek", () => emitPlayerEvent("seeked")));
+      unsubscribeRef.current.push(core.on("ended", () => emitPlayerEvent("ended")));
+      unsubscribeRef.current.push(core.on("video:timeupdate", () => emitPlayerEvent("timeupdate")));
+      unsubscribeRef.current.push(
+        core.on("error", (payload) => {
+          const fallback = "Stream playback failed. Please try another source.";
+          if (typeof payload === "string" && payload.trim()) {
+            reportFatalError(payload);
+            return;
+          }
+          reportFatalError(fallback);
+        }),
+      );
+
+      if (normalizedStartAt > 0) {
+        const offCanPlay = core.on("video:canplay", () => {
+          core.seek(normalizedStartAt);
+          offCanPlay();
+        });
+        unsubscribeRef.current.push(offCanPlay);
+
+        window.setTimeout(() => {
+          if (core.duration > 0 && core.currentTime < 1) {
+            core.seek(normalizedStartAt);
+          }
+        }, 1200);
+      }
+    },
+    [
+      cleanupSubscriptions,
+      episode,
+      mediaId,
+      mediaType,
+      normalizedStartAt,
+      reportFatalError,
+      season,
+    ],
+  );
+
+  if (error) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black/90 p-4 text-center text-sm text-default-300">
+        {error}
+      </div>
+    );
+  }
+
+  if (isLoading || !streamUrl) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black/90">
+        <Spinner color="primary" />
+      </div>
+    );
+  }
+
+  return (
+    <StrataPlayer
+      key={streamUrl}
+      src={streamUrl}
+      type="hls"
+      plugins={plugins}
+      autoPlay={false}
+      loop={false}
+      screenshot={false}
+      fullscreenWeb={false}
+      pip={true}
+      setting={true}
+      hotKey={true}
+      centerControls={true}
+      videoFit="contain"
+      useSSR={false}
+      container={cn("h-full w-full bg-black", className)}
+      onGetInstance={onGetInstance}
+    />
+  );
+};
+
+export default HlsJsonPlayer;
