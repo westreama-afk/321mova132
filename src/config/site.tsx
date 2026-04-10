@@ -12,6 +12,8 @@ import {
   IoInformationCircle,
   IoInformationCircleOutline,
   IoMoon,
+  IoPhonePortrait,
+  IoPhonePortraitOutline,
 } from "react-icons/io5";
 import { TbFolder, TbFolderFilled } from "react-icons/tb";
 
@@ -55,6 +57,12 @@ export const siteConfig: SiteConfigType = {
       href: "/about",
       icon: <IoInformationCircleOutline className="size-full" />,
       activeIcon: <IoInformationCircle className="size-full" />,
+    },
+    {
+      label: "Download",
+      href: "/download",
+      icon: <IoPhonePortraitOutline className="size-full" />,
+      activeIcon: <IoPhonePortrait className="size-full" />,
     },
   ],
   themes: [

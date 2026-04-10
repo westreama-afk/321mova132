@@ -3,6 +3,24 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      app_downloads: {
+        Row: {
+          id: number;
+          count: number;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          count?: number;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          count?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       comments: {
         Row: {
           content: string;
@@ -404,6 +422,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      increment_download_count: {
+        Args: Record<PropertyKey, never>;
+        Returns: number;
+      };
       get_media_rating_stats: {
         Args: {
           p_media_id: number;
