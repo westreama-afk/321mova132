@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 
 export const dynamic = "force-dynamic";
 
-const APK_URL = "http://r2.piracy.cloud/app/321movies1.2.apk";
+const APK_URL = "http://r2.piracy.cloud/app/321movies1.3.apk";
 
 export const GET = async () => {
   try {
