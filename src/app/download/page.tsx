@@ -49,8 +49,8 @@ const features = [
   },
   {
     icon: <IoCheckmarkCircle className="h-5 w-5" />,
-    title: "Ad-Free Option",
-    description: "Subscribe to remove ads across all platforms.",
+    title: "Live Tv & Movies",
+    description: "10000 channels available.",
   },
 ];
 
