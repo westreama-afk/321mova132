@@ -1,12 +1,8 @@
-import { getDownloadCount } from "@/actions/download";
 import { FaAndroid } from "react-icons/fa";
 import dynamic from "next/dynamic";
-const LiveDownloadCounter = dynamic(() => import("@/components/sections/Download/LiveDownloadCounter"));
 const DownloadButton = dynamic(() => import("@/components/sections/Download/DownloadButton"));
 
-const AppDownload = async () => {
-  const initialCount = await getDownloadCount().catch(() => 0);
-
+const AppDownload = () => {
   return (
     <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-primary/20 via-primary/5 to-transparent p-6 md:p-8">
       <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
@@ -29,7 +25,6 @@ const AppDownload = async () => {
 
         <div className="flex shrink-0 flex-col items-center gap-2">
           <DownloadButton />
-          <LiveDownloadCounter initialCount={initialCount} />
         </div>
       </div>
     </section>

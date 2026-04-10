@@ -1,0 +1,7 @@
+name = "small-cake-fdee"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+# PROXY_KEY = "your-secret-key"  # optional: restrict access by shared secret
+# ALLOWED_HOSTS = "321movies.co.uk,www.321movies.co.uk"  # override allowed origins

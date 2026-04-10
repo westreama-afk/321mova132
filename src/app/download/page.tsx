@@ -1,4 +1,3 @@
-import { getDownloadCount } from "@/actions/download";
 import { siteConfig } from "@/config/site";
 import { Metadata } from "next";
 import { FaAndroid } from "react-icons/fa";
@@ -11,7 +10,6 @@ import {
   IoSync,
 } from "react-icons/io5";
 import dynamic from "next/dynamic";
-const LiveDownloadCounter = dynamic(() => import("@/components/sections/Download/LiveDownloadCounter"));
 const DownloadButton = dynamic(() => import("@/components/sections/Download/DownloadButton"));
 
 export const metadata: Metadata = {
@@ -61,9 +59,7 @@ const installSteps = [
   "Tap Install and enjoy 321movies on your device.",
 ];
 
-const DownloadPage = async () => {
-  const initialCount = await getDownloadCount().catch(() => 0);
-
+const DownloadPage = () => {
   return (
     <div className="flex w-full justify-center px-4 py-6">
       <div className="flex w-full max-w-2xl flex-col gap-8">
@@ -84,7 +80,6 @@ const DownloadPage = async () => {
               <p className="text-xs text-foreground/40">Version {APP_VERSION}</p>
             </div>
             <DownloadButton />
-            <LiveDownloadCounter initialCount={initialCount} />
           </div>
         </div>
 
