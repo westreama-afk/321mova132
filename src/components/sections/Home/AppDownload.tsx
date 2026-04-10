@@ -2,7 +2,7 @@ import { Button } from "@heroui/react";
 import { FaAndroid } from "react-icons/fa";
 import { HiDownload } from "react-icons/hi";
 
-const APK_URL = "http://r2.piracy.cloud/app/321movies.apk";
+const APK_URL = "http://r2.piracy.cloud/app/321movies1.2.apk";
 
 const AppDownload: React.FC = () => {
   return (
