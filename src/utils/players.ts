@@ -22,6 +22,7 @@ const get321TvPlaylistUrl = (
   return `/api/player/vixsrc-playlist?${params.toString()}`;
 };
 
+
 /**
  * Generates a list of movie players with their respective titles and source URLs.
  * Each player is constructed using the provided movie ID.
@@ -152,6 +153,25 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
     {
       title: "MoviesAPI",
       source: `https://moviesapi.club/movie/${id}`,
+      ads: true,
+    },
+    {
+      title: "NexVid",
+      source: `https://nexvid.online/watch/movie/${id}`,
+      recommended: true,
+      fast: true,
+      ads: false,
+    },
+    {
+      title: "Smashy",
+      source: `https://player.smashy.stream/movie/${id}`,
+      fast: true,
+      ads: true,
+    },
+    {
+      title: "VidBinge",
+      source: `https://vidbinge.dev/embed/movie?tmdb=${id}`,
+      fast: true,
       ads: true,
     },
   ];
@@ -294,6 +314,25 @@ export const getTvShowPlayers = (
     {
       title: "MoviesAPI",
       source: `https://moviesapi.club/tv/${id}-${season}-${episode}`,
+      ads: true,
+    },
+    {
+      title: "NexVid",
+      source: `https://nexvid.online/watch/show/${id}?s=${season}&e=${episode}`,
+      recommended: true,
+      fast: true,
+      ads: false,
+    },
+    {
+      title: "Smashy",
+      source: `https://player.smashy.stream/tv/${id}?s=${season}&e=${episode}`,
+      fast: true,
+      ads: true,
+    },
+    {
+      title: "VidBinge",
+      source: `https://vidbinge.dev/embed/tv?tmdb=${id}&season=${season}&episode=${episode}`,
+      fast: true,
       ads: true,
     },
   ];

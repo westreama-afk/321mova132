@@ -40,6 +40,16 @@ interface SubtitleTrack {
   lang: string;
 }
 
+interface ExternalSubtitleTrack {
+  url: string;
+  lang: string;
+  label: string;
+  format: string;
+}
+
+/** External (Wyzie) subtitle IDs start at this offset to avoid clashing with HLS track indices. */
+const EXTERNAL_SUB_ID_OFFSET = 1000;
+
 interface QualityLevel {
   id: number;
   label: string;
@@ -154,6 +164,8 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   }>({ direction: "forward", visible: false });
   const [currentSubtitleCue, setCurrentSubtitleCue] = useState<string | null>(null);
   const cueCleanupRef = useRef<(() => void) | null>(null);
+  const [externalSubtitles, setExternalSubtitles] = useState<ExternalSubtitleTrack[]>([]);
+  const externalTrackElementsRef = useRef<HTMLTrackElement[]>([]);
 
   // ── Subtitle helpers ──────────────────────────────────────────────────────────
 
@@ -161,18 +173,30 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     preferredSubtitleIdRef.current = id;
     setActiveSubtitleId(id);
     const hls = hlsRef.current;
-    if (hls) {
-      hls.subtitleTrack = id;
-    }
     const video = videoRef.current;
-    if (!video) return;
-    // Use 'hidden' so the browser loads cues but doesn't render them natively;
-    // we render them ourselves in JSX.
-    setTimeout(() => {
-      for (let i = 0; i < video.textTracks.length; i++) {
-        video.textTracks[i].mode = i === id ? "hidden" : "disabled";
+
+    if (id >= EXTERNAL_SUB_ID_OFFSET) {
+      // External subtitle selected — disable all HLS tracks
+      if (hls) hls.subtitleTrack = -1;
+      if (video) {
+        setTimeout(() => {
+          for (let i = 0; i < video.textTracks.length; i++) {
+            const externalIdx = i - (video.textTracks.length - externalTrackElementsRef.current.length);
+            video.textTracks[i].mode = (externalIdx >= 0 && externalIdx === id - EXTERNAL_SUB_ID_OFFSET) ? "hidden" : "disabled";
+          }
+        }, 0);
       }
-    }, 0);
+    } else {
+      // HLS or native subtitle — disable all external tracks
+      if (hls) hls.subtitleTrack = id;
+      if (video) {
+        setTimeout(() => {
+          for (let i = 0; i < video.textTracks.length; i++) {
+            video.textTracks[i].mode = i === id ? "hidden" : "disabled";
+          }
+        }, 0);
+      }
+    }
   }, []);
 
   // ── Event emission ────────────────────────────────────────────────────────────
@@ -354,6 +378,64 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     return () => { cancelled = true; };
   }, [playlistUrl, loadSource, onFatalError]);
 
+  // ── Fetch external subtitles (Wyzie) ──────────────────────────────────────────
+
+  useEffect(() => {
+    let cancelled = false;
+    setExternalSubtitles([]);
+
+    const subParams = new URLSearchParams({
+      id: String(mediaId),
+      type: mediaType === "movie" ? "movie" : "tv",
+    });
+    if (mediaType === "tv" && season) subParams.set("season", String(season));
+    if (mediaType === "tv" && episode) subParams.set("episode", String(episode));
+
+    fetch(`/api/player/subtitles?${subParams.toString()}`)
+      .then((res) => res.json())
+      .then((data: { tracks?: ExternalSubtitleTrack[] }) => {
+        if (cancelled || !Array.isArray(data?.tracks)) return;
+        setExternalSubtitles(data.tracks);
+      })
+      .catch(() => {});
+
+    return () => { cancelled = true; };
+  }, [mediaId, mediaType, season, episode]);
+
+  // ── Attach external <track> elements to the video ─────────────────────────────
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Remove previously attached external tracks
+    for (const el of externalTrackElementsRef.current) {
+      video.removeChild(el);
+    }
+    externalTrackElementsRef.current = [];
+
+    for (const ext of externalSubtitles) {
+      const track = document.createElement("track");
+      track.kind = "subtitles";
+      track.label = ext.label;
+      track.srclang = ext.lang;
+      track.src = ext.url;
+      track.default = false;
+      video.appendChild(track);
+      // Set mode to disabled so it loads but doesn't render
+      const idx = video.textTracks.length - 1;
+      if (video.textTracks[idx]) video.textTracks[idx].mode = "disabled";
+      externalTrackElementsRef.current.push(track);
+    }
+
+    return () => {
+      for (const el of externalTrackElementsRef.current) {
+        try { video.removeChild(el); } catch { /* already removed */ }
+      }
+      externalTrackElementsRef.current = [];
+    };
+  }, [externalSubtitles]);
+
   // ── Source switching ──────────────────────────────────────────────────────────
 
   const switchSource = useCallback(
@@ -449,7 +531,13 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     const tryAttach = () => {
       const video = videoRef.current;
       if (!video) return false;
-      const track = video.textTracks[activeSubtitleId];
+      let track: TextTrack | null = null;
+      if (activeSubtitleId >= EXTERNAL_SUB_ID_OFFSET) {
+        const el = externalTrackElementsRef.current[activeSubtitleId - EXTERNAL_SUB_ID_OFFSET];
+        track = el?.track ?? null;
+      } else {
+        track = video.textTracks[activeSubtitleId] ?? null;
+      }
       if (!track) return false;
       track.mode = "hidden";
       const onCueChange = () => {
@@ -708,7 +796,17 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const hoverTime = hoverFraction !== null && duration > 0 ? hoverFraction * duration : null;
   const VolumeIcon = isMuted || volume === 0 ? IoMdVolumeMute : volume < 0.5 ? IoMdVolumeLow : IoMdVolumeHigh;
   const controlsActive = showControls || !isPlaying;
-  const hasSubtitles = subtitleTracks.length > 0;
+  const hasSubtitles = subtitleTracks.length > 0 || externalSubtitles.length > 0;
+
+  // Build combined subtitle track list for the menu
+  const allSubtitleTracks: SubtitleTrack[] = [
+    ...subtitleTracks,
+    ...externalSubtitles.map((ext, i) => ({
+      id: EXTERNAL_SUB_ID_OFFSET + i,
+      name: ext.label,
+      lang: ext.lang,
+    })),
+  ];
 
   // ── Render ────────────────────────────────────────────────────────────────────
 
@@ -812,7 +910,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                   {tab === "source" ? "Source" : tab === "quality" ? "Quality" : tab === "subtitles" ? "Subs" : "Speed"}
                   {tab === "subtitles" && hasSubtitles && (
                     <span className="ml-1 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white/10 text-[8px] font-bold">
-                      {subtitleTracks.length}
+                      {allSubtitleTracks.length}
                     </span>
                   )}
                 </button>
@@ -883,7 +981,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
                     )}
                   </button>
-                  {hasSubtitles ? subtitleTracks.map((track) => (
+                  {hasSubtitles ? allSubtitleTracks.map((track) => (
                     <button
                       key={track.id}
                       type="button"
