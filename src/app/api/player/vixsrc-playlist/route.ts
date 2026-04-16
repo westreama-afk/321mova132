@@ -16,7 +16,7 @@ const PROVIDER_LABELS: Record<string, string> = {
   guru: "Guru",
   ophim: "Ophim",
 };
-const REQUEST_TIMEOUT_MS = 10000;
+const REQUEST_TIMEOUT_MS = 15000;
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
 const DEFAULT_WORKER_PROXY = "https://small-cake-fdee.piracya.workers.dev";
@@ -461,10 +461,10 @@ export const GET = async (request: NextRequest) => {
     if (provider === "flowcast") return 0;
     
     // Second Priority: Guru
-    if (provider === "guru") return 1;
+    if (provider === "primevids") return 1;
     
     // Third Priority: PrimeVids
-    if (provider === "primevids") return 2;
+    if (provider === "guru") return 2;
 
     // Everything else (Fallbacks)
     if (provider === "icefy" || provider === "hollymoviehd") return 3;
