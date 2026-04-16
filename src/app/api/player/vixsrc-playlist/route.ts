@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encodePlayerStreamUrl } from "@/utils/playerUrlCodec";
 
-// ─── Rivestream scrapper ───────────────────────────────────────────────────────
+/**
+ * ─── RIVESTREAM SCRAPER CONFIG ───────────────────────────────────────────────
+ */
 const SCRAPPER_BASE = "https://scrapper.rivestream.org";
 const SCRAPPER_ORIGIN = "https://rivestream.org";
 const SCRAPPER_REFERER = "https://rivestream.org/";
@@ -19,8 +21,9 @@ const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36";
 const DEFAULT_WORKER_PROXY = "https://small-cake-fdee.piracya.workers.dev";
 
-// ─── Tulnex / Vidrush providers ────────────────────────────────────────────────
-// Decryption constants extracted from player.vidrush.net/assets/index-CELgbrKC.js
+/**
+ * ─── TULNEX / VIDRUSH CONSTANTS ──────────────────────────────────────────────
+ */
 const TULNEX_DI = "Sn00pD0g#L1_X0R_M4st3rK3y!2025";
 const TULNEX_FI = "xK9!mR2@pL5#nQ8";
 const TULNEX_HI = "Sn00pD0g#L3_AES_S3cur3K3y@2025$";
@@ -80,7 +83,9 @@ const TULNEX_PROVIDERS: TulnexProviderDef[] = [
   },
 ];
 
-// Cache constant XOR key (PBKDF2 is slow; derive once per cold start)
+/**
+ * ─── UTILITIES & CRYPTO ──────────────────────────────────────────────────────
+ */
 let _cachedXorKey: Uint8Array | null = null;
 
 const tulnexB64ToBuffer = (b64: string): ArrayBuffer => {
@@ -129,17 +134,14 @@ const getTulnexXorKey = (): Promise<Uint8Array> => {
   });
 };
 
-/** Decrypt a tulnex {v:4, payload} string — 4-layer scheme from vidrush bundle */
 const decryptTulnex = async (payload: string): Promise<unknown> => {
   const xorKey = await getTulnexXorKey();
-
   const sepIdx = payload.indexOf("|");
   if (sepIdx === -1) throw new Error("missing | separator");
   const rcvdHmac = payload.slice(0, sepIdx);
   const encB64 = payload.slice(sepIdx + 1);
   const innerStr = new TextDecoder().decode(tulnexB64ToBuffer(encB64));
 
-  // HMAC-SHA-512 integrity check
   const hmacKey = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(TULNEX_PI).buffer as ArrayBuffer,
@@ -150,7 +152,6 @@ const decryptTulnex = async (payload: string): Promise<unknown> => {
   const sig = await crypto.subtle.sign("HMAC", hmacKey, new TextEncoder().encode(innerStr));
   if (rcvdHmac !== tulnexBufToHex(sig)) throw new Error("HMAC mismatch");
 
-  // AES-256-CBC with per-response PBKDF2-SHA-512 derived key
   const parts = innerStr.split(".");
   if (parts.length !== 3) throw new Error(`unexpected parts: ${parts.length}`);
   const [ivB64, saltB64, cipherB64] = parts;
@@ -170,106 +171,21 @@ const decryptTulnex = async (payload: string): Promise<unknown> => {
     tulnexB64ToBuffer(cipherB64),
   );
 
-  // Binary-space decode
   const aesPlain = new TextDecoder().decode(decBuf);
   const binDecoded = atob(aesPlain)
     .split(" ")
     .map((s) => String.fromCharCode(parseInt(s, 2)))
     .join("");
 
-  // XOR with constant key
   const hexBytes = tulnexHexToBytes(binDecoded);
   const out = new Uint8Array(hexBytes.length);
   for (let i = 0; i < hexBytes.length; i++) out[i] = hexBytes[i] ^ xorKey[i % 32];
   return JSON.parse(new TextDecoder().decode(out.buffer));
 };
 
-const buildTulnexUrl = (provider: TulnexProviderDef, req: ParsedMediaRequest): string =>
-  (req.type === "movie" ? provider.movieUrl : provider.tvUrl)
-    .replace("${id}", req.id)
-    .replace("${season}", req.season ?? "0")
-    .replace("${episode}", req.episode ?? "0");
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const extractTulnexStreams = (data: any, label: string): { url: string; headers: HeaderMap }[] => {
-  const results: { url: string; headers: HeaderMap }[] = [];
-  const defaultHeaders: HeaderMap = { Referer: VIDRUSH_REFERER, Origin: "https://player.vidrush.net" };
-
-  const addUrl = (url: string, extraHeaders?: HeaderMap) => {
-    if (typeof url === "string" && url.startsWith("http")) {
-      results.push({ url, headers: { ...defaultHeaders, ...extraHeaders } });
-    }
-  };
-
-  if (!data || typeof data !== "object") return results;
-
-  // { stream: "url" }  (Icefy)
-  if (typeof data.stream === "string") { addUrl(data.stream); return results; }
-
-  // { data: { sources: [{file, type, label}] } }  (hollymoviehd)
-  if (Array.isArray(data?.data?.sources)) {
-    for (const s of data.data.sources as { file?: string }[]) {
-      if (s.file) addUrl(s.file);
-    }
-  }
-
-  // { streams: [{url|link|playlist|streaming_url}] }
-  if (Array.isArray(data.streams)) {
-    for (const s of data.streams as Record<string, string>[]) {
-      const u = s.link ?? s.url ?? s.playlist ?? s.streaming_url;
-      if (u) addUrl(u, data.headers);
-    }
-  }
-
-  if (Array.isArray(data?.data?.streams)) {
-    for (const s of data.data.streams as Record<string, string>[]) {
-      const u = s.link ?? s.url ?? s.playlist ?? s.streaming_url;
-      if (u) addUrl(u, data.data.headers ?? data.headers);
-    }
-  }
-
-  // Direct URL fields
-  for (const field of ["stream_url", "streaming_url", "url", "video_url", "playlist", "m3u8"]) {
-    const v = (data as Record<string, unknown>)[field];
-    if (typeof v === "string") addUrl(v);
-  }
-
-  if (typeof data?.data?.stream?.playlist === "string") addUrl(data.data.stream.playlist);
-
-  return results;
-};
-
-const fetchTulnexProviderSources = async (
-  provider: TulnexProviderDef,
-  requestParams: ParsedMediaRequest,
-): Promise<PlaylistSource[]> => {
-  const url = buildTulnexUrl(provider, requestParams);
-  try {
-    const response = await fetchWithTimeout(
-      url,
-      { cache: "no-store", headers: { Accept: "application/json, */*", Referer: VIDRUSH_REFERER } },
-      35_000,
-    );
-    if (!response?.ok) return [];
-
-    const json = await response.json();
-    let data = json;
-    if (provider.encrypted && json?.v === 4 && typeof json.payload === "string") {
-      data = await decryptTulnex(json.payload);
-    }
-
-    const streams = extractTulnexStreams(data, provider.label);
-    return streams.map(({ url: streamUrl, headers }) => ({
-      type: "hls" as const,
-      file: buildWorkerM3u8ProxyUrl(streamUrl, headers),
-      label: provider.label,
-      provider: provider.name,
-    }));
-  } catch {
-    return [];
-  }
-};
-
+/**
+ * ─── DOMAIN LOGIC ────────────────────────────────────────────────────────────
+ */
 type MediaType = "movie" | "tv";
 type HeaderMap = Record<string, string>;
 
@@ -282,9 +198,7 @@ interface PlaylistSource {
 }
 
 interface PlaylistResponse {
-  playlist: Array<{
-    sources: PlaylistSource[];
-  }>;
+  playlist: Array<{ sources: PlaylistSource[] }>;
 }
 
 interface ParsedMediaRequest {
@@ -312,82 +226,71 @@ const parseMediaRequest = (params: URLSearchParams): ParsedMediaRequest | null =
   const type = params.get("type") as MediaType | null;
   const id = params.get("id");
   if (!type || !isDigits(id)) return null;
-
-  if (type === "movie") {
-    return { type, id };
-  }
-
+  if (type === "movie") return { type, id };
   const season = params.get("season");
   const episode = params.get("episode");
   if (!isDigits(season) || !isDigits(episode)) return null;
-
   return { type, id, season, episode };
 };
 
 const getWorkerBaseUrl = () =>
-  (
-    process.env.PLAYER_PROXY_URL ||
-    process.env.NEXT_PUBLIC_PLAYER_PROXY_URL ||
-    DEFAULT_WORKER_PROXY
-  ).replace(/\/+$/, "");
+  (process.env.PLAYER_PROXY_URL || process.env.NEXT_PUBLIC_PLAYER_PROXY_URL || DEFAULT_WORKER_PROXY).replace(/\/+$/, "");
 
 const buildWorkerM3u8ProxyUrl = (m3u8Url: string, headers: HeaderMap): string => {
   const workerBase = getWorkerBaseUrl();
-  const params = new URLSearchParams({
-    url: m3u8Url,
-    headers: JSON.stringify(headers),
-  });
+  const params = new URLSearchParams({ url: m3u8Url, headers: JSON.stringify(headers) });
   const workerKey = process.env.PLAYER_PROXY_WORKER_KEY?.trim();
-  if (workerKey) {
-    params.set("k", workerKey);
-  }
-  // Keep a .m3u8 suffix so player libraries reliably detect HLS mode.
+  if (workerKey) params.set("k", workerKey);
   return `${workerBase}/m3u8-proxy/playlist.m3u8?${params.toString()}`;
 };
 
-const toPlaylistPayload = (sources: PlaylistSource[]): PlaylistResponse => ({
-  playlist: [{ sources }],
-});
-
-const parseJsonObject = <T>(value: string | null | undefined): T | null => {
-  if (!value) return null;
-  try {
-    return JSON.parse(value) as T;
-  } catch {
-    return null;
-  }
+const buildWorkerMp4ProxyUrl = (mp4Url: string, headers: HeaderMap): string => {
+  const workerBase = getWorkerBaseUrl();
+  const params = new URLSearchParams({ url: mp4Url, headers: JSON.stringify(headers) });
+  const workerKey = process.env.PLAYER_PROXY_WORKER_KEY?.trim();
+  if (workerKey) params.set("k", workerKey);
+  return `${workerBase}/mp4-proxy?${params.toString()}`;
 };
 
-const normalizeHeaders = (headers: HeaderMap | string | null | undefined): HeaderMap => {
-  if (!headers) return {};
-  const raw =
-    typeof headers === "string"
-      ? parseJsonObject<Record<string, unknown>>(headers)
-      : headers;
-  if (!raw || typeof raw !== "object") return {};
-  const normalized: HeaderMap = {};
-  Object.entries(raw).forEach(([key, value]) => {
-    if (typeof value === "string" && value.trim().length > 0) {
-      normalized[key] = value;
+const buildTulnexUrl = (provider: TulnexProviderDef, req: ParsedMediaRequest): string =>
+  (req.type === "movie" ? provider.movieUrl : provider.tvUrl)
+    .replace("${id}", req.id)
+    .replace("${season}", req.season ?? "0")
+    .replace("${episode}", req.episode ?? "0");
+
+const extractTulnexStreams = (data: any): { url: string; headers: HeaderMap }[] => {
+  const results: { url: string; headers: HeaderMap }[] = [];
+  const defaultHeaders: HeaderMap = { Referer: VIDRUSH_REFERER, Origin: "https://player.vidrush.net" };
+  const addUrl = (url: string, extraHeaders?: HeaderMap) => {
+    if (typeof url === "string" && url.startsWith("http")) {
+      results.push({ url, headers: { ...defaultHeaders, ...extraHeaders } });
     }
-  });
-  return normalized;
+  };
+  if (!data || typeof data !== "object") return results;
+  if (typeof data.stream === "string") { addUrl(data.stream); return results; }
+  if (Array.isArray(data?.data?.sources)) {
+    for (const s of data.data.sources) if (s.file) addUrl(s.file);
+  }
+  if (Array.isArray(data.streams)) {
+    for (const s of data.streams) {
+      const u = s.link ?? s.url ?? s.playlist ?? s.streaming_url;
+      if (u) addUrl(u, data.headers);
+    }
+  }
+  if (Array.isArray(data?.data?.streams)) {
+    for (const s of data.data.streams) {
+      const u = s.link ?? s.url ?? s.playlist ?? s.streaming_url;
+      if (u) addUrl(u, data.data.headers ?? data.headers);
+    }
+  }
+  for (const field of ["stream_url", "streaming_url", "url", "video_url", "playlist", "m3u8"]) {
+    const v = (data as Record<string, unknown>)[field];
+    if (typeof v === "string") addUrl(v);
+  }
+  return results;
 };
 
-const dedupeSources = (sources: PlaylistSource[]): PlaylistSource[] => {
-  const seen = new Set<string>();
-  return sources.filter((s) => {
-    if (seen.has(s.file)) return false;
-    seen.add(s.file);
-    return true;
-  });
-};
-
-const fetchWithTimeout = async (
-  url: string,
-  init: RequestInit,
-  timeoutMs: number,
-): Promise<Response | null> => {
+const fetchWithTimeout = async (url: string, init: RequestInit, timeoutMs: number): Promise<Response | null> => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -399,163 +302,202 @@ const fetchWithTimeout = async (
   }
 };
 
-const buildProviderUrl = (provider: string, requestParams: ParsedMediaRequest): string => {
-  const url = new URL(`${SCRAPPER_BASE}/api/provider`);
-  url.searchParams.set("provider", provider);
-  url.searchParams.set("id", requestParams.id);
-  if (requestParams.type === "tv") {
-    url.searchParams.set("season", requestParams.season!);
-    url.searchParams.set("episode", requestParams.episode!);
-  }
-  return url.toString();
+const normalizeHeaders = (headers: any): HeaderMap => {
+  if (!headers) return {};
+  const raw = typeof headers === "string" ? JSON.parse(headers) : headers;
+  const normalized: HeaderMap = {};
+  Object.entries(raw).forEach(([k, v]) => { if (typeof v === "string") normalized[k] = v; });
+  return normalized;
 };
 
-const normalizeScrapperSource = (
-  source: ScrapperSource,
-): { url: string; headers: HeaderMap } | null => {
+const normalizeScrapperSource = (source: ScrapperSource): { url: string; headers: HeaderMap } | null => {
   if (typeof source.url !== "string" || source.url.length === 0) return null;
-
   let directUrl = source.url;
   const mergedHeaders: HeaderMap = {};
-
-  // Unwrap pre-proxied URLs (e.g. proxy.valhallastream.dpdns.org/proxy?url=...&headers=...)
   try {
     const parsed = new URL(source.url);
     const wrapped = parsed.searchParams.get("url");
     if (wrapped) {
       directUrl = decodeURIComponent(wrapped);
-      const wrappedHeaders = parseJsonObject<Record<string, unknown>>(
-        decodeURIComponent(parsed.searchParams.get("headers") || ""),
-      );
-      Object.assign(mergedHeaders, normalizeHeaders(wrappedHeaders as HeaderMap));
+      Object.assign(mergedHeaders, normalizeHeaders(decodeURIComponent(parsed.searchParams.get("headers") || "")));
     }
-  } catch {
-    // keep original url
-  }
-
+  } catch {}
   Object.assign(mergedHeaders, normalizeHeaders(source.headers));
-
   if (!mergedHeaders.Referer && !mergedHeaders.referer) {
     mergedHeaders.Referer = SCRAPPER_REFERER;
     mergedHeaders.Origin = SCRAPPER_ORIGIN;
   }
-
   return { url: directUrl, headers: mergedHeaders };
 };
 
-const fetchProviderSources = async (
-  provider: string,
-  requestParams: ParsedMediaRequest,
-): Promise<PlaylistSource[]> => {
+const fetchProviderSources = async (provider: string, requestParams: ParsedMediaRequest): Promise<PlaylistSource[]> => {
   try {
-    const url = buildProviderUrl(provider, requestParams);
-    const response = await fetchWithTimeout(
-      url,
-      {
-        cache: "no-store",
-        headers: {
-          "user-agent": USER_AGENT,
-          accept: "application/json, text/plain, */*",
-          referer: SCRAPPER_REFERER,
-          origin: SCRAPPER_ORIGIN,
-        },
-      },
-      REQUEST_TIMEOUT_MS,
-    );
-
-    if (!response?.ok) return [];
-
-    const payload = (await response.json()) as ScrapperResponse;
-    if (!Array.isArray(payload?.data?.sources)) return [];
-
-    const sources: PlaylistSource[] = [];
-
-    for (const source of payload.data.sources) {
-      // The player only processes type="hls" sources — skip mp4 and other formats
-      if (source.format !== "hls") continue;
-
-      const normalized = normalizeScrapperSource(source);
-      if (!normalized) continue;
-
-      const qualityStr =
-        source.quality != null
-          ? typeof source.quality === "number"
-            ? `${source.quality}p`
-            : String(source.quality)
-          : "";
-      const baseLabel = PROVIDER_LABELS[provider] ?? provider;
-      const label = qualityStr ? `${baseLabel} ${qualityStr}` : baseLabel;
-
-      sources.push({
-        type: "hls",
-        file: buildWorkerM3u8ProxyUrl(normalized.url, normalized.headers),
-        label,
-        provider,
-      });
+    const url = new URL(`${SCRAPPER_BASE}/api/provider`);
+    url.searchParams.set("provider", provider);
+    url.searchParams.set("id", requestParams.id);
+    if (requestParams.type === "tv") {
+      url.searchParams.set("season", requestParams.season!);
+      url.searchParams.set("episode", requestParams.episode!);
     }
-
-    return sources;
-  } catch {
+    const response = await fetchWithTimeout(url.toString(), { cache: "no-store", headers: { "user-agent": USER_AGENT, referer: SCRAPPER_REFERER } }, REQUEST_TIMEOUT_MS);
+    if (!response?.ok) {
+      console.log(`[Rive] ${provider}: HTTP ${response?.status || 'timeout'}`);
+      return [];
+    }
+    const payload = (await response.json()) as ScrapperResponse;
+    if (!Array.isArray(payload?.data?.sources)) {
+      console.log(`[Rive] ${provider}: No sources array in response`);
+      return [];
+    }
+    // Accept both HLS and MP4 formats
+    const validSources = payload.data.sources.filter(s => s.format && ["hls", "mp4"].includes(s.format));
+    if (validSources.length === 0 && payload.data.sources.length > 0) {
+      const formats = payload.data.sources.map(s => s.format || "undefined").join(", ");
+      console.log(`[Rive] ${provider}: 0 valid sources (${payload.data.sources.length} total) - formats: [${formats}]`);
+    } else {
+      console.log(`[Rive] ${provider}: ${validSources.length} sources (${payload.data.sources.length} total)`);
+    }
+    return validSources.map(source => {
+      const normalized = normalizeScrapperSource(source)!;
+      const qualityStr = source.quality ? `${source.quality}p` : "";
+      const isHls = source.format === "hls";
+      const isMp4 = source.format === "mp4";
+      return {
+        type: "hls",
+        file: isHls 
+          ? buildWorkerM3u8ProxyUrl(normalized.url, normalized.headers) 
+          : isMp4 
+          ? buildWorkerMp4ProxyUrl(normalized.url, normalized.headers)
+          : normalized.url,
+        label: qualityStr ? `${PROVIDER_LABELS[provider] || provider} ${qualityStr}` : (PROVIDER_LABELS[provider] || provider),
+        provider,
+      };
+    });
+  } catch (e) {
+    console.log(`[Rive] ${provider}: Error -`, e instanceof Error ? e.message : String(e));
     return [];
   }
 };
 
+const fetchTulnexProviderSources = async (provider: TulnexProviderDef, requestParams: ParsedMediaRequest): Promise<PlaylistSource[]> => {
+  const url = buildTulnexUrl(provider, requestParams);
+  try {
+    const response = await fetchWithTimeout(url, { cache: "no-store", headers: { Referer: VIDRUSH_REFERER } }, 35_000);
+    if (!response?.ok) return [];
+    let data = await response.json();
+    if (provider.encrypted && data?.v === 4) {
+      data = await decryptTulnex(data.payload);
+    }
+    const streams = extractTulnexStreams(data);
+    return streams.map(({ url: streamUrl, headers }) => ({
+      type: "hls",
+      file: buildWorkerM3u8ProxyUrl(streamUrl, headers),
+      label: provider.label,
+      provider: provider.name,
+    }));
+  } catch { return []; }
+};
+
+const dedupeSources = (sources: PlaylistSource[]): PlaylistSource[] => {
+  const seen = new Set<string>();
+  return sources.filter(s => !seen.has(s.file) && seen.add(s.file));
+};
+
+/**
+ * ─── MAIN ROUTE HANDLER ──────────────────────────────────────────────────────
+ */
 export const dynamic = "force-dynamic";
 
 export const GET = async (request: NextRequest) => {
-  const requestParams = parseMediaRequest(request.nextUrl.searchParams);
+  const { searchParams } = request.nextUrl;
+  const requestParams = parseMediaRequest(searchParams);
+
+  // LOG: Incoming Request
+  console.log(`[Rive Response] Incoming: ${searchParams.toString()}`);
+
   if (!requestParams) {
+    console.error("[Rive Response] Error: Invalid Parameters");
     return NextResponse.json({ error: "Invalid parameters" }, { status: 400 });
   }
 
+  console.log(`[Rive Response] Processing ${requestParams.type} (${requestParams.id})`);
+
   const [rivResults, tulnexResults] = await Promise.all([
-    Promise.allSettled(PROVIDERS.map((provider) => fetchProviderSources(provider, requestParams))),
-    Promise.allSettled(TULNEX_PROVIDERS.map((provider) => fetchTulnexProviderSources(provider, requestParams))),
+    Promise.allSettled(PROVIDERS.map((p) => fetchProviderSources(p, requestParams))),
+    Promise.allSettled(TULNEX_PROVIDERS.map((p) => fetchTulnexProviderSources(p, requestParams))),
   ]);
 
-  const providerOrder = (provider: string | undefined) => {
-    // Tulnex providers — highest priority
-    if (provider === "icefy") return 0;
-    if (provider === "hollymoviehd") return 0;
-    // Rivestream top-tier
-    if (provider === "guru") return 1;
-    // Tulnex mid-tier
-    if (provider === "primeshows" || provider === "vidzee0" || provider === "vidzee1" || provider === "allmovies") return 2;
-    // Rivestream mid-tier
-    if (provider === "flowcast" || provider === "primevids" || provider === "hindicast" || provider === "ophim") return 3;
-    // Rivestream low
-    if (provider === "asiacloud") return 4;
-    return 3;
-  };
-
-  const results = [...rivResults, ...tulnexResults];
-
   const allSources: PlaylistSource[] = [];
-  for (const result of results) {
+  const riveSourceCount: Record<string, number> = {};
+  
+  // Only log Rive results
+  rivResults.forEach((result, idx) => {
+    if (result.status === "fulfilled") {
+      const sources = result.value;
+      const provider = PROVIDERS[idx];
+      if (sources.length > 0) {
+        riveSourceCount[provider] = sources.length;
+        console.log(`[Rive] ${provider}: ${sources.length} sources`);
+      }
+      allSources.push(...sources);
+    } else {
+      console.error(`[Rive] ${PROVIDERS[idx]} failed:`, result.reason);
+    }
+  });
+
+  // Also add Tulnex sources but don't log them
+  tulnexResults.forEach((result) => {
     if (result.status === "fulfilled") {
       allSources.push(...result.value);
     }
+  });
+
+  if (Object.keys(riveSourceCount).length > 0) {
+    console.log(`[Rive] Summary:`, JSON.stringify(riveSourceCount, null, 2));
   }
+
+  const providerOrder = (provider: string | undefined) => {
+    // Top Priority: FlowCast
+    if (provider === "flowcast") return 0;
+    
+    // Second Priority: Guru
+    if (provider === "guru") return 1;
+    
+    // Third Priority: PrimeVids
+    if (provider === "primevids") return 2;
+
+    // Everything else (Fallbacks)
+    if (provider === "icefy" || provider === "hollymoviehd") return 3;
+    if (["primeshows", "vidzee0", "vidzee1", "allmovies"].includes(provider!)) return 4;
+    if (["hindicast", "ophim"].includes(provider!)) return 5;
+    return provider === "asiacloud" ? 6 : 5;
+  };
 
   const orderedSources = dedupeSources(
-    allSources.slice().sort((a, b) => providerOrder(a.provider) - providerOrder(b.provider)),
-  ).map((source, index) => ({
-    ...source,
-    default: index === 0,
-  }));
+    allSources.slice().sort((a, b) => providerOrder(a.provider) - providerOrder(b.provider))
+  ).map((source, index) => ({ ...source, default: index === 0 }));
 
   if (!orderedSources.length) {
-    return NextResponse.json({ error: "Failed to resolve any playable source" }, { status: 502 });
+    console.warn(`[Rive Response] No playable sources found for ID ${requestParams.id}`);
+    return NextResponse.json({ error: "No sources found" }, { status: 502 });
   }
 
-  const encodedSources = orderedSources.map((source) => ({
-    ...source,
-    file: encodePlayerStreamUrl(source.file),
+  console.log(`[Rive] Success: Found ${orderedSources.length} unique sources from Rive scraper`);
+  orderedSources
+    .filter(s => PROVIDERS.some(p => s.provider === p))
+    .slice(0, 6)
+    .forEach((s, i) => {
+      console.log(`  [${i}] ${s.label}: ${s.file.substring(0, 100)}...`);
+    });
+
+  const encodedSources = orderedSources.map((s) => ({
+    ...s,
+    file: encodePlayerStreamUrl(s.file),
   }));
 
-  return NextResponse.json(toPlaylistPayload(encodedSources), {
-    headers: {
-      "cache-control": "no-store, max-age=0",
-    },
+  const response = { playlist: [{ sources: encodedSources }] };
+
+  return NextResponse.json(response, {
+    headers: { "cache-control": "no-store, max-age=0" },
   });
 };

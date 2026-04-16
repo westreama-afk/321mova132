@@ -119,20 +119,52 @@ const VAST_MEDIA_TYPE_PRIORITY = [
 ] as const;
 
 const pickHlsSources = (payload: PlaylistResponse): StreamSourceOption[] => {
-  if (!Array.isArray(payload.playlist)) return [];
+  console.log("[HlsJsonPlayer] pickHlsSources called with payload:", JSON.stringify(payload, null, 2).substring(0, 300));
+  
+  if (!Array.isArray(payload.playlist)) {
+    console.warn("[HlsJsonPlayer] No playlist array in payload");
+    return [];
+  }
 
   const collected: StreamSourceOption[] = [];
 
   for (const item of payload.playlist) {
-    if (!Array.isArray(item.sources)) continue;
+    console.log("[HlsJsonPlayer] Processing playlist item:", JSON.stringify(item, null, 2).substring(0, 200));
+    
+    if (!Array.isArray(item.sources)) {
+      console.warn("[HlsJsonPlayer] No sources array in item");
+      continue;
+    }
+
+    console.log(`[HlsJsonPlayer] Item has ${item.sources.length} sources to process`);
 
     for (const source of item.sources) {
-      if (source?.type !== "hls" || typeof source.file !== "string" || source.file.length === 0) {
+      console.log("[HlsJsonPlayer] Processing source:", {
+        type: source.type,
+        label: source.label,
+        provider: source.provider,
+        fileLength: source.file?.length,
+        filePreview: source.file?.substring(0, 80),
+      });
+
+      if ((source?.type !== "hls" && source?.type !== "mp4") || typeof source.file !== "string" || source.file.length === 0) {
+        console.warn("[HlsJsonPlayer] Source skipped - invalid type/file:", {
+          type: source?.type,
+          isString: typeof source.file === "string",
+          isEmpty: source.file?.length === 0,
+        });
         continue;
       }
 
       const decodedFile = decodePlayerStreamUrl(source.file);
+      console.log("[HlsJsonPlayer] Decoded URL:", {
+        wasEncoded: source.file.startsWith("enc:"),
+        decodedLength: decodedFile?.length,
+        decodedPreview: decodedFile?.substring(0, 80),
+      });
+
       if (!decodedFile || decodedFile.length === 0) {
+        console.warn("[HlsJsonPlayer] Decoded file is empty, skipping source");
         continue;
       }
 
@@ -142,15 +174,29 @@ const pickHlsSources = (payload: PlaylistResponse): StreamSourceOption[] => {
         provider: source.provider,
         isDefault: Boolean(source.default),
       });
+
+      console.log("[HlsJsonPlayer] Source added to collected:", {
+        label: source.label?.trim() || "Auto",
+        provider: source.provider,
+        isDefault: Boolean(source.default),
+      });
     }
   }
 
+  console.log(`[HlsJsonPlayer] Total collected sources before dedup: ${collected.length}`);
+
   const seen = new Set<string>();
-  return collected.filter((source) => {
-    if (seen.has(source.file)) return false;
+  const deduped = collected.filter((source) => {
+    if (seen.has(source.file)) {
+      console.log("[HlsJsonPlayer] Filtering out duplicate source");
+      return false;
+    }
     seen.add(source.file);
     return true;
   });
+
+  console.log(`[HlsJsonPlayer] Final sources after dedup: ${deduped.length}`);
+  return deduped;
 };
 
 interface PlayerElementLike extends HTMLElement {
@@ -889,21 +935,35 @@ const HlsJsonPlayer: React.FC<HlsJsonPlayerProps> = ({
       setActiveSourceIndex(0);
 
       try {
+        console.log("[HlsJsonPlayer] loadPlaylist: Fetching from", playlistUrl);
+        
         const response = await fetch(playlistUrl, {
           cache: "no-store",
         });
+
+        console.log("[HlsJsonPlayer] loadPlaylist: Response status:", response.status);
 
         if (!response.ok) {
           throw new Error(`Playlist request failed (${response.status})`);
         }
 
         const payload = (await response.json()) as PlaylistResponse;
+        console.log("[HlsJsonPlayer] loadPlaylist: Received payload:", JSON.stringify(payload, null, 2).substring(0, 500));
+        
         const parsedSources = pickHlsSources(payload);
+        console.log("[HlsJsonPlayer] loadPlaylist: Parsed sources count:", parsedSources.length);
+        
         const mergedSources = parsedSources;
 
         if (!mergedSources.length) {
+          console.error("[HlsJsonPlayer] loadPlaylist: No sources found after parsing");
           throw new Error("No HLS stream found in playlist response");
         }
+
+        console.log("[HlsJsonPlayer] loadPlaylist: Found", mergedSources.length, "sources");
+        mergedSources.forEach((s, i) => {
+          console.log(`  [${i}] ${s.label} (${s.provider}): ${s.file.substring(0, 80)}...`);
+        });
 
         if (!disposed) {
           const defaultIndex = mergedSources.findIndex((source) => source.isDefault);
@@ -914,7 +974,9 @@ const HlsJsonPlayer: React.FC<HlsJsonPlayerProps> = ({
       } catch (caughtError) {
         if (disposed) return;
 
-        reportFatalError(caughtError instanceof Error ? caughtError.message : "Failed to load stream");
+        const errorMsg = caughtError instanceof Error ? caughtError.message : "Failed to load stream";
+        console.error("[HlsJsonPlayer] loadPlaylist: Error -", errorMsg);
+        reportFatalError(errorMsg);
         setIsLoading(false);
       }
     };

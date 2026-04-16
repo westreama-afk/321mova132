@@ -4,7 +4,7 @@ import { ContentType } from "@/types";
 import { cn } from "@/utils/helpers";
 import { decodePlayerStreamUrl } from "@/utils/playerUrlCodec";
 import Hls from "hls.js";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, createElement } from "react";
 import { FaPause, FaPlay, FaServer } from "react-icons/fa";
 import { IoMdVolumeHigh, IoMdVolumeLow, IoMdVolumeMute } from "react-icons/io";
 import { MdClosedCaption, MdClosedCaptionDisabled, MdForward10, MdFullscreen, MdFullscreenExit, MdReplay10, MdSettings } from "react-icons/md";
@@ -90,7 +90,8 @@ const pickHlsSources = (payload: PlaylistResponse): StreamSourceOption[] => {
   for (const item of payload.playlist) {
     if (!Array.isArray(item.sources)) continue;
     for (const source of item.sources) {
-      if (source?.type !== "hls" || typeof source.file !== "string" || source.file.length === 0) continue;
+      // Accept both HLS and MP4 sources
+      if ((source?.type !== "hls" && source?.type !== "mp4") || typeof source.file !== "string" || source.file.length === 0) continue;
       const decodedFile = decodePlayerStreamUrl(source.file);
       if (!decodedFile || decodedFile.length === 0) continue;
       collected.push({
@@ -250,11 +251,24 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         }
       };
 
+      // Decode URL first to check actual format (handle "enc:" prefix)
+      const decodedUrl = decodePlayerStreamUrl(url);
+      const isMp4 = decodedUrl.toLowerCase().endsWith(".mp4");
+
+      if (isMp4) {
+        // For MP4, Vidstack media-player handles it natively
+        // Just reset state and let the media-player element handle playback
+        applyStartAt();
+        setIsLoading(false);
+        setQualityLevels([{ id: 0, label: "Source", height: 0 }]);
+        return;
+      }
+
       if (Hls.isSupported()) {
         const hls = new Hls({ enableWorker: true, maxBufferLength: 30 });
         hlsRef.current = hls;
         hls.subtitleDisplay = false; // We render cues ourselves
-        hls.loadSource(url);
+        hls.loadSource(decodedUrl);
         hls.attachMedia(video);
 
         hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
@@ -312,7 +326,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         // Safari native HLS
-        video.src = url;
+        video.src = decodedUrl;
         applyStartAt();
         setIsLoading(false);
 
@@ -830,7 +844,15 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         onWaiting={handleWaiting}
         onCanPlay={handleCanPlay}
         onLoadedMetadata={handleLoadedMetadata}
+        onError={(e) => {
+          const video = e.currentTarget;
+          const code = video.error?.code;
+          const msg = code === 1 ? "Aborted" : code === 2 ? "Network error" : code === 3 ? "Decoding failed" : code === 4 ? "Format not supported" : "Unknown error";
+          setError(`Video error: ${msg}`);
+        }}
         playsInline
+        crossOrigin="anonymous"
+        preload="auto"
       />
 
       {/* ── Loading spinner ── */}

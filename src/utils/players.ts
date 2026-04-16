@@ -34,7 +34,7 @@ const get321TvPlaylistUrl = (
  */
 export const getMoviePlayers = (id: string | number, startAt?: number): PlayersProps[] => {
   return [
-    {
+   /* {
       title: "321movies",
       source: get321MoviePlaylistUrl(id),
       mode: "native_hls",
@@ -42,9 +42,9 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
       fast: true,
       ads: false,
       resumable: true,
-    },
+    },*/
     {
-      title: "321 Player fallback",
+      title: "321Plaayer",
       source: get321MoviePlaylistUrl(id),
       mode: "playlist_json",
       recommended: true,
@@ -195,7 +195,7 @@ export const getTvShowPlayers = (
   startAt?: number,
 ): PlayersProps[] => {
   return [
-    {
+   /* {
       title: "321 Player",
       source: get321TvPlaylistUrl(id, season, episode),
       mode: "native_hls",
@@ -203,9 +203,9 @@ export const getTvShowPlayers = (
       fast: true,
       ads: false,
       resumable: true,
-    },
+    },*/
     {
-      title: "321 Player fallback",
+      title: "321Player",
       source: get321TvPlaylistUrl(id, season, episode),
       mode: "playlist_json",
       recommended: true,

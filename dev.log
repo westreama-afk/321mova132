@@ -1,0 +1,15 @@
+
+> 321movies@1.0.0 dev
+> patch-package && next dev --turbopack
+
+patch-package 8.0.1
+Applying patches...
+strataplayer@1.2.23 ✔
+   ▲ Next.js 15.5.7 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.128:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Compiled middleware in 492ms
+ ✓ Ready in 2.2s
