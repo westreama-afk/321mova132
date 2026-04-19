@@ -972,9 +972,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ error: "No sources found" }, { status: 502 });
   }
 
-  // Save to cache excluding Movish (its CDN URLs have short-lived signed tokens)
-  const cacheable = orderedSources.filter(s => s.provider !== "movish");
-  saveCachedPlaylist(requestParams, cacheable).catch((e) =>
+  saveCachedPlaylist(requestParams, orderedSources).catch((e) =>
     console.error("[Cache] Save failed:", e instanceof Error ? e.message : String(e)),
   );
 
