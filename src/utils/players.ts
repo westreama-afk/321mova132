@@ -47,7 +47,7 @@ export const getMoviePlayers = (id: string | number, startAt?: number): PlayersP
       resumable: true,
     },
     {
-      title: "321Plaayer",
+      title: "321Playerfallback",
       source: get321MoviePlaylistUrl(id),
       mode: "playlist_json",
       recommended: true,
@@ -199,7 +199,7 @@ export const getTvShowPlayers = (
 ): PlayersProps[] => {
   return [
     {
-      title: "321 Player",
+      title: "321movies",
       source: get321TvPlaylistUrl(id, season, episode),
       mode: "native_hls",
       recommended: true,
@@ -208,7 +208,7 @@ export const getTvShowPlayers = (
       resumable: true,
     },
     {
-      title: "321Player",
+      title: "321Playerfallback",
       source: get321TvPlaylistUrl(id, season, episode),
       mode: "playlist_json",
       recommended: true,
