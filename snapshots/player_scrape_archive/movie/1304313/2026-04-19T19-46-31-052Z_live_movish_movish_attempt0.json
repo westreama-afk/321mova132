@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-04-19T19:46:31.052Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1304313"
+  },
+  "url": "https://movish.net/moviebox-embed/movie/1304313",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No video src in HTML"
+}

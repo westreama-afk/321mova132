@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-04-19T19:46:21.108Z",
+  "family": "rive",
+  "provider": "primevids",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1304313"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=primevids&id=1304313",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No sources array in response",
+  "responseBody": {
+    "data": null
+  },
+  "responseText": "{\"data\":null}"
+}

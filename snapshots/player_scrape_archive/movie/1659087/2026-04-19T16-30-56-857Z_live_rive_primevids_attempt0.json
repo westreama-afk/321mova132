@@ -1,0 +1,31 @@
+{
+  "createdAt": "2026-04-19T16:30:56.857Z",
+  "family": "rive",
+  "provider": "primevids",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1659087"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=primevids&id=1659087",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "url": "https://green-bonus-4647.57-11a.workers.dev/movie/DxbsIs1aeIFBAfA-kACQv763j6g20cn7wTheN-pqKBdmbHGUAYzLEhV7p_AUYDkh.Jt8VGUNG/index.m3u8",
+          "source": "PrimeVids",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"url\":\"https://green-bonus-4647.57-11a.workers.dev/movie/DxbsIs1aeIFBAfA-kACQv763j6g20cn7wTheN-pqKBdmbHGUAYzLEhV7p_AUYDkh.Jt8VGUNG/index.m3u8\",\"source\":\"PrimeVids\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 1
+  }
+}

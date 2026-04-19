@@ -1,0 +1,33 @@
+{
+  "createdAt": "2026-04-19T18:20:23.312Z",
+  "family": "rive",
+  "provider": "primevids",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "79744",
+    "season": "2",
+    "episode": "10"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=primevids&id=79744&season=2&episode=10",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "url": "https://withered-lab-fd99.84-488.workers.dev/tv/Mr4lCs7mmJGIKybfmeaytgB0PRYme9aafqvcmyxWbO2lvLHFZ_-GPydYWjMYC4OL.2iqkeDPL/index.m3u8",
+          "source": "PrimeVids",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"url\":\"https://withered-lab-fd99.84-488.workers.dev/tv/Mr4lCs7mmJGIKybfmeaytgB0PRYme9aafqvcmyxWbO2lvLHFZ_-GPydYWjMYC4OL.2iqkeDPL/index.m3u8\",\"source\":\"PrimeVids\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 1
+  }
+}

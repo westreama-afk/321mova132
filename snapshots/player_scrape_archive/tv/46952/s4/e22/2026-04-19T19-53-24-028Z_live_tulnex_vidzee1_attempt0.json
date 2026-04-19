@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-19T19:53:24.028Z",
+  "family": "tulnex",
+  "provider": "vidzee1",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "4",
+    "episode": "22"
+  },
+  "url": "https://api.tulnex.com/vidzee/tv/46952/4/22?server=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 0,
+  "responseBody": null,
+  "responseText": "null",
+  "extra": {
+    "decryptedBody": null
+  }
+}

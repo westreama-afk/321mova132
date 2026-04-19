@@ -1,0 +1,169 @@
+[
+  {
+    "requestKey": "movie_1659087",
+    "request": {
+      "type": "movie",
+      "id": "1659087"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-19T22:38:14.278Z",
+    "createdAt": "2026-04-19T16:31:31.019Z",
+    "updatedAt": "2026-04-19T16:38:14.278Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "vidlink"
+    ],
+    "reason": "Missing priority providers: flowcast, guru, vidlink"
+  },
+  {
+    "requestKey": "movie_687163",
+    "request": {
+      "type": "movie",
+      "id": "687163"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-19T22:53:50.938Z",
+    "createdAt": "2026-04-19T16:53:50.938Z",
+    "updatedAt": "2026-04-19T16:53:50.938Z",
+    "missingProviders": [
+      "guru"
+    ],
+    "reason": "Missing priority providers: guru"
+  },
+  {
+    "requestKey": "movie_1290821",
+    "request": {
+      "type": "movie",
+      "id": "1290821"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-19T23:04:49.711Z",
+    "createdAt": "2026-04-19T17:04:49.711Z",
+    "updatedAt": "2026-04-19T17:04:49.711Z",
+    "missingProviders": [
+      "guru"
+    ],
+    "reason": "Missing priority providers: guru"
+  },
+  {
+    "requestKey": "tv_79744_s2_e10",
+    "request": {
+      "type": "tv",
+      "id": "79744",
+      "season": "2",
+      "episode": "10"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T00:21:28.320Z",
+    "createdAt": "2026-04-19T18:20:57.248Z",
+    "updatedAt": "2026-04-19T18:21:28.320Z",
+    "missingProviders": [
+      "flowcast",
+      "guru"
+    ],
+    "reason": "Missing priority providers: flowcast, guru"
+  },
+  {
+    "requestKey": "movie_1226863",
+    "request": {
+      "type": "movie",
+      "id": "1226863"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T01:38:38.274Z",
+    "createdAt": "2026-04-19T19:38:38.274Z",
+    "updatedAt": "2026-04-19T19:38:38.274Z",
+    "missingProviders": [
+      "guru"
+    ],
+    "reason": "Missing priority providers: guru"
+  },
+  {
+    "requestKey": "tv_37680_s8_e13",
+    "request": {
+      "type": "tv",
+      "id": "37680",
+      "season": "8",
+      "episode": "13"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T01:43:47.629Z",
+    "createdAt": "2026-04-19T19:43:47.629Z",
+    "updatedAt": "2026-04-19T19:43:47.629Z",
+    "missingProviders": [
+      "flowcast",
+      "guru"
+    ],
+    "reason": "Missing priority providers: flowcast, guru"
+  },
+  {
+    "requestKey": "movie_1304313",
+    "request": {
+      "type": "movie",
+      "id": "1304313"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T01:46:48.728Z",
+    "createdAt": "2026-04-19T19:46:48.728Z",
+    "updatedAt": "2026-04-19T19:46:48.728Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "primevids"
+    ],
+    "reason": "Missing priority providers: flowcast, primevids, guru"
+  },
+  {
+    "requestKey": "movie_1613798",
+    "request": {
+      "type": "movie",
+      "id": "1613798"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T01:47:43.138Z",
+    "createdAt": "2026-04-19T19:47:43.138Z",
+    "updatedAt": "2026-04-19T19:47:43.138Z",
+    "missingProviders": [
+      "flowcast"
+    ],
+    "reason": "Missing priority providers: flowcast"
+  },
+  {
+    "requestKey": "tv_46952_s4_e21",
+    "request": {
+      "type": "tv",
+      "id": "46952",
+      "season": "4",
+      "episode": "21"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T01:49:15.198Z",
+    "createdAt": "2026-04-19T19:49:15.198Z",
+    "updatedAt": "2026-04-19T19:49:15.198Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "primevids"
+    ],
+    "reason": "Missing priority providers: flowcast, primevids, guru"
+  },
+  {
+    "requestKey": "tv_46952_s4_e22",
+    "request": {
+      "type": "tv",
+      "id": "46952",
+      "season": "4",
+      "episode": "22"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T01:53:24.031Z",
+    "createdAt": "2026-04-19T19:50:19.472Z",
+    "updatedAt": "2026-04-19T19:53:24.031Z",
+    "missingProviders": [
+      "guru",
+      "primevids"
+    ],
+    "reason": "Missing priority providers: primevids, guru"
+  }
+]

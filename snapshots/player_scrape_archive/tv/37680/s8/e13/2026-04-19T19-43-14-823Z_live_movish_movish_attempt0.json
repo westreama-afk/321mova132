@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-04-19T19:43:14.823Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "37680",
+    "season": "8",
+    "episode": "13"
+  },
+  "url": "https://movish.net/moviebox-embed/tv/37680/8/13",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1
+}

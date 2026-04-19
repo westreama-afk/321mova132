@@ -1,0 +1,21 @@
+{
+  "createdAt": "2026-04-19T16:37:39.758Z",
+  "family": "vidlink",
+  "provider": "vidlink",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1659087"
+  },
+  "url": "https://small-cake-fdee.piracya.workers.dev/api-proxy?url=https%3A%2F%2Fvidlink.pro%2Fapi%2Fb%2Fmovie%2FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3ht68-XfUygEMEVvtrJB_cGFDcd9eGEZ2cRK4UM9nA%3FmultiLang%3D0&headers=%7B%22accept%22%3A%22application%2Fjson%2C+text%2Fplain%2C+*%2F*%22%2C%22accept-language%22%3A%22en-US%2Cen%3Bq%3D0.9%22%2C%22origin%22%3A%22https%3A%2F%2Fvidlink.pro%22%2C%22referer%22%3A%22https%3A%2F%2Fvidlink.pro%2Fmovie%2F1659087%22%2C%22user-agent%22%3A%22Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F140.0.0.0+Safari%2F537.36%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+  "status": 403,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 403",
+  "responseBody": null,
+  "responseText": "forbidden",
+  "extra": {
+    "apiUrl": "https://vidlink.pro/api/b/movie/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3ht68-XfUygEMEVvtrJB_cGFDcd9eGEZ2cRK4UM9nA?multiLang=0"
+  }
+}

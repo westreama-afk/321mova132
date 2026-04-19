@@ -253,16 +253,21 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
 
       // Decode URL first to check actual format (handle "enc:" prefix)
       const decodedUrl = decodePlayerStreamUrl(url);
-      const isMp4 = decodedUrl.toLowerCase().endsWith(".mp4");
+      const isMp4 = /\.mp4(?:\?|$)/i.test(decodedUrl) || decodedUrl.includes("/mp4-proxy");
 
       if (isMp4) {
-        // For MP4, Vidstack media-player handles it natively
-        // Just reset state and let the media-player element handle playback
+        // Remove crossOrigin for MP4 — CDN servers reject CORS requests
+        video.removeAttribute("crossorigin");
+        video.src = decodedUrl;
+        video.load();
         applyStartAt();
-        setIsLoading(false);
         setQualityLevels([{ id: 0, label: "Source", height: 0 }]);
+        void video.play().catch(() => {});
         return;
       }
+
+      // Restore crossOrigin for HLS (needed for external VTT subtitle <track> elements)
+      video.setAttribute("crossorigin", "anonymous");
 
       if (Hls.isSupported()) {
         const hls = new Hls({ enableWorker: true, maxBufferLength: 30 });
@@ -433,7 +438,11 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
       track.kind = "subtitles";
       track.label = ext.label;
       track.srclang = ext.lang;
-      track.src = ext.url;
+      // Proxy cross-origin subtitle URLs through our server to avoid CORS issues
+      const isCrossOrigin = ext.url.startsWith("http://") || ext.url.startsWith("https://");
+      track.src = isCrossOrigin
+        ? `/api/player/subtitle-proxy?url=${encodeURIComponent(ext.url)}`
+        : ext.url;
       track.default = false;
       video.appendChild(track);
       // Set mode to disabled so it loads but doesn't render
@@ -847,6 +856,11 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         onError={(e) => {
           const video = e.currentTarget;
           const code = video.error?.code;
+          // Code 3 = decoding error — try HLS recovery before showing error
+          if (code === 3 && hlsRef.current) {
+            hlsRef.current.recoverMediaError();
+            return;
+          }
           const msg = code === 1 ? "Aborted" : code === 2 ? "Network error" : code === 3 ? "Decoding failed" : code === 4 ? "Format not supported" : "Unknown error";
           setError(`Video error: ${msg}`);
         }}

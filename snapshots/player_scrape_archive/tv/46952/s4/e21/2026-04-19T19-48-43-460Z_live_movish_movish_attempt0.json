@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-04-19T19:48:43.460Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "4",
+    "episode": "21"
+  },
+  "url": "https://movish.net/moviebox-embed/tv/46952/4/21",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1
+}

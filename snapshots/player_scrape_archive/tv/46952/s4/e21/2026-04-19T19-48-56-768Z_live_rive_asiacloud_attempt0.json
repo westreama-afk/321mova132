@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-04-19T19:48:56.768Z",
+  "family": "rive",
+  "provider": "asiacloud",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "4",
+    "episode": "21"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=asiacloud&id=46952&season=4&episode=21",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "timeout",
+  "responseBody": null,
+  "responseText": null
+}

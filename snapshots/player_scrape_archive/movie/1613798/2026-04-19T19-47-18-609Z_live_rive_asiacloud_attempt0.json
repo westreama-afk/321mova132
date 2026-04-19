@@ -1,0 +1,43 @@
+{
+  "createdAt": "2026-04-19T19:47:18.609Z",
+  "family": "rive",
+  "provider": "asiacloud",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1613798"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=asiacloud&id=1613798",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 3,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "Hindi",
+          "url": "https://i-cdn-0.fusvi413kac.com/stream2/i-cdn-0/1eef0cb4a488cb4f369b4a4b432462aa/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2llaKxmWX1UeORVTy4keBNTW6x2aN1mUspFVoh2TEV0MNRlQs1keSlmTyEVP:1776630737:23.129.64.200:8c03d55e79b86df94a65b3060860116f90602785a7931bc99bc63c4b5cca59b8:=0kaNVXTUlUNMpWWwwkaJdXTB1TP/index.m3u8",
+          "source": "AsiaCloud",
+          "format": "hls"
+        },
+        {
+          "quality": "English",
+          "url": "https://i-cdn-0.fusvi413kac.com/stream2/i-cdn-0/1eef0cb4a488cb4f369b4a4b432462aa/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2pFRrhXWtl0MZpXVwo1RFNjWtVEMOREat90Vah2TUFFMZJjRq5UbRhnWX1UP:1776630744:23.129.64.200:fca305fafaf224321afb81a3c8977bf8c33450638db6ce8b94d356fb3745b97e:=0kaNVXTUlUNMpWWwwkaJdXTB1TP/index.m3u8",
+          "source": "AsiaCloud",
+          "format": "hls"
+        },
+        {
+          "quality": "Bengali",
+          "url": "https://i-cdn-0.fusvi413kac.com/stream2/i-cdn-0/1eef0cb4a488cb4f369b4a4b432462aa/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25kMJlXWXJVbNp3YwoFRNJjWUV1dN1WT0oVbNdXTH1ENNdlRp10VFpnT6lVP:1776630751:23.129.64.200:0b13f82083cca9a17940156d31dfa7ab6f444d076b2bc42f1e63dc80a9db0a3a:=0kaNVXTUlUNMpWWwwkaJdXTB1TP/index.m3u8",
+          "source": "AsiaCloud",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"Hindi\",\"url\":\"https://i-cdn-0.fusvi413kac.com/stream2/i-cdn-0/1eef0cb4a488cb4f369b4a4b432462aa/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2llaKxmWX1UeORVTy4keBNTW6x2aN1mUspFVoh2TEV0MNRlQs1keSlmTyEVP:1776630737:23.129.64.200:8c03d55e79b86df94a65b3060860116f90602785a7931bc99bc63c4b5cca59b8:=0kaNVXTUlUNMpWWwwkaJdXTB1TP/index.m3u8\",\"source\":\"AsiaCloud\",\"format\":\"hls\"},{\"quality\":\"English\",\"url\":\"https://i-cdn-0.fusvi413kac.com/stream2/i-cdn-0/1eef0cb4a488cb4f369b4a4b432462aa/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2pFRrhXWtl0MZpXVwo1RFNjWtVEMOREat90Vah2TUFFMZJjRq5UbRhnWX1UP:1776630744:23.129.64.200:fca305fafaf224321afb81a3c8977bf8c33450638db6ce8b94d356fb3745b97e:=0kaNVXTUlUNMpWWwwkaJdXTB1TP/index.m3u8\",\"source\":\"AsiaCloud\",\"format\":\"hls\"},{\"quality\":\"Bengali\",\"url\":\"https://i-cdn-0.fusvi413kac.com/stream2/i-cdn-0/1eef0cb4a488cb4f369b4a4b432462aa/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25kMJlXWXJVbNp3YwoFRNJjWUV1dN1WT0oVbNdXTH1ENNdlRp10VFpnT6lVP:1776630751:23.129.64.200:0b13f82083cca9a17940156d31dfa7ab6f444d076b2bc42f1e63dc80a9db0a3a:=0kaNVXTUlUNMpWWwwkaJdXTB1TP/index.m3u8\",\"source\":\"AsiaCloud\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 3
+  }
+}

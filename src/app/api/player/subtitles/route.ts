@@ -84,14 +84,14 @@ export const GET = async (request: NextRequest) => {
         byLang.set(sub.language, sub);
         continue;
       }
-      // Prefer srt format
-      if (existing.format !== "srt" && sub.format === "srt") {
+      // Prefer vtt over srt (Chrome requires WebVTT for <track> elements)
+      if (existing.format !== "vtt" && sub.format === "vtt") {
         byLang.set(sub.language, sub);
       }
     }
 
     const tracks: SubtitleTrackResponse[] = Array.from(byLang.values()).map((sub) => ({
-      url: sub.url,
+      url: `/api/player/subtitle-proxy?url=${encodeURIComponent(sub.url)}`,
       lang: sub.language,
       label: sub.display || sub.language,
       format: sub.format,
@@ -107,7 +107,7 @@ export const GET = async (request: NextRequest) => {
 
     return NextResponse.json(
       { tracks },
-      { headers: { "cache-control": "public, max-age=3600, s-maxage=3600" } },
+      { headers: { "cache-control": "no-store" } },
     );
   } catch {
     return NextResponse.json({ tracks: [] });

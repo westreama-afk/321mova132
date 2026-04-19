@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-04-19T16:37:47.783Z",
+  "family": "tulnex",
+  "provider": "primeshows",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1659087"
+  },
+  "url": "https://api.tulnex.com/indra/movie/1659087",
+  "status": 404,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 404",
+  "responseBody": {
+    "error": "No stream found in any source."
+  },
+  "responseText": "{\"error\":\"No stream found in any source.\"}"
+}

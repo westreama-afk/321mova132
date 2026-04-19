@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-04-19T16:37:24.049Z",
+  "family": "rive",
+  "provider": "asiacloud",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1659087"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=asiacloud&id=1659087",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No sources array in response",
+  "responseBody": {
+    "data": null
+  },
+  "responseText": "{\"data\":null}"
+}

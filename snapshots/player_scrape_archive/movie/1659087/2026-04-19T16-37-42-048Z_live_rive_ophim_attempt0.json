@@ -1,0 +1,32 @@
+{
+  "createdAt": "2026-04-19T16:37:42.048Z",
+  "family": "rive",
+  "provider": "ophim",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1659087"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=ophim&id=1659087",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "source": "#Hà Nội (Vietsub) (Full)",
+          "url": "https://v7.kkphimplayer7.com/20260419/RD5ej5tb/index.m3u8",
+          "format": "hls"
+        }
+      ],
+      "captions": []
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"source\":\"#Hà Nội (Vietsub) (Full)\",\"url\":\"https://v7.kkphimplayer7.com/20260419/RD5ej5tb/index.m3u8\",\"format\":\"hls\"}],\"captions\":[]}}",
+  "extra": {
+    "totalSourceCount": 1
+  }
+}

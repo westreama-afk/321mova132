@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-19T18:20:22.805Z",
+  "family": "tulnex",
+  "provider": "hollymoviehd",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "79744",
+    "season": "2",
+    "episode": "10"
+  },
+  "url": "https://api.tulnex.com/provider/hollymoviehd/tv/79744/2/10",
+  "status": 500,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 500",
+  "responseBody": {
+    "error": "Request failed with status code 502"
+  },
+  "responseText": "{\"error\":\"Request failed with status code 502\"}"
+}

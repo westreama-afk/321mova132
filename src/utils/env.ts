@@ -38,6 +38,7 @@ export const env = createEnv({
     SELLAUTH_MONTHLY_CHECKOUT_URL: optionalUrl,
     SELLAUTH_YEARLY_CHECKOUT_URL: optionalUrl,
     WYZIE_API_KEY: optionalNonEmptyString,
+    PLAYER_SCRAPE_BACKFILL_TOKEN: optionalNonEmptyString,
   },
   client: {
     NEXT_PUBLIC_TMDB_ACCESS_TOKEN: z.string().min(1),

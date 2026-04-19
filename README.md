@@ -67,3 +67,27 @@ npm run dev
 Routes expected by app:
 - `GET /playlist/movie/:id`
 - `GET /playlist/tv/:id/:season/:episode`
+
+## Player Scrape Archive
+
+The `vixsrc-playlist` route now writes each upstream scrape response to JSON files under:
+
+```bash
+snapshots/player_scrape_archive/
+```
+
+Each movie/episode gets its own folder, and pending delayed retries are tracked in:
+
+```bash
+snapshots/player_scrape_archive/backfill-queue.json
+```
+
+To replay due backfills after the six-hour delay, call:
+
+```bash
+POST /api/player/scrape-backfill
+```
+
+Optional:
+- Set `PLAYER_SCRAPE_BACKFILL_TOKEN` and send `Authorization: Bearer <token>` to protect the endpoint.
+- Pass `?limit=5` to control how many due queue items are replayed in one run.

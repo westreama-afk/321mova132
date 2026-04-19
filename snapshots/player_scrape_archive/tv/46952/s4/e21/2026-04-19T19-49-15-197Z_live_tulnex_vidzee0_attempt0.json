@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-19T19:49:15.197Z",
+  "family": "tulnex",
+  "provider": "vidzee0",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "4",
+    "episode": "21"
+  },
+  "url": "https://api.tulnex.com/vidzee/tv/46952/4/21?server=0",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 0,
+  "responseBody": null,
+  "responseText": "null",
+  "extra": {
+    "decryptedBody": null
+  }
+}

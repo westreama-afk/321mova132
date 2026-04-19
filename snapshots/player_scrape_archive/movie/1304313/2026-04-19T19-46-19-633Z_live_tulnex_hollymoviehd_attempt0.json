@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-04-19T19:46:19.633Z",
+  "family": "tulnex",
+  "provider": "hollymoviehd",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1304313"
+  },
+  "url": "https://api.tulnex.com/provider/hollymoviehd/movie/1304313",
+  "status": 500,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 500",
+  "responseBody": {
+    "error": "Request failed with status code 502"
+  },
+  "responseText": "{\"error\":\"Request failed with status code 502\"}"
+}

@@ -214,18 +214,42 @@ async function m3u8Proxy(target, headers, base, host, token, allowedOrigin) {
   }
 }
 
+// --- API PROXY (server-to-server, key-authenticated, no origin check) ---
+async function apiProxy(target, headers, allowedOrigin) {
+  try {
+    const r = await fetch(target, { headers, redirect: "follow" });
+    const text = await r.text();
+    return withCors(
+      new Response(text, { status: r.status, headers: { "Content-Type": r.headers.get("content-type") || "text/plain" } }),
+      allowedOrigin,
+    );
+  } catch (e) {
+    return withCors(new Response(`err: ${e}`, { status: 502 }), allowedOrigin);
+  }
+}
+
 // --- MAIN ROUTER ---
 export default {
   async fetch(req, env) {
     try {
+      const reqUrl = new URL(req.url);
       const allowedOrigin = resolveAllowedOrigin(req, env);
       if (req.method === "OPTIONS") return withCors(new Response(null, { status: 204 }), allowedOrigin);
-      if (!allowedOrigin) return new Response("forbidden", { status: 403 });
 
+      const defaultKey = "j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW";
       const requiredKey = (env.PROXY_KEY || "").trim();
-      const reqUrl = new URL(req.url);
-      const token = reqUrl.searchParams.get("k") || req.headers.get("x-proxy-key") || "j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW";
+      const token = reqUrl.searchParams.get("k") || req.headers.get("x-proxy-key") || defaultKey;
 
+      // /api-proxy: server-to-server, key-authenticated, no browser origin required
+      if (reqUrl.pathname.includes("/api-proxy")) {
+        const expectedKey = requiredKey || defaultKey;
+        if (token !== expectedKey) return new Response("bad key", { status: 403 });
+        const target = reqUrl.searchParams.get("url");
+        if (!target) return new Response("no url", { status: 400 });
+        return apiProxy(target, buildHeaders(reqUrl.searchParams.get("headers")), allowedOrigin);
+      }
+
+      if (!allowedOrigin) return new Response("forbidden", { status: 403 });
       if (requiredKey && token !== requiredKey) return new Response("bad key", { status: 403 });
 
       const target = reqUrl.searchParams.get("url");

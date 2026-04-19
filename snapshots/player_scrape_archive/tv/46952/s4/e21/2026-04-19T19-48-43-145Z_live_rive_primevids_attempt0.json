@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-19T19:48:43.145Z",
+  "family": "rive",
+  "provider": "primevids",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "4",
+    "episode": "21"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=primevids&id=46952&season=4&episode=21",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No sources array in response",
+  "responseBody": {
+    "data": null
+  },
+  "responseText": "{\"data\":null}"
+}

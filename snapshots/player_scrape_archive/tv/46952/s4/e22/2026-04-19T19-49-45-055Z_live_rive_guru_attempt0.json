@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-19T19:49:45.055Z",
+  "family": "rive",
+  "provider": "guru",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "4",
+    "episode": "22"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=guru&id=46952&season=4&episode=22",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No sources array in response",
+  "responseBody": {
+    "data": null
+  },
+  "responseText": "{\"data\":null}"
+}

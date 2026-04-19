@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-19T19:43:47.624Z",
+  "family": "tulnex",
+  "provider": "vidzee1",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "37680",
+    "season": "8",
+    "episode": "13"
+  },
+  "url": "https://api.tulnex.com/vidzee/tv/37680/8/13?server=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 0,
+  "responseBody": null,
+  "responseText": "null",
+  "extra": {
+    "decryptedBody": null
+  }
+}
