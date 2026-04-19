@@ -165,5 +165,23 @@
       "primevids"
     ],
     "reason": "Missing priority providers: primevids, guru"
+  },
+  {
+    "requestKey": "tv_124364_s1_e1",
+    "request": {
+      "type": "tv",
+      "id": "124364",
+      "season": "1",
+      "episode": "1"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-20T02:02:01.353Z",
+    "createdAt": "2026-04-19T20:02:01.353Z",
+    "updatedAt": "2026-04-19T20:02:01.353Z",
+    "missingProviders": [
+      "flowcast",
+      "guru"
+    ],
+    "reason": "Missing priority providers: flowcast, guru"
   }
 ]

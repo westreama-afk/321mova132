@@ -1,0 +1,33 @@
+{
+  "createdAt": "2026-04-19T20:01:37.597Z",
+  "family": "rive",
+  "provider": "primevids",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "124364",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=primevids&id=124364&season=1&episode=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "url": "https://white-sun-5f88.3-97e.workers.dev/tv/O28JObetJ3kL15vpSpIIRCqCCwJnhZvlplfYhecY3CBprPfqTbHOgAGBaPZ_UoGM.OhZRQf95/index.m3u8",
+          "source": "PrimeVids",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"url\":\"https://white-sun-5f88.3-97e.workers.dev/tv/O28JObetJ3kL15vpSpIIRCqCCwJnhZvlplfYhecY3CBprPfqTbHOgAGBaPZ_UoGM.OhZRQf95/index.m3u8\",\"source\":\"PrimeVids\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 1
+  }
+}

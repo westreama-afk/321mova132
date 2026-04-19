@@ -146,6 +146,9 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const [activeQualityLevel, setActiveQualityLevel] = useState<number>(-1);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
+  const mp4RetryCountRef = useRef(0);
+  const [scrapingMsgIdx, setScrapingMsgIdx] = useState(0);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
@@ -256,6 +259,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
       const isMp4 = /\.mp4(?:\?|$)/i.test(decodedUrl) || decodedUrl.includes("/mp4-proxy");
 
       if (isMp4) {
+        mp4RetryCountRef.current = 0;
         // Remove crossOrigin for MP4 — CDN servers reject CORS requests
         video.removeAttribute("crossorigin");
         video.src = decodedUrl;
@@ -507,6 +511,14 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncSignal?.version]);
+
+  // ── Scraping status cycling message ──────────────────────────────────────────
+
+  useEffect(() => {
+    if (sources.length > 0 || !isLoading) return;
+    const id = setInterval(() => setScrapingMsgIdx((i) => (i + 1) % 4), 2500);
+    return () => clearInterval(id);
+  }, [sources.length, isLoading]);
 
   // ── Cleanup ───────────────────────────────────────────────────────────────────
 
@@ -856,9 +868,21 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         onError={(e) => {
           const video = e.currentTarget;
           const code = video.error?.code;
-          // Code 3 = decoding error — try HLS recovery before showing error
           if (code === 3 && hlsRef.current) {
             hlsRef.current.recoverMediaError();
+            return;
+          }
+          // Auto-retry MP4 network errors (transient wifi drops, CDN hiccups)
+          const isCurrentlyMp4 = /\.mp4(?:\?|$)/i.test(video.src) || video.src.includes("/mp4-proxy");
+          if (code === 2 && isCurrentlyMp4 && mp4RetryCountRef.current < 3) {
+            mp4RetryCountRef.current++;
+            setIsLoading(true);
+            const savedTime = video.currentTime;
+            setTimeout(() => {
+              video.load();
+              if (savedTime > 0) video.currentTime = savedTime;
+              void video.play().catch(() => {});
+            }, 1500 * mp4RetryCountRef.current);
             return;
           }
           const msg = code === 1 ? "Aborted" : code === 2 ? "Network error" : code === 3 ? "Decoding failed" : code === 4 ? "Format not supported" : "Unknown error";
@@ -871,11 +895,16 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
 
       {/* ── Loading spinner ── */}
       {isLoading && !error && (
-        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-4">
           <div className="relative h-16 w-16">
             <div className="absolute inset-0 animate-spin rounded-full border-[3px] border-white/10 border-t-white" />
             <div className="absolute inset-2 animate-spin rounded-full border-[3px] border-white/5 border-t-white/40" style={{ animationDuration: "1.5s", animationDirection: "reverse" }} />
           </div>
+          {sources.length === 0 && (
+            <p className="text-xs font-medium tracking-wide text-white/50 transition-opacity duration-500">
+              {["Finding sources\u2026", "Scanning providers\u2026", "Checking streams\u2026", "Almost ready\u2026"][scrapingMsgIdx]}
+            </p>
+          )}
         </div>
       )}
 
