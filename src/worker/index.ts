@@ -2,7 +2,7 @@
 // 8 MB chunks, serves what the browser asked for, and caches the rest so
 // subsequent requests within the same chunk are served from memory instantly.
 
-declare let self: ServiceWorkerGlobalScope;
+const sw = self as unknown as ServiceWorkerGlobalScope;
 
 const PREFETCH_BYTES = 8 * 1024 * 1024; // 8 MB per fetch
 const MAX_BYTES_PER_URL = 80 * 1024 * 1024; // evict oldest chunks past 80 MB
@@ -45,7 +45,7 @@ function evict(url: string): void {
   }
 }
 
-self.addEventListener("fetch", (event: FetchEvent) => {
+sw.addEventListener("fetch", (event: FetchEvent) => {
   const url = new URL(event.request.url);
   if (!url.pathname.includes("/mp4-proxy")) return;
   const rangeHeader = event.request.headers.get("range");
