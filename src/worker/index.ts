@@ -2,15 +2,15 @@
 // 8 MB chunks, serves what the browser asked for, and caches the rest so
 // subsequent requests within the same chunk are served from memory instantly.
 
-const sw = self as unknown as ServiceWorkerGlobalScope;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-const PREFETCH_BYTES = 8 * 1024 * 1024; // 8 MB per fetch
-const MAX_BYTES_PER_URL = 80 * 1024 * 1024; // evict oldest chunks past 80 MB
+const PREFETCH_BYTES = 8 * 1024 * 1024;
+const MAX_BYTES_PER_URL = 80 * 1024 * 1024;
 const MAX_URLS = 4;
 
 interface Chunk {
   start: number;
-  end: number; // inclusive, actual fetched end
+  end: number;
   data: Uint8Array;
   totalSize: number | null;
 }
@@ -45,12 +45,12 @@ function evict(url: string): void {
   }
 }
 
-sw.addEventListener("fetch", (event: FetchEvent) => {
-  const url = new URL(event.request.url);
+(self as any).addEventListener("fetch", (event: any) => {
+  const url = new URL(event.request.url as string);
   if (!url.pathname.includes("/mp4-proxy")) return;
-  const rangeHeader = event.request.headers.get("range");
+  const rangeHeader = event.request.headers.get("range") as string | null;
   if (!rangeHeader) return;
-  event.respondWith(handle(event.request, url.href, rangeHeader));
+  event.respondWith(handle(event.request as Request, url.href, rangeHeader));
 });
 
 async function handle(req: Request, url: string, rangeHeader: string): Promise<Response> {
@@ -58,7 +58,6 @@ async function handle(req: Request, url: string, rangeHeader: string): Promise<R
   if (!range) return fetch(req);
 
   const reqStart = range.start;
-  // browser often omits the end — default to one typical browser chunk ahead
   const reqEnd = range.end ?? reqStart + 1048575;
 
   const chunks = store.get(url) ?? [];
@@ -78,7 +77,6 @@ async function handle(req: Request, url: string, rangeHeader: string): Promise<R
     });
   }
 
-  // Fetch a larger chunk from network
   const fetchEnd = reqStart + PREFETCH_BYTES - 1;
   const fetchHeaders = new Headers(req.headers);
   fetchHeaders.set("range", `bytes=${reqStart}-${fetchEnd}`);
