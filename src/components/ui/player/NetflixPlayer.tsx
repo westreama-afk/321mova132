@@ -148,6 +148,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
 
   const mp4RetryCountRef = useRef(0);
   const mp4ResumeTimeRef = useRef(0);
+  const mp4RetryResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [scrapingMsgIdx, setScrapingMsgIdx] = useState(0);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -878,17 +879,24 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
           }
           // Auto-retry MP4 network errors (transient wifi drops, CDN hiccups)
           const isCurrentlyMp4 = /\.mp4(?:\?|$)/i.test(video.src) || video.src.includes("/mp4-proxy");
-          if (code === 2 && isCurrentlyMp4 && mp4RetryCountRef.current < 3) {
-            mp4RetryCountRef.current++;
-            setIsLoading(true);
-            mp4ResumeTimeRef.current = video.currentTime;
-            setTimeout(() => {
-              // Re-remove crossOrigin — React re-applies it on re-render triggered by setIsLoading
-              video.removeAttribute("crossorigin");
-              video.load();
-              void video.play().catch(() => {});
-            }, 1500 * mp4RetryCountRef.current);
-            return;
+          if (code === 2 && isCurrentlyMp4) {
+            // If the video is still playing the error was on a background range/buffer request — ignore it
+            if (!video.paused && !video.ended) return;
+            if (mp4RetryCountRef.current < 3) {
+              mp4RetryCountRef.current++;
+              setIsLoading(true);
+              mp4ResumeTimeRef.current = video.currentTime;
+              // Reset retry count after 10s of successful playback so long sessions don't exhaust retries
+              if (mp4RetryResetTimerRef.current) clearTimeout(mp4RetryResetTimerRef.current);
+              mp4RetryResetTimerRef.current = setTimeout(() => { mp4RetryCountRef.current = 0; }, 10000);
+              setTimeout(() => {
+                // Re-remove crossOrigin — React re-applies it on re-render triggered by setIsLoading
+                video.removeAttribute("crossorigin");
+                video.load();
+                void video.play().catch(() => {});
+              }, 1500 * mp4RetryCountRef.current);
+              return;
+            }
           }
           const msg = code === 1 ? "Aborted" : code === 2 ? "Network error" : code === 3 ? "Decoding failed" : code === 4 ? "Format not supported" : "Unknown error";
           setError(`Video error: ${msg}`);

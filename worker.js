@@ -123,6 +123,17 @@ function rewriteM3u8Text(text, absoluteTarget, headers, base, token, allowedOrig
 }
 
 // --- PROXY FUNCTIONS ---
+async function fetchUpstream(url, options, maxRetries = 2) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const r = await fetch(url, options);
+      if (r.ok || r.status === 206 || r.status < 500) return r;
+    } catch (e) {
+      if (attempt === maxRetries) throw e;
+    }
+  }
+}
+
 async function tsProxy(target, headers, host, allowedOrigin, base, token) {
   const absolute = abs(target, host || target);
   try {
@@ -136,13 +147,13 @@ async function tsProxy(target, headers, host, allowedOrigin, base, token) {
     const isMp4 = absolute.toLowerCase().endsWith(".mp4");
     const isMp4Range = isMp4 && reqRange;
 
-    const r = await fetch(absolute, { 
-      headers: fetchHeaders, 
+    const r = await fetchUpstream(absolute, {
+      headers: fetchHeaders,
       redirect: "follow",
       cf: {
-        cacheTtl: isMp4Range ? 0 : 43200, // Don't cache Range requests
+        cacheTtl: isMp4Range ? 0 : 43200,
         cacheEverything: !isMp4Range,
-        cacheKey: absolute 
+        cacheKey: absolute
       }
     });
 
