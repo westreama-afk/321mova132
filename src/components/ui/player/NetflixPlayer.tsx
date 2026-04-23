@@ -147,6 +147,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
   const mp4RetryCountRef = useRef(0);
+  const mp4ResumeTimeRef = useRef(0);
   const [scrapingMsgIdx, setScrapingMsgIdx] = useState(0);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -696,7 +697,10 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     const video = videoRef.current;
     if (!video) return;
     setDuration(video.duration);
-    if (startAt && startAt > 0 && !startAtAppliedRef.current) {
+    if (mp4ResumeTimeRef.current > 0) {
+      video.currentTime = mp4ResumeTimeRef.current;
+      mp4ResumeTimeRef.current = 0;
+    } else if (startAt && startAt > 0 && !startAtAppliedRef.current) {
       video.currentTime = startAt;
       startAtAppliedRef.current = true;
     }
@@ -877,10 +881,11 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
           if (code === 2 && isCurrentlyMp4 && mp4RetryCountRef.current < 3) {
             mp4RetryCountRef.current++;
             setIsLoading(true);
-            const savedTime = video.currentTime;
+            mp4ResumeTimeRef.current = video.currentTime;
             setTimeout(() => {
+              // Re-remove crossOrigin — React re-applies it on re-render triggered by setIsLoading
+              video.removeAttribute("crossorigin");
               video.load();
-              if (savedTime > 0) video.currentTime = savedTime;
               void video.play().catch(() => {});
             }, 1500 * mp4RetryCountRef.current);
             return;

@@ -68,18 +68,10 @@ function withCors(resp, allowedOrigin) {
   return resp;
 }
 
-function sanitizeResponseHeaders(h, isMp4 = false) {
+function sanitizeResponseHeaders(h) {
   const out = new Headers(h);
   out.delete("content-encoding");
-  
-  // For MP4s, delete content-length to force progressive streaming
-  // Browser will play while downloading instead of buffering full file
-  if (isMp4) {
-    out.delete("content-length");
-  }
-  
-  // FORCE Cloudflare to cache this chunk regardless of source headers
-  out.set("Cache-Control", "public, max-age=43200"); 
+  out.set("Cache-Control", "public, max-age=43200");
   return out;
 }
 
@@ -160,17 +152,17 @@ async function tsProxy(target, headers, host, allowedOrigin, base, token) {
       return rewriteM3u8Text(text, absolute, headers, base, token, allowedOrigin);
     }
 
-    const respHeaders = sanitizeResponseHeaders(r.headers, isMp4);
-    
-    // MP4 detection and proper content-type
+    const respHeaders = sanitizeResponseHeaders(r.headers);
+
     if (isMp4) {
       respHeaders.set("Content-Type", "video/mp4");
-      // Force streaming behavior - remove any content-length that might confuse browsers
-      respHeaders.delete("Content-Length");
-      // Explicitly tell browser data is chunked/streaming
-      if (!respHeaders.has("Transfer-Encoding")) {
-        respHeaders.set("Transfer-Encoding", "chunked");
+      // For full 200 responses only: drop Content-Length so the browser streams progressively.
+      // For 206 range responses: keep it — removing it causes NS_ERROR_NET_PARTIAL_TRANSFER
+      // when the upstream drops the connection before the full range is delivered.
+      if (r.status !== 206) {
+        respHeaders.delete("Content-Length");
       }
+      // Do NOT set Transfer-Encoding: chunked — Cloudflare handles this automatically.
     } else if (absolute.toLowerCase().match(/\.(html|js|png|jpg|woff2?|ts)$/) || absolute.includes(".ts")) {
       respHeaders.set("Content-Type", "video/mp2t");
     }
