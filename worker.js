@@ -151,9 +151,9 @@ async function tsProxy(target, headers, host, allowedOrigin, base, token) {
       headers: fetchHeaders,
       redirect: "follow",
       cf: {
-        cacheTtl: isMp4Range ? 0 : 43200,
-        cacheEverything: !isMp4Range,
-        cacheKey: absolute
+        cacheTtl: 43200,
+        cacheEverything: true,
+        cacheKey: isMp4Range ? `${absolute}|${reqRange}` : absolute
       }
     });
 
