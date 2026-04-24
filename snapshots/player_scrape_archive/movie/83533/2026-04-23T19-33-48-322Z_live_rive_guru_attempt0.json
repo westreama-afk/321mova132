@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-04-23T19:33:48.322Z",
+  "family": "rive",
+  "provider": "guru",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "83533"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=guru&id=83533",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No sources array in response",
+  "responseBody": {
+    "data": null
+  },
+  "responseText": "{\"data\":null}"
+}

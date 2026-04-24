@@ -1,0 +1,34 @@
+{
+  "createdAt": "2026-04-23T19:35:40.186Z",
+  "family": "rive",
+  "provider": "ophim",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "76479",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=ophim&id=76479&season=1&episode=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "source": "#Hà Nội (Vietsub) (Tập 01)",
+          "url": "https://s3.phim1280.tv/20240507/RKsuOm4s/index.m3u8",
+          "format": "hls"
+        }
+      ],
+      "captions": []
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"source\":\"#Hà Nội (Vietsub) (Tập 01)\",\"url\":\"https://s3.phim1280.tv/20240507/RKsuOm4s/index.m3u8\",\"format\":\"hls\"}],\"captions\":[]}}",
+  "extra": {
+    "totalSourceCount": 1
+  }
+}

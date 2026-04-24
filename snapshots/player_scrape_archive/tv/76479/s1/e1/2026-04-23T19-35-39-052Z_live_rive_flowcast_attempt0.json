@@ -1,0 +1,105 @@
+{
+  "createdAt": "2026-04-23T19:35:39.052Z",
+  "family": "rive",
+  "provider": "flowcast",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "76479",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=flowcast&id=76479&season=1&episode=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 4,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": 1080,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fcfb526f1203c80b04c54dbd29d3bcf04.mp4%3Fsign%3D58b3ace837b8d2539ff5ef0bdbec2f49%26t%3D1776970422&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "FlowCast",
+          "size": "646186864",
+          "format": "mp4"
+        },
+        {
+          "quality": 720,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F05221eb8c5f75930c583670ea6baea61.mp4%3Fsign%3Db9fbf27d5f1b459caccc9bdcbd4201f4%26t%3D1776969528&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "FlowCast",
+          "size": "406800865",
+          "format": "mp4"
+        },
+        {
+          "quality": 480,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fc4fe6bdec5999f633c04d1386a16fbe1.mp4%3Fsign%3D080a0b545a4995fc59bc7f26c8344d7e%26t%3D1776969661&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "FlowCast",
+          "size": "222382021",
+          "format": "mp4"
+        },
+        {
+          "quality": 360,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fa16a3c1a238b9c65fd46800ab0239fb3.mp4%3Fsign%3D095daa400b137fc24b679b347dc6699a%26t%3D1776970160&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "FlowCast",
+          "size": "210144117",
+          "format": "mp4"
+        }
+      ],
+      "captions": [
+        {
+          "label": "اَلْعَرَبِيَّةُ - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/c5f95c6d9f958de1ec67e3a2982949e1.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "বাংলা - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/msubt/3cd98200f6412c7d124b131a6ed1f4d3.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "English - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/b036f198a3eb5f7811b50b9aaffbbcbb.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Filipino - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/msubt/f24d0a088f9e86c5e7fe80a3da0c3816.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Français - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/c2f9749bb962b5056b0a5220c54417e7.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Indonesian - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/6ea10b996afb7ad30e8257d3f63e4d36.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Malay - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/msubt/029612f284bf29e0409b020f6bc94baf.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "ਪੰਜਾਬੀ - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/msubt/316b26770b3ede89218c0c4411369ad0.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Português - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/1a1f76971e62c1176174af9beafa3c4d.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Русский - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/msubt/901b3fcbc765b433a82990a54a72f844.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "اُردُو - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/msubt/4c6d5ea67b32002512f14cf62b3469eb.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "中文 - FlowCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/fd2b8925b2f28641ff09a0a28951532e.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":1080,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fcfb526f1203c80b04c54dbd29d3bcf04.mp4%3Fsign%3D58b3ace837b8d2539ff5ef0bdbec2f49%26t%3D1776970422&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"FlowCast\",\"size\":\"646186864\",\"format\":\"mp4\"},{\"quality\":720,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F05221eb8c5f75930c583670ea6baea61.mp4%3Fsign%3Db9fbf27d5f1b459caccc9bdcbd4201f4%26t%3D1776969528&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"FlowCast\",\"size\":\"406800865\",\"format\":\"mp4\"},{\"quality\":480,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fc4fe6bdec5999f633c04d1386a16fbe1.mp4%3Fsign%3D080a0b545a4995fc59bc7f26c8344d7e%26t%3D1776969661&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"FlowCast\",\"size\":\"222382021\",\"format\":\"mp4\"},{\"quality\":360,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fa16a3c1a238b9c65fd46800ab0239fb3.mp4%3Fsign%3D095daa400b137fc24b679b347dc6699a%26t%3D1776970160&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"FlowCast\",\"size\":\"210144117\",\"format\":\"mp4\"}],\"captions\":[{\"label\":\"اَلْعَرَبِيَّةُ - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/c5f95c6d9f958de1ec67e3a2982949e1.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"বাংলা - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/msubt/3cd98200f6412c7d124b131a6ed1f4d3.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"English - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/b036f198a3eb5f7811b50b9aaffbbcbb.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Filipino - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/msubt/f24d0a088f9e86c5e7fe80a3da0c3816.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Français - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/c2f9749bb962b5056b0a5220c54417e7.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Indonesian - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/6ea10b996afb7ad30e8257d3f63e4d36.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Malay - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/msubt/029612f284bf29e0409b020f6bc94baf.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"ਪੰਜਾਬੀ - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/msubt/316b26770b3ede89218c0c4411369ad0.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Português - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/1a1f76971e62c1176174af9beafa3c4d.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Русский - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/msubt/901b3fcbc765b433a82990a54a72f844.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"اُردُو - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/msubt/4c6d5ea67b32002512f14cf62b3469eb.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9tc3VidC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=zy3rFcGmDdEVu-1S8rPYhSdsp0YvvSnEVhwy9hSmnWNml1WE~IoA5lXIhfBavsGWNze3NXxb5Tx2CCZZlC4GQzEFaoKZCuNGVWJyinO78R-IXVNeKvu-cBfDKEweoOWp8qfATFbJ2o4WSOk~0tcYgIZaFMxqms~4k3Mblkj99EU5GhJ9eQehCWanJ2tbAURSWUF09rqrk9GOc~f6td8RglQVVYr4nx-XgPY4rxTaSht-cQYBT3VgvTnkyoUafs4ZFbLBrmH68y3bUs1jraOTcDdkg~tNLtoxTZmxmdfaed3fvlQ-Id28IoLP8-Xk2kbPuVcEy-5Aemmau8XWcjN71Q__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"中文 - FlowCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/fd2b8925b2f28641ff09a0a28951532e.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"}]}}",
+  "extra": {
+    "totalSourceCount": 4
+  }
+}

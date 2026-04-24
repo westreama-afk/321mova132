@@ -1,0 +1,26 @@
+{
+  "cachedAt": "2026-04-23T19:43:09.258Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Ff199a8ff09f81b5b1c8074a86ee2daf4.mp4%3Fsign%3D28a987f0fca42d796eeedafa12f863a3%26t%3D1776972535&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "NovaCast",
+      "provider": "movish",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Ftiny-heart-8f33.37-1c8.workers.dev%2Ftv%2FhfZVOgIv62iGU5FR9vikV7W4XtnbMzhQ0_tuPLJ-EEtEY9365SMr5uj7cX5eJMxn.PYjUuHI_%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "PrimeVids HLSp",
+      "provider": "primevids",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fscrennnifu.click%2Fserial%2Ftt7587890%2F4%2F13%2Fplaylist.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Guru Multi Audiop",
+      "provider": "guru",
+      "default": false
+    }
+  ]
+}

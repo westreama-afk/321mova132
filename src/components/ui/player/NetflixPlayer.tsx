@@ -164,6 +164,9 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const [settingsTab, setSettingsTab] = useState<SettingsTab>("source");
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [introTimestamps, setIntroTimestamps] = useState<{ start: number; end: number } | null>(null);
+  const [showSkipIntro, setShowSkipIntro] = useState(false);
+
   const [seekFeedback, setSeekFeedback] = useState<{
     direction: "forward" | "backward";
     visible: boolean;
@@ -683,6 +686,46 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const handleWaiting = useCallback(() => setIsLoading(true), []);
   const handleCanPlay = useCallback(() => setIsLoading(false), []);
 
+  // Fetch skip-intro timestamps from TheIntroDB (TIDB) using TMDB ID directly
+  useEffect(() => {
+    setIntroTimestamps(null);
+    setShowSkipIntro(false);
+    if (!mediaId) return;
+
+    const controller = new AbortController();
+
+    const run = async () => {
+      try {
+        const params = new URLSearchParams({ tmdb_id: String(mediaId) });
+        if (mediaType === "tv" && season != null && episode != null) {
+          params.set("season", String(season));
+          params.set("episode", String(episode));
+        }
+        const r = await fetch(`https://api.theintrodb.org/v1/media?${params.toString()}`, {
+          signal: controller.signal,
+          headers: { Accept: "application/json" },
+        });
+        if (r.ok) {
+          const d = (await r.json()) as { intro?: { start_ms?: number; end_ms?: number } | null };
+          if (d.intro && typeof d.intro.start_ms === "number" && typeof d.intro.end_ms === "number") {
+            setIntroTimestamps({ start: d.intro.start_ms / 1000, end: d.intro.end_ms / 1000 });
+            return;
+          }
+        }
+      } catch { /* ignore */ }
+
+      if (controller.signal.aborted) return;
+
+      // Fallback: timer-based range for TV episodes
+      if (mediaType === "tv" && season != null && episode != null) {
+        setIntroTimestamps({ start: 30, end: 90 });
+      }
+    };
+
+    void run();
+    return () => controller.abort();
+  }, [mediaId, mediaType, season, episode]);
+
   const handleTimeUpdate = useCallback(() => {
     const video = videoRef.current;
     if (!video || progressDragRef.current) return;
@@ -692,7 +735,11 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
       lastEmittedTimeRef.current = video.currentTime;
       emitEvent("timeupdate");
     }
-  }, [emitEvent]);
+    if (introTimestamps) {
+      const t = video.currentTime;
+      setShowSkipIntro(t >= introTimestamps.start && t < introTimestamps.end);
+    }
+  }, [emitEvent, introTimestamps]);
 
   const handleLoadedMetadata = useCallback(() => {
     const video = videoRef.current;
@@ -962,6 +1009,24 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
               <p key={i} className="text-sm font-medium leading-snug drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] sm:text-base">{line}</p>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ── Skip Intro ── */}
+      {showSkipIntro && !error && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-24 z-[36] flex justify-end px-4 sm:px-6">
+          <button
+            type="button"
+            className="pointer-events-auto rounded border-2 border-white/70 bg-black/60 px-5 py-2 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white hover:text-black"
+            onClick={() => {
+              if (videoRef.current && introTimestamps) {
+                videoRef.current.currentTime = introTimestamps.end;
+                setShowSkipIntro(false);
+              }
+            }}
+          >
+            Skip Intro
+          </button>
         </div>
       )}
 

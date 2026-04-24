@@ -1,0 +1,26 @@
+{
+  "cachedAt": "2026-04-23T19:44:27.190Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Ffalling-cherry-e04e.bison-6d7.workers.dev%2Ftv%2FzSq0UM8ks0W4Y8CgtsM9bOYPhQBx7qQ6L02rF8Zkd6k7J-nlvYgvZn3hJ_kyVv7f.CZLET3ry%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "PrimeVids HLSp",
+      "provider": "primevids",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-arch-400.loffe414wil.com%2Fstream2%2Fi-arch-400%2F28f8622db1885b5ab7e103127fd9195a%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2llMNVTTEZlaOdkUo5kaKpWTtlUMNpmRs5kMVNjTUFUeadVV49ERBBTTtVUP%3A1776977054%3A45.83.104.137%3A50cece746a54550d61b5f91b4aa5fdcec4a3cf3586e3ebdb31d1c42ad2e39d5c%3A%3D4ERVV3TE1UdNRVQwwkaFpnT31TP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Hindip",
+      "provider": "asiacloud",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-arch-400.loffe414wil.com%2Fstream2%2Fi-arch-400%2F28f8622db1885b5ab7e103127fd9195a%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT29ERrhXW6FkMPdUVy0EVslWWqlFNNpWQy0ERjVTWtl0MOJTR61ERRJjT6VUP%3A1776977056%3A45.83.104.137%3A5d15bb9f71e8b753fa5a24a932ca341d0a409505f9a16bb66e9acaa54dfd0a8b%3A%3D4ERVV3TE1UdNRVQwwkaFpnT31TP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Englishp",
+      "provider": "asiacloud",
+      "default": false
+    }
+  ]
+}

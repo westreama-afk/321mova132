@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-04-23T19:42:54.618Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "79744",
+    "season": "4",
+    "episode": "13"
+  },
+  "url": "https://movish.net/moviebox-embed/tv/79744/4/13",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1
+}

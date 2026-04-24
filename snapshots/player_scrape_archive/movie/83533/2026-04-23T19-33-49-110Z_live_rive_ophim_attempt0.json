@@ -1,0 +1,38 @@
+{
+  "createdAt": "2026-04-23T19:33:49.110Z",
+  "family": "rive",
+  "provider": "ophim",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "83533"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=ophim&id=83533",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 2,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "source": "#Hà Nội (Vietsub) (Full)",
+          "url": "https://s6.kkphimplayer6.com/20260331/eRpJwGPs/index.m3u8",
+          "format": "hls"
+        },
+        {
+          "quality": "HLS",
+          "source": "#Hà Nội (Thuyết Minh) (Full)",
+          "url": "https://s6.kkphimplayer6.com/20260410/8c2UbVCu/index.m3u8",
+          "format": "hls"
+        }
+      ],
+      "captions": []
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"source\":\"#Hà Nội (Vietsub) (Full)\",\"url\":\"https://s6.kkphimplayer6.com/20260331/eRpJwGPs/index.m3u8\",\"format\":\"hls\"},{\"quality\":\"HLS\",\"source\":\"#Hà Nội (Thuyết Minh) (Full)\",\"url\":\"https://s6.kkphimplayer6.com/20260410/8c2UbVCu/index.m3u8\",\"format\":\"hls\"}],\"captions\":[]}}",
+  "extra": {
+    "totalSourceCount": 2
+  }
+}

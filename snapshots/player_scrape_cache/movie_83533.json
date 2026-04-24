@@ -1,0 +1,117 @@
+{
+  "cachedAt": "2026-04-23T19:33:49.129Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fcms%2Fc3202e159c3334a2981a442a54c9943a.mp4%3Fsign%3Dfe3cd302e69230117b61e9c594ce455e%26t%3D1776971428&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 1080p",
+      "provider": "flowcast",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F6dcf84a7ed3b8b36eef88d739b1a190d.mp4%3Fsign%3Dc7a4105050fe90e27fe34f84410dc893%26t%3D1776971100&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 480p",
+      "provider": "flowcast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F415791a1b43f82ac0ae4968045f47705.mp4%3Fsign%3Da7ebec94c55073622c08661e89e8a9da%26t%3D1776971039&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 360p",
+      "provider": "flowcast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fcms%2Fc3202e159c3334a2981a442a54c9943a.mp4%3Fsign%3D8be921fc86646d20afcb05570fdb7457%26t%3D1776967515&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "NovaCast",
+      "provider": "movish",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fbitter-forest-21bb.75-8b0.workers.dev%2Fmovie%2F_T0HtwArK7tdhQlW1NOUm-7CVstl8-S2mJJ10bZ2tju23EGT85h-6eLP028obakd.YdL9p_iV%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "PrimeVids HLSp",
+      "provider": "primevids",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fcms%2Fc3202e159c3334a2981a442a54c9943a.mp4%3Fsign%3Db0a78cda9d3fa78f5e4c8af24b06af7c%26t%3D1776969879&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 1080p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F6dcf84a7ed3b8b36eef88d739b1a190d.mp4%3Fsign%3D9244a720dfcb7db7a5dae8aba5e5ccf3%26t%3D1776969334&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 480p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F415791a1b43f82ac0ae4968045f47705.mp4%3Fsign%3D5716370ecd6edf142ebbf6da44ee7b89%26t%3D1776969998&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 360p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260331%2FeRpJwGPs%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Ophim HLSp",
+      "provider": "ophim",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fs6.kkphimplayer6.com%2F20260410%2F8c2UbVCu%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Ophim HLSp",
+      "provider": "ophim",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Flizer123.site%2Fgetm3u8%2FYNFKDT9Z&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Hindip",
+      "provider": "asiacloud",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-arch-400.loffe414wil.com%2Fstream2%2Fi-arch-400%2F835a9382c6569030a71de820a127e418%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2pVbJlnTUNGNO1WTx4UbVlnWqVkePdVT41keWlmWtFVMO1WU410ROtmTE1UP%3A1776975243%3A192.42.116.112%3Ab9bc6417cfda94b77a6d85ed8210619ecf6fb7c88e0e94c946518e617260f7ef%3A%3D0EVrlHTqFVeMpWR45Ua0gXTUlUP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Englishp",
+      "provider": "asiacloud",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-cdn-0.loffe414wil.com%2Fstream2%2Fi-cdn-0%2F835a9382c6569030a71de820a127e418%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT250RVpnTyY1aPRUSx0EROt2TEFEePdlTr1keRFTTHV1dPRlUs1ERrRjWEtWP%3A1776975247%3A192.42.116.112%3A939daf21cff802ae6c85c98d69d921f7e7b44aac4f03157f9ef232ddc4127f71%3A%3D0EVrlHTqFVeMpWR45Ua0gXTUlUP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Bengalip",
+      "provider": "asiacloud",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-cdn-0.loffe414wil.com%2Fstream2%2Fi-cdn-0%2F835a9382c6569030a71de820a127e418%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2l1VZFjTtlUeNpXU10kMS1mWEpVaOJjWq5kaFpnTHFVeNR0az0EROpWTqlUP%3A1776975251%3A192.42.116.112%3A26aa1ee6b619e5694d13da49f5fbdbf86f63d2dd4b75856d5ec772e27f807dfb%3A%3D0EVrlHTqFVeMpWR45Ua0gXTUlUP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Tamilp",
+      "provider": "asiacloud",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-cdn-0.loffe414wil.com%2Fstream2%2Fi-cdn-0%2F835a9382c6569030a71de820a127e418%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT25keWtmTHFFeZJjWq9EVVFTW6VVNZp2Zw4kMRJjWENGeZ1WWz4kerJjTqVUP%3A1776975254%3A192.42.116.112%3A65432bdcfb5a55ee2197621cbe716f4d15ab5658ecd2a88111ef1598ebe88dfa%3A%3D0EVrlHTqFVeMpWR45Ua0gXTUlUP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Telugup",
+      "provider": "asiacloud",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fi-arch-400.loffe414wil.com%2Fstream2%2Fi-arch-400%2F835a9382c6569030a71de820a127e418%2FMJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2lleJRTTqNWeNpnWrp1RNlnTUllePRkQp5keO12TENGMZR1a61kaJdnWtVUP%3A1776975258%3A192.42.116.112%3A92d3bca43d919487ebeef891f9d9e441528f24a2d832c4dedc765a61208f47bd%3A%3D0EVrlHTqFVeMpWR45Ua0gXTUlUP%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "AsiaCloud Hindi Subbedp",
+      "provider": "asiacloud",
+      "default": false
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-04-23T19:33:47.536Z",
+  "family": "tulnex",
+  "provider": "allmovies",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "83533"
+  },
+  "url": "https://api.tulnex.com/provider/allmovies/movie/83533?lang=english",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

@@ -1,0 +1,41 @@
+{
+  "createdAt": "2026-04-23T19:35:42.089Z",
+  "family": "rive",
+  "provider": "guru",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "76479",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=guru&id=76479&season=1&episode=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 2,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "url": "https://scrennnifu.click/serial/tt1190634/1/1/playlist.m3u8",
+          "quality": "Multi Audio",
+          "priority": 2,
+          "source": "Guru",
+          "format": "hls"
+        },
+        {
+          "url": "https://eTOjdo3Yv1iw.moonlandinghistory.space/JVW37qsJlOto/hls3/01/01540/njh625gmzpxw_n/master.txt",
+          "quality": "HLS 1",
+          "priority": 1,
+          "source": "Guru",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"url\":\"https://scrennnifu.click/serial/tt1190634/1/1/playlist.m3u8\",\"quality\":\"Multi Audio\",\"priority\":2,\"source\":\"Guru\",\"format\":\"hls\"},{\"url\":\"https://eTOjdo3Yv1iw.moonlandinghistory.space/JVW37qsJlOto/hls3/01/01540/njh625gmzpxw_n/master.txt\",\"quality\":\"HLS 1\",\"priority\":1,\"source\":\"Guru\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 2
+  }
+}

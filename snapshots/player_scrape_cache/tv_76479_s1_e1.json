@@ -1,0 +1,89 @@
+{
+  "cachedAt": "2026-04-23T19:35:53.490Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fcfb526f1203c80b04c54dbd29d3bcf04.mp4%3Fsign%3D58b3ace837b8d2539ff5ef0bdbec2f49%26t%3D1776970422&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 1080p",
+      "provider": "flowcast",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F05221eb8c5f75930c583670ea6baea61.mp4%3Fsign%3Db9fbf27d5f1b459caccc9bdcbd4201f4%26t%3D1776969528&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 720p",
+      "provider": "flowcast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fc4fe6bdec5999f633c04d1386a16fbe1.mp4%3Fsign%3D080a0b545a4995fc59bc7f26c8344d7e%26t%3D1776969661&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 480p",
+      "provider": "flowcast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fa16a3c1a238b9c65fd46800ab0239fb3.mp4%3Fsign%3D095daa400b137fc24b679b347dc6699a%26t%3D1776970160&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 360p",
+      "provider": "flowcast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fsilent-wildflower-8004.8-716.workers.dev%2Ftv%2FalS4Xv1Yu5wWtPErxPwxacVPpg4nNhPT5fqVns5GXQL0KZbpwb5qEI-hilonlIC7.RKzgrbwz%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "PrimeVids HLSp",
+      "provider": "primevids",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fscrennnifu.click%2Fserial%2Ftt1190634%2F1%2F1%2Fplaylist.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Guru Multi Audiop",
+      "provider": "guru",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2FeTOjdo3Yv1iw.moonlandinghistory.space%2FJVW37qsJlOto%2Fhls3%2F01%2F01540%2Fnjh625gmzpxw_n%2Fmaster.txt&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Guru HLS 1p",
+      "provider": "guru",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fcfb526f1203c80b04c54dbd29d3bcf04.mp4%3Fsign%3D5b7623cb926e94c57914fce4dd42a7d3%26t%3D1776939539&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 1080p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F05221eb8c5f75930c583670ea6baea61.mp4%3Fsign%3De3783cd8d7a00de75ca8ee5522e7d74d%26t%3D1776936530&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 720p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fc4fe6bdec5999f633c04d1386a16fbe1.mp4%3Fsign%3Dd5bbb3d654ee8aaa56889b3e56598b37%26t%3D1776936821&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 480p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fa16a3c1a238b9c65fd46800ab0239fb3.mp4%3Fsign%3D5fa10a03296d68e5f8b0c50f3c485a9a%26t%3D1776939289&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "HindiCast 360p",
+      "provider": "hindicast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fs3.phim1280.tv%2F20240507%2FRKsuOm4s%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Ophim HLSp",
+      "provider": "ophim",
+      "default": false
+    }
+  ]
+}

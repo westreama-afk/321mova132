@@ -24,7 +24,8 @@ const TvShowPlayerSourceSelection = dynamic(() => import("./SourceSelection"));
 const TvShowPlayerEpisodeSelection = dynamic(() => import("./EpisodeSelection"));
 
 const AUTO_NEXT_STORAGE_KEY = "TV_PLAYER_AUTO_NEXT_ENABLED";
-const AUTO_NEXT_TRIGGER_REMAINING_SECONDS = 90;
+const AUTO_NEXT_TRIGGER_REMAINING_SECONDS = 180; // show panel at 3 mins remaining
+const AUTO_NEXT_NAVIGATE_AT_SECONDS = 20; // auto-navigate when 20s left
 const AUTO_NEXT_FALLBACK_DELAY_SECONDS = 5;
 
 export interface TvShowPlayerProps {
@@ -174,7 +175,7 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
       if (!Number.isFinite(currentTime) || currentTime < 0) return;
 
       const remaining = duration - currentTime;
-      if (remaining <= AUTO_NEXT_TRIGGER_REMAINING_SECONDS && remaining > 0) {
+      if (remaining <= AUTO_NEXT_TRIGGER_REMAINING_SECONDS && remaining > AUTO_NEXT_NAVIGATE_AT_SECONDS) {
         maybeStartAutoNext(remaining);
       }
     },
@@ -210,7 +211,7 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
       return;
     }
 
-    if (autoNextCountdown <= 0) {
+    if (autoNextCountdown <= AUTO_NEXT_NAVIGATE_AT_SECONDS) {
       goToNextEpisode();
       return;
     }
@@ -334,7 +335,11 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
             <div className="pointer-events-none absolute inset-x-0 bottom-16 z-[10120] flex justify-center px-3 sm:bottom-20">
               <div className="pointer-events-auto flex w-full max-w-lg items-center justify-between gap-3 rounded-xl border border-sky-200/35 bg-[#071022]/92 px-3 py-2 text-white shadow-[0_14px_40px_rgba(0,0,0,0.45)] backdrop-blur">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold sm:text-base">Up next in {autoNextCountdown}s</p>
+                  <p className="truncate text-sm font-semibold sm:text-base">
+                    {autoNextCountdown !== null && autoNextCountdown <= AUTO_NEXT_NAVIGATE_AT_SECONDS
+                      ? `Playing next in ${autoNextCountdown}s`
+                      : "Up next"}
+                  </p>
                   <p className="truncate text-xs text-white/75 sm:text-sm">
                     {nextEpisodeName || `Episode ${props.nextEpisodeNumber}`}
                   </p>

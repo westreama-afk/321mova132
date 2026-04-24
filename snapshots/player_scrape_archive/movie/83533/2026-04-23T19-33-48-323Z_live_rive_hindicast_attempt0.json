@@ -1,0 +1,60 @@
+{
+  "createdAt": "2026-04-23T19:33:48.323Z",
+  "family": "rive",
+  "provider": "hindicast",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "83533"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=hindicast&id=83533",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 3,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": 1080,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fcms%2Fc3202e159c3334a2981a442a54c9943a.mp4%3Fsign%3Db0a78cda9d3fa78f5e4c8af24b06af7c%26t%3D1776969879&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "HindiCast",
+          "size": "3529044471",
+          "format": "mp4"
+        },
+        {
+          "quality": 480,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F6dcf84a7ed3b8b36eef88d739b1a190d.mp4%3Fsign%3D9244a720dfcb7db7a5dae8aba5e5ccf3%26t%3D1776969334&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "HindiCast",
+          "size": "933281539",
+          "format": "mp4"
+        },
+        {
+          "quality": 360,
+          "url": "https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F415791a1b43f82ac0ae4968045f47705.mp4%3Fsign%3D5716370ecd6edf142ebbf6da44ee7b89%26t%3D1776969998&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D",
+          "source": "HindiCast",
+          "size": "568248495",
+          "format": "mp4"
+        }
+      ],
+      "captions": [
+        {
+          "label": "اَلْعَرَبِيَّةُ - HindiCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/c07dbc19ba209214ffeea33bff734fb7.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "English - HindiCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/e4c63afed3d2e142e485f9567773a673.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        },
+        {
+          "label": "Indonesian - HindiCast",
+          "file": "https://cacdn.hakunaymatata.com/subtitle/28221311b9d91a3d0e00f3afb89de706.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":1080,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fcms%2Fc3202e159c3334a2981a442a54c9943a.mp4%3Fsign%3Db0a78cda9d3fa78f5e4c8af24b06af7c%26t%3D1776969879&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"HindiCast\",\"size\":\"3529044471\",\"format\":\"mp4\"},{\"quality\":480,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F6dcf84a7ed3b8b36eef88d739b1a190d.mp4%3Fsign%3D9244a720dfcb7db7a5dae8aba5e5ccf3%26t%3D1776969334&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"HindiCast\",\"size\":\"933281539\",\"format\":\"mp4\"},{\"quality\":360,\"url\":\"https://proxy.valhallastream.dpdns.org/proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F415791a1b43f82ac0ae4968045f47705.mp4%3Fsign%3D5716370ecd6edf142ebbf6da44ee7b89%26t%3D1776969998&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D\",\"source\":\"HindiCast\",\"size\":\"568248495\",\"format\":\"mp4\"}],\"captions\":[{\"label\":\"اَلْعَرَبِيَّةُ - HindiCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/c07dbc19ba209214ffeea33bff734fb7.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"English - HindiCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/e4c63afed3d2e142e485f9567773a673.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"},{\"label\":\"Indonesian - HindiCast\",\"file\":\"https://cacdn.hakunaymatata.com/subtitle/28221311b9d91a3d0e00f3afb89de706.srt?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jYWNkbi5oYWt1bmF5bWF0YXRhLmNvbS9zdWJ0aXRsZS8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzc3NTc3MTI2fX19XX0_&Signature=xQgLxlp7Md3g6Na3mtzBU45YkZdtVZfkn6FSS-tkuT4qxmMvd9-rJZRx4ctPvZpHBvh-nKOpbXYDVXP2hO1Gas9jO8wyNEzCVJeJomgF9kvF4cyyRy1u7DXu2ebXp-cq3GqWnKiyVYrVUUwDaLLXMhu3hHuvnNKgYae5Fy569iPKJgGVPSzwU2poe~ctTrfBG-f7BhjvNYCvWlvb50tFXW5zAnw7nxsugJH2XnpGYNlBKWRDrnCKe~0UvC5klNlFg~Ec8WcAoYyRdz7KItqocO7QibaOR05tvSVjKi3MGcd~k2MVGZNCsiuGSVzhqYC1cYNMAGdy48HjXhDwY370vw__&Key-Pair-Id=KMHN1LQ1HEUPL\"}]}}",
+  "extra": {
+    "totalSourceCount": 3
+  }
+}

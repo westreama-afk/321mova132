@@ -183,5 +183,55 @@
       "guru"
     ],
     "reason": "Missing priority providers: flowcast, guru"
+  },
+  {
+    "requestKey": "movie_83533",
+    "request": {
+      "type": "movie",
+      "id": "83533"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-24T01:33:49.117Z",
+    "createdAt": "2026-04-23T19:33:49.117Z",
+    "updatedAt": "2026-04-23T19:33:49.117Z",
+    "missingProviders": [
+      "guru"
+    ],
+    "reason": "Missing priority providers: guru"
+  },
+  {
+    "requestKey": "tv_79744_s4_e13",
+    "request": {
+      "type": "tv",
+      "id": "79744",
+      "season": "4",
+      "episode": "13"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-24T01:43:09.248Z",
+    "createdAt": "2026-04-23T19:43:09.248Z",
+    "updatedAt": "2026-04-23T19:43:09.248Z",
+    "missingProviders": [
+      "flowcast"
+    ],
+    "reason": "Missing priority providers: flowcast"
+  },
+  {
+    "requestKey": "tv_1399_s1_e1",
+    "request": {
+      "type": "tv",
+      "id": "1399",
+      "season": "1",
+      "episode": "1"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-24T01:44:27.186Z",
+    "createdAt": "2026-04-23T19:44:27.186Z",
+    "updatedAt": "2026-04-23T19:44:27.186Z",
+    "missingProviders": [
+      "flowcast",
+      "guru"
+    ],
+    "reason": "Missing priority providers: flowcast, guru"
   }
 ]

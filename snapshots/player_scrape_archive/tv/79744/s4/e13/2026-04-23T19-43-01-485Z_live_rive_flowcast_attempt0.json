@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-04-23T19:43:01.485Z",
+  "family": "rive",
+  "provider": "flowcast",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "79744",
+    "season": "4",
+    "episode": "13"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=flowcast&id=79744&season=4&episode=13",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No sources array in response",
+  "responseBody": {
+    "error": "Internal Server Error"
+  },
+  "responseText": "{\"error\":\"Internal Server Error\"}"
+}

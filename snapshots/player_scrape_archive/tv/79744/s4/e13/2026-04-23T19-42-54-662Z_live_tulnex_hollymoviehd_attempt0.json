@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-04-23T19:42:54.662Z",
+  "family": "tulnex",
+  "provider": "hollymoviehd",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "79744",
+    "season": "4",
+    "episode": "13"
+  },
+  "url": "https://api.tulnex.com/provider/hollymoviehd/tv/79744/4/13",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

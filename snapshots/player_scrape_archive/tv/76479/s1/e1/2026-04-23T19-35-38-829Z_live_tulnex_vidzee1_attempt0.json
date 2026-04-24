@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-04-23T19:35:38.829Z",
+  "family": "tulnex",
+  "provider": "vidzee1",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "76479",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://api.tulnex.com/vidzee/tv/76479/1/1?server=1",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

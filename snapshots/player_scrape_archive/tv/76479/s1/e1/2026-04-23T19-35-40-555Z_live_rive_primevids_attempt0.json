@@ -1,0 +1,33 @@
+{
+  "createdAt": "2026-04-23T19:35:40.555Z",
+  "family": "rive",
+  "provider": "primevids",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "76479",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=primevids&id=76479&season=1&episode=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "HLS",
+          "url": "https://silent-wildflower-8004.8-716.workers.dev/tv/alS4Xv1Yu5wWtPErxPwxacVPpg4nNhPT5fqVns5GXQL0KZbpwb5qEI-hilonlIC7.RKzgrbwz/index.m3u8",
+          "source": "PrimeVids",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"HLS\",\"url\":\"https://silent-wildflower-8004.8-716.workers.dev/tv/alS4Xv1Yu5wWtPErxPwxacVPpg4nNhPT5fqVns5GXQL0KZbpwb5qEI-hilonlIC7.RKzgrbwz/index.m3u8\",\"source\":\"PrimeVids\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 1
+  }
+}
