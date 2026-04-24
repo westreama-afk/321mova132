@@ -217,6 +217,21 @@
     "reason": "Missing priority providers: flowcast"
   },
   {
+    "requestKey": "movie_1318447",
+    "request": {
+      "type": "movie",
+      "id": "1318447"
+    },
+    "attempts": 0,
+    "dueAt": "2026-04-25T00:03:00.139Z",
+    "createdAt": "2026-04-24T18:03:00.139Z",
+    "updatedAt": "2026-04-24T18:03:00.139Z",
+    "missingProviders": [
+      "primevids"
+    ],
+    "reason": "Missing priority providers: primevids"
+  },
+  {
     "requestKey": "tv_1399_s1_e1",
     "request": {
       "type": "tv",
@@ -225,9 +240,9 @@
       "episode": "1"
     },
     "attempts": 0,
-    "dueAt": "2026-04-24T01:44:27.186Z",
+    "dueAt": "2026-04-25T00:03:51.516Z",
     "createdAt": "2026-04-23T19:44:27.186Z",
-    "updatedAt": "2026-04-23T19:44:27.186Z",
+    "updatedAt": "2026-04-24T18:03:51.516Z",
     "missingProviders": [
       "flowcast",
       "guru"

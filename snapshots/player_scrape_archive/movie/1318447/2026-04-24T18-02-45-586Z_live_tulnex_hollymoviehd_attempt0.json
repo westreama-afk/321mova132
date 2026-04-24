@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-04-24T18:02:45.586Z",
+  "family": "tulnex",
+  "provider": "hollymoviehd",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1318447"
+  },
+  "url": "https://api.tulnex.com/provider/hollymoviehd/movie/1318447",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

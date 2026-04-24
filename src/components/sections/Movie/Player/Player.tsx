@@ -157,6 +157,8 @@ const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt }) => {
                 onFatalError={handlePrimaryPlayerError}
                 className="absolute inset-0 z-10 h-full w-full"
                 openSourceMenuSignal={streamSourceMenuSignal}
+                backdropUrl={movie.backdrop_path ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}` : undefined}
+                title={title}
               />
             ) : (
               <iframe

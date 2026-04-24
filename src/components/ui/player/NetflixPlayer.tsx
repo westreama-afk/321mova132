@@ -4,10 +4,10 @@ import { ContentType } from "@/types";
 import { cn } from "@/utils/helpers";
 import { decodePlayerStreamUrl } from "@/utils/playerUrlCodec";
 import Hls from "hls.js";
-import { useCallback, useEffect, useRef, useState, createElement } from "react";
-import { FaPause, FaPlay, FaServer } from "react-icons/fa";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FaChevronLeft, FaPause, FaPlay, FaServer } from "react-icons/fa";
 import { IoMdVolumeHigh, IoMdVolumeLow, IoMdVolumeMute } from "react-icons/io";
-import { MdClosedCaption, MdClosedCaptionDisabled, MdForward10, MdFullscreen, MdFullscreenExit, MdReplay10, MdSettings } from "react-icons/md";
+import { MdClosedCaption, MdClosedCaptionDisabled, MdForward10, MdFullscreen, MdFullscreenExit, MdHighQuality, MdReplay10, MdSettings, MdSpeed } from "react-icons/md";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -58,6 +58,7 @@ interface QualityLevel {
 
 type LocalPlayerEventType = "play" | "pause" | "seeked" | "ended" | "timeupdate";
 type SettingsTab = "source" | "quality" | "subtitles" | "speed";
+type SettingsView = "grid" | SettingsTab;
 
 export interface NetflixPlayerProps {
   playlistUrl: string;
@@ -71,6 +72,9 @@ export interface NetflixPlayerProps {
   openSourceMenuSignal?: number;
   /** Party sync: when version increments, execute action */
   syncSignal?: { action: "play" | "pause" | "seek"; time?: number; version: number };
+  backdropUrl?: string;
+  title?: string;
+  subtitle?: string;
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -127,6 +131,9 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   onFatalError,
   openSourceMenuSignal,
   syncSignal,
+  backdropUrl,
+  title,
+  subtitle,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -161,7 +168,7 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<SettingsTab>("source");
+  const [settingsView, setSettingsView] = useState<SettingsView>("grid");
   const [hoverX, setHoverX] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [introTimestamps, setIntroTimestamps] = useState<{ start: number; end: number } | null>(null);
@@ -497,10 +504,15 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   // Open settings (source tab) when external signal fires
   useEffect(() => {
     if (typeof openSourceMenuSignal === "number" && openSourceMenuSignal > 0) {
-      setSettingsTab("source");
+      setSettingsView("source");
       setSettingsOpen((prev) => !prev);
     }
   }, [openSourceMenuSignal]);
+
+  // Reset to grid view when panel closes
+  useEffect(() => {
+    if (!settingsOpen) setSettingsView("grid");
+  }, [settingsOpen]);
 
   // Party sync: apply incoming play/pause/seek from host
   useEffect(() => {
@@ -955,16 +967,28 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
 
       {/* ── Loading spinner ── */}
       {isLoading && !error && (
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-4">
-          <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-[3px] border-white/10 border-t-white" />
-            <div className="absolute inset-2 animate-spin rounded-full border-[3px] border-white/5 border-t-white/40" style={{ animationDuration: "1.5s", animationDirection: "reverse" }} />
-          </div>
-          {sources.length === 0 && (
-            <p className="text-xs font-medium tracking-wide text-white/50 transition-opacity duration-500">
-              {["Finding sources\u2026", "Scanning providers\u2026", "Checking streams\u2026", "Almost ready\u2026"][scrapingMsgIdx]}
-            </p>
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center overflow-hidden">
+          {backdropUrl && (
+            <img src={backdropUrl} alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" draggable={false} />
           )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/45" />
+          <div className="relative z-10 flex flex-col items-center gap-5">
+            <div className="relative h-14 w-14">
+              <div className="absolute inset-0 animate-spin rounded-full border-[3px] border-white/10 border-t-white" />
+              <div className="absolute inset-2 animate-spin rounded-full border-[3px] border-white/5 border-t-white/40" style={{ animationDuration: "1.5s", animationDirection: "reverse" }} />
+            </div>
+            {title && (
+              <div className="text-center">
+                <p className="text-base font-bold text-white drop-shadow-lg">{title}</p>
+                {subtitle && <p className="mt-0.5 text-sm text-white/55">{subtitle}</p>}
+              </div>
+            )}
+            {sources.length === 0 && (
+              <p className="text-xs font-medium tracking-wide text-white/40 transition-opacity duration-500">
+                {["Finding sources\u2026", "Scanning providers\u2026", "Checking streams\u2026", "Almost ready\u2026"][scrapingMsgIdx]}
+              </p>
+            )}
+          </div>
         </div>
       )}
 
@@ -1030,144 +1054,200 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         </div>
       )}
 
-      {/* ── Settings panel (source + subtitles) ── */}
+      {/* ── Settings panel ── */}
       {settingsOpen && (
         <div
           className="absolute inset-x-0 bottom-[4.5rem] z-40 flex justify-end px-4 sm:px-6"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="w-full max-w-[260px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#141414]/97 shadow-2xl backdrop-blur-xl ring-1 ring-white/5">
-            {/* Tabs */}
-            <div className="flex border-b border-white/[0.08]">
-              {(["source", "quality", "subtitles", "speed"] as SettingsTab[]).map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setSettingsTab(tab)}
-                  className={cn(
-                    "flex-1 py-2 text-[10px] font-semibold uppercase tracking-widest transition",
-                    settingsTab === tab ? "text-white" : "text-white/35 hover:text-white/60",
-                  )}
-                  style={settingsTab === tab ? { borderBottom: `2px solid ${NETFLIX_RED}`, marginBottom: -1 } : undefined}
-                >
-                  {tab === "source" ? "Source" : tab === "quality" ? "Quality" : tab === "subtitles" ? "Subs" : "Speed"}
-                  {tab === "subtitles" && hasSubtitles && (
-                    <span className="ml-1 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white/10 text-[8px] font-bold">
-                      {allSubtitleTracks.length}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+          <div className="w-full max-w-[300px] overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0d0d0d]/97 shadow-2xl backdrop-blur-xl ring-1 ring-white/5">
+            {settingsView === "grid" ? (
+              <div className="p-3">
+                <p className="mb-2.5 px-1 text-[10px] font-bold uppercase tracking-widest text-white/25">Settings</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSettingsView("quality")}
+                    className="group flex flex-col gap-2 rounded-xl bg-white/[0.05] p-3 text-left transition hover:bg-white/[0.09] active:scale-[0.97]"
+                  >
+                    <MdHighQuality size={18} className="text-white/40 transition group-hover:text-white/70" />
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-white/35">Quality</p>
+                      <p className="truncate text-sm font-semibold text-white">
+                        {qualityLevels.find((q) => q.id === activeQualityLevel)?.label ?? "Auto"}
+                      </p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSettingsView("speed")}
+                    className="group flex flex-col gap-2 rounded-xl bg-white/[0.05] p-3 text-left transition hover:bg-white/[0.09] active:scale-[0.97]"
+                  >
+                    <MdSpeed size={18} className="text-white/40 transition group-hover:text-white/70" />
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-white/35">Speed</p>
+                      <p className="truncate text-sm font-semibold text-white">
+                        {playbackSpeed === 1 ? "Normal" : `${playbackSpeed}×`}
+                      </p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSettingsView("subtitles")}
+                    className="group flex flex-col gap-2 rounded-xl bg-white/[0.05] p-3 text-left transition hover:bg-white/[0.09] active:scale-[0.97]"
+                  >
+                    {activeSubtitleId >= 0 ? (
+                      <MdClosedCaption size={18} className="text-white/40 transition group-hover:text-white/70" />
+                    ) : (
+                      <MdClosedCaptionDisabled size={18} className="text-white/40 transition group-hover:text-white/70" />
+                    )}
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-white/35">Captions</p>
+                      <p className="truncate text-sm font-semibold text-white">
+                        {activeSubtitleId >= 0
+                          ? (allSubtitleTracks.find((t) => t.id === activeSubtitleId)?.name ?? "On")
+                          : "Off"}
+                      </p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSettingsView("source")}
+                    className="group flex flex-col gap-2 rounded-xl bg-white/[0.05] p-3 text-left transition hover:bg-white/[0.09] active:scale-[0.97]"
+                  >
+                    <FaServer size={14} className="text-white/40 transition group-hover:text-white/70" />
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest text-white/35">Source</p>
+                      <p className="truncate text-sm font-semibold text-white">
+                        {sources[activeSourceIndex]?.label ?? "—"}
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 border-b border-white/[0.08] px-2 py-2">
+                  <button
+                    type="button"
+                    onClick={() => setSettingsView("grid")}
+                    className="rounded-full p-1.5 text-white/50 transition hover:bg-white/[0.08] hover:text-white"
+                  >
+                    <FaChevronLeft size={11} />
+                  </button>
+                  <p className="text-xs font-semibold text-white/70">
+                    {settingsView === "source" ? "Source" : settingsView === "quality" ? "Quality" : settingsView === "subtitles" ? "Captions" : "Speed"}
+                  </p>
+                </div>
+                <div className="max-h-64 overflow-y-auto p-1.5 scrollbar-thin">
+                  {settingsView === "source" && sources.map((src, idx) => (
+                    <button
+                      key={src.file}
+                      type="button"
+                      onClick={() => switchSource(idx)}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
+                        idx === activeSourceIndex ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                      )}
+                      style={idx === activeSourceIndex ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
+                    >
+                      <FaServer size={10} className="shrink-0 opacity-50" />
+                      <span className="flex-1 truncate font-medium">{src.label}</span>
+                      {idx === activeSourceIndex && (
+                        <span className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ backgroundColor: NETFLIX_RED }}>
+                          Active
+                        </span>
+                      )}
+                    </button>
+                  ))}
 
-            {/* Content */}
-            <div className="max-h-64 overflow-y-auto p-1.5 scrollbar-thin">
-              {settingsTab === "source" && sources.map((src, idx) => (
-                <button
-                  key={src.file}
-                  type="button"
-                  onClick={() => switchSource(idx)}
-                  className={cn(
-                    "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
-                    idx === activeSourceIndex ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                  {settingsView === "quality" && (
+                    <>
+                      {qualityLevels.length <= 1 ? (
+                        <p className="px-3 py-4 text-center text-xs text-white/30">No quality levels detected</p>
+                      ) : (
+                        qualityLevels.map((ql) => (
+                          <button
+                            key={ql.id}
+                            type="button"
+                            onClick={() => setQuality(ql.id)}
+                            className={cn(
+                              "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
+                              activeQualityLevel === ql.id ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                            )}
+                            style={activeQualityLevel === ql.id ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
+                          >
+                            <span className="flex-1 font-medium">{ql.label}</span>
+                            {activeQualityLevel === ql.id && (
+                              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
+                            )}
+                          </button>
+                        ))
+                      )}
+                    </>
                   )}
-                  style={idx === activeSourceIndex ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
-                >
-                  <FaServer size={10} className="shrink-0 opacity-50" />
-                  <span className="flex-1 truncate font-medium">{src.label}</span>
-                  {idx === activeSourceIndex && (
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
-                  )}
-                </button>
-              ))}
 
-              {settingsTab === "quality" && (
-                <>
-                  {qualityLevels.length <= 1 ? (
-                    <p className="px-3 py-4 text-center text-xs text-white/30">No quality levels detected</p>
-                  ) : (
-                    qualityLevels.map((ql) => (
+                  {settingsView === "subtitles" && (
+                    <>
                       <button
-                        key={ql.id}
                         type="button"
-                        onClick={() => setQuality(ql.id)}
+                        onClick={() => applySubtitle(-1)}
                         className={cn(
                           "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
-                          activeQualityLevel === ql.id ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                          activeSubtitleId === -1 ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
                         )}
-                        style={activeQualityLevel === ql.id ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
+                        style={activeSubtitleId === -1 ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
                       >
-                        <span className="flex-1 font-medium">{ql.label}</span>
-                        {activeQualityLevel === ql.id && (
+                        <MdClosedCaptionDisabled size={13} className="shrink-0 opacity-50" />
+                        <span className="flex-1 font-medium">Off</span>
+                        {activeSubtitleId === -1 && (
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
                         )}
                       </button>
-                    ))
-                  )}
-                </>
-              )}
-
-              {settingsTab === "subtitles" && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => applySubtitle(-1)}
-                    className={cn(
-                      "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
-                      activeSubtitleId === -1 ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
-                    )}
-                    style={activeSubtitleId === -1 ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
-                  >
-                    <MdClosedCaptionDisabled size={13} className="shrink-0 opacity-50" />
-                    <span className="flex-1 font-medium">Off</span>
-                    {activeSubtitleId === -1 && (
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
-                    )}
-                  </button>
-                  {hasSubtitles ? allSubtitleTracks.map((track) => (
-                    <button
-                      key={track.id}
-                      type="button"
-                      onClick={() => applySubtitle(track.id)}
-                      className={cn(
-                        "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
-                        activeSubtitleId === track.id ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                      {hasSubtitles ? allSubtitleTracks.map((track) => (
+                        <button
+                          key={track.id}
+                          type="button"
+                          onClick={() => applySubtitle(track.id)}
+                          className={cn(
+                            "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition",
+                            activeSubtitleId === track.id ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                          )}
+                          style={activeSubtitleId === track.id ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
+                        >
+                          <MdClosedCaption size={13} className="shrink-0 opacity-50" />
+                          <span className="flex-1 truncate font-medium">{track.name}</span>
+                          {track.lang && <span className="shrink-0 rounded bg-white/10 px-1 py-0.5 text-[9px] uppercase tracking-wide text-white/40">{track.lang}</span>}
+                          {activeSubtitleId === track.id && (
+                            <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
+                          )}
+                        </button>
+                      )) : (
+                        <p className="px-3 py-4 text-center text-xs text-white/30">No subtitle tracks detected</p>
                       )}
-                      style={activeSubtitleId === track.id ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
+                    </>
+                  )}
+
+                  {settingsView === "speed" && PLAYBACK_SPEEDS.map((rate) => (
+                    <button
+                      key={rate}
+                      type="button"
+                      onClick={() => changeSpeed(rate)}
+                      className={cn(
+                        "flex w-full items-center rounded-xl px-3 py-2.5 text-left text-sm transition",
+                        playbackSpeed === rate ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
+                      )}
+                      style={playbackSpeed === rate ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
                     >
-                      <MdClosedCaption size={13} className="shrink-0 opacity-50" />
-                      <span className="flex-1 truncate font-medium">{track.name}</span>
-                      {track.lang && <span className="shrink-0 rounded bg-white/10 px-1 py-0.5 text-[9px] uppercase tracking-wide text-white/40">{track.lang}</span>}
-                      {activeSubtitleId === track.id && (
+                      <span className="flex-1 font-medium">{rate === 1 ? "Normal (1×)" : `${rate}×`}</span>
+                      {playbackSpeed === rate && (
                         <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
                       )}
                     </button>
-                  )) : (
-                    <p className="px-3 py-4 text-center text-xs text-white/30">
-                      No subtitle tracks detected
-                    </p>
-                  )}
-                </>
-              )}
-
-              {settingsTab === "speed" && PLAYBACK_SPEEDS.map((rate) => (
-                <button
-                  key={rate}
-                  type="button"
-                  onClick={() => changeSpeed(rate)}
-                  className={cn(
-                    "flex w-full items-center rounded-xl px-3 py-2.5 text-left text-sm transition",
-                    playbackSpeed === rate ? "text-white" : "text-white/60 hover:bg-white/[0.06] hover:text-white",
-                  )}
-                  style={playbackSpeed === rate ? { backgroundColor: `${NETFLIX_RED}22` } : undefined}
-                >
-                  <span className="flex-1 font-medium">{rate === 1 ? "Normal (1×)" : `${rate}×`}</span>
-                  {playbackSpeed === rate && (
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: NETFLIX_RED }} />
-                  )}
-                </button>
-              ))}
-            </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -1191,6 +1271,15 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent" />
         {/* Bottom gradient */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
+        {/* Center play overlay */}
+        {!isPlaying && !isLoading && !error && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full bg-black/35 ring-2 ring-white/20 backdrop-blur-sm">
+              <FaPlay size={26} className="ml-1.5 text-white drop-shadow-lg" />
+            </div>
+          </div>
+        )}
 
         {/* Control bar */}
           <div
@@ -1315,22 +1404,22 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
             {/* Spacer */}
             <div className="flex-1" />
 
-            {/* Settings (Quality / Speed) */}
+            {/* Settings */}
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                if (settingsOpen && (settingsTab === "quality" || settingsTab === "speed")) {
+                if (settingsOpen && settingsView === "grid") {
                   setSettingsOpen(false);
                 } else {
-                  setSettingsTab("quality");
+                  setSettingsView("grid");
                   setSettingsOpen(true);
                 }
                 resetHideTimer();
               }}
               className="rounded-full p-1 transition hover:bg-white/10"
-              style={settingsOpen && (settingsTab === "quality" || settingsTab === "speed") ? { color: NETFLIX_RED } : { color: "rgba(255,255,255,0.7)" }}
-              aria-label="Quality and speed settings"
+              style={settingsOpen ? { color: NETFLIX_RED } : { color: "rgba(255,255,255,0.7)" }}
+              aria-label="Settings"
             >
               <MdSettings size={20} />
             </button>
@@ -1340,15 +1429,15 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setSettingsTab("subtitles");
-                setSettingsOpen((prev) => settingsTab === "subtitles" ? !prev : true);
+                setSettingsView("subtitles");
+                setSettingsOpen((prev) => settingsView === "subtitles" ? !prev : true);
                 resetHideTimer();
               }}
               className={cn(
                 "rounded-full p-1 transition hover:bg-white/10",
-                settingsTab === "subtitles" && settingsOpen ? "text-white" : hasSubtitles && activeSubtitleId >= 0 ? "" : "text-white/50",
+                settingsView === "subtitles" && settingsOpen ? "text-white" : hasSubtitles && activeSubtitleId >= 0 ? "" : "text-white/50",
               )}
-              style={settingsTab === "subtitles" && settingsOpen ? { color: NETFLIX_RED } : activeSubtitleId >= 0 && hasSubtitles ? { color: "white" } : undefined}
+              style={settingsView === "subtitles" && settingsOpen ? { color: NETFLIX_RED } : activeSubtitleId >= 0 && hasSubtitles ? { color: "white" } : undefined}
               aria-label="Subtitles"
               aria-pressed={activeSubtitleId >= 0}
             >
@@ -1361,12 +1450,12 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSettingsTab("source");
-                  setSettingsOpen((prev) => settingsTab === "source" ? !prev : true);
+                  setSettingsView("source");
+                  setSettingsOpen((prev) => settingsView === "source" ? !prev : true);
                   resetHideTimer();
                 }}
                 className={cn("rounded-full p-1.5 transition hover:bg-white/10")}
-                style={settingsTab === "source" && settingsOpen ? { color: NETFLIX_RED } : undefined}
+                style={settingsView === "source" && settingsOpen ? { color: NETFLIX_RED } : undefined}
                 aria-label="Select stream source"
               >
                 <FaServer size={14} />

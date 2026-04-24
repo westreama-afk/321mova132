@@ -318,6 +318,9 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
                 onFatalError={handlePrimaryPlayerError}
                 className="absolute inset-0 z-10 h-full w-full"
                 openSourceMenuSignal={streamSourceMenuSignal}
+                backdropUrl={tv.backdrop_path ? `https://image.tmdb.org/t/p/w1280${tv.backdrop_path}` : undefined}
+                title={props.seriesName}
+                subtitle={episode.name}
               />
             ) : (
               <iframe

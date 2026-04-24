@@ -1,0 +1,39 @@
+{
+  "createdAt": "2026-04-24T18:03:36.878Z",
+  "family": "rive",
+  "provider": "asiacloud",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "1399",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=asiacloud&id=1399&season=1&episode=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 2,
+  "responseBody": {
+    "data": {
+      "sources": [
+        {
+          "quality": "Hindi",
+          "url": "https://i-arch-400.loffe414wil.com/stream2/i-arch-400/fc1ae38028a185fb0f18cdfddb63a433/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2llMNVTTEZlaOdkUo5kaKpWTtlUMNpmRs5kMVNjTUFUeadVV49ERBBTTtVUP:1777056129:185.129.61.1:50cece746a54550d61b5f91b4aa5fdcec4a3cf3586e3ebdb31d1c42ad2e39d5c:==QTUdWMMpWR590U0ITTTRDe/index.m3u8",
+          "source": "AsiaCloud",
+          "format": "hls"
+        },
+        {
+          "quality": "English",
+          "url": "https://i-arch-400.loffe414wil.com/stream2/i-arch-400/fc1ae38028a185fb0f18cdfddb63a433/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT29ERrhXW6FkMPdUVy0EVslWWqlFNNpWQy0ERjVTWtl0MOJTR61ERRJjT6VUP:1777056131:185.129.61.1:5d15bb9f71e8b753fa5a24a932ca341d0a409505f9a16bb66e9acaa54dfd0a8b:==QTUdWMMpWR590U0ITTTRDe/index.m3u8",
+          "source": "AsiaCloud",
+          "format": "hls"
+        }
+      ]
+    }
+  },
+  "responseText": "{\"data\":{\"sources\":[{\"quality\":\"Hindi\",\"url\":\"https://i-arch-400.loffe414wil.com/stream2/i-arch-400/fc1ae38028a185fb0f18cdfddb63a433/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT2llMNVTTEZlaOdkUo5kaKpWTtlUMNpmRs5kMVNjTUFUeadVV49ERBBTTtVUP:1777056129:185.129.61.1:50cece746a54550d61b5f91b4aa5fdcec4a3cf3586e3ebdb31d1c42ad2e39d5c:==QTUdWMMpWR590U0ITTTRDe/index.m3u8\",\"source\":\"AsiaCloud\",\"format\":\"hls\"},{\"quality\":\"English\",\"url\":\"https://i-arch-400.loffe414wil.com/stream2/i-arch-400/fc1ae38028a185fb0f18cdfddb63a433/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT29ERrhXW6FkMPdUVy0EVslWWqlFNNpWQy0ERjVTWtl0MOJTR61ERRJjT6VUP:1777056131:185.129.61.1:5d15bb9f71e8b753fa5a24a932ca341d0a409505f9a16bb66e9acaa54dfd0a8b:==QTUdWMMpWR590U0ITTTRDe/index.m3u8\",\"source\":\"AsiaCloud\",\"format\":\"hls\"}]}}",
+  "extra": {
+    "totalSourceCount": 2
+  }
+}

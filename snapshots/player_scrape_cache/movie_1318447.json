@@ -1,0 +1,40 @@
+{
+  "cachedAt": "2026-04-24T18:03:00.144Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F56488d5279820a3cfc3942c25d800400.mp4%3Fsign%3D7cf39fefbf0256f2c96a69c99f0ccc18%26t%3D1777051660&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 1080p",
+      "provider": "flowcast",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fbt%2F7fe86b69abeac8866ee200a605094c44.mp4%3Fsign%3D7d8830f786a5859218cd0689740941a2%26t%3D1777052835&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "FlowCast 480p",
+      "provider": "flowcast",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F56488d5279820a3cfc3942c25d800400.mp4%3Fsign%3D13226daf1a3d6315345fa8005fa17d43%26t%3D1777048270&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "NovaCast",
+      "provider": "movish",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2FnZBq3n4m6m3.silvercrestinnovations.online%2Fe9B1QwLqSdiw%2Fhls3%2F01%2F14162%2Fe9q1ii1rq6q1_o%2Fmaster.txt&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Guru HLS 1p",
+      "provider": "guru",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fs2.phim1280.tv%2F20240110%2Fss0xOmAr%2Findex.m3u8&headers=%7B%22Referer%22%3A%22https%3A%2F%2Frivestream.org%2F%22%2C%22Origin%22%3A%22https%3A%2F%2Frivestream.org%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Ophim HLSp",
+      "provider": "ophim",
+      "default": false
+    }
+  ]
+}

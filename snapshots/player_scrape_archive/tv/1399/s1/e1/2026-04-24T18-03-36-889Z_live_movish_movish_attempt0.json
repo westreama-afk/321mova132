@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-04-24T18:03:36.889Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "1399",
+    "season": "1",
+    "episode": "1"
+  },
+  "url": "https://movish.net/moviebox-embed/tv/1399/1/1",
+  "status": 200,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "No video src in HTML"
+}
