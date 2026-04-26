@@ -1,6 +1,6 @@
 "use client";
 
-import { PropsWithChildren, Suspense } from "react";
+import { PropsWithChildren, Suspense, useEffect } from "react";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,8 +9,22 @@ import { AppProgressProvider as ProgressProvider } from "@bprogress/next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { usePathname, useRouter } from "next/navigation";
 import useDiscoverFilters from "@/hooks/useDiscoverFilters";
+import { createClient } from "@/utils/supabase/client";
 
 export const queryClient = new QueryClient();
+
+// Single auth listener for the whole app — prevents duplicate Supabase fetches
+// when multiple components call useSupabaseUser() simultaneously.
+function SupabaseAuthSync() {
+  useEffect(() => {
+    const supabase = createClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      void queryClient.invalidateQueries({ queryKey: ["supabase-user"] });
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+  return null;
+}
 
 export default function Providers({ children }: PropsWithChildren) {
   const { push } = useRouter();
@@ -20,6 +34,7 @@ export default function Providers({ children }: PropsWithChildren) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SupabaseAuthSync />
       <HeroUIProvider navigate={push}>
         <ToastProvider
           placement="top-right"

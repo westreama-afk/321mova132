@@ -27,8 +27,6 @@ export interface SubtitleTrackResponse {
   isHearingImpaired: boolean;
 }
 
-export const dynamic = "force-dynamic";
-
 export const GET = async (request: NextRequest) => {
   const params = request.nextUrl.searchParams;
   const tmdbId = params.get("id");
@@ -57,7 +55,7 @@ export const GET = async (request: NextRequest) => {
 
     const response = await fetch(`${WYZIE_BASE}/search?${searchParams.toString()}`, {
       headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(10_000),
+      next: { revalidate: 21600 }, // cache 6h — subtitle lists rarely change
     });
 
     if (!response.ok) {
@@ -107,7 +105,7 @@ export const GET = async (request: NextRequest) => {
 
     return NextResponse.json(
       { tracks },
-      { headers: { "cache-control": "no-store" } },
+      { headers: { "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600" } },
     );
   } catch {
     return NextResponse.json({ tracks: [] });

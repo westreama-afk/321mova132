@@ -122,6 +122,141 @@ function rewriteM3u8Text(text, absoluteTarget, headers, base, token, allowedOrig
   );
 }
 
+// --- MP4 READ-AHEAD PROXY ---
+// Fetches 8 MB superchunks from origin, stores them in CF's edge Cache API
+// (shared across all users at each PoP), serves the browser's requested slice.
+// Cache miss: ~1 origin fetch per 8 MB of video, regardless of how many small
+// range requests the browser makes within that window.
+// Cache hit: served from CF memory — no origin round-trip at all.
+
+const MP4_CHUNK_BYTES = 8 * 1024 * 1024; // 8 MB
+
+function parseMp4Range(h) {
+  const m = h ? h.match(/bytes=(\d+)-(\d*)/) : null;
+  if (!m) return null;
+  return { start: +m[1], end: m[2] !== "" ? +m[2] : null };
+}
+
+async function mp4ReadAheadProxy(req, target, fetchHeaders, allowedOrigin) {
+  const rangeHeader = req.headers.get("range");
+  const range = parseMp4Range(rangeHeader);
+
+  // No Range header → just stream the full file through
+  if (!range) {
+    try {
+      const r = await fetch(target, { headers: fetchHeaders, redirect: "follow" });
+      const rh = sanitizeResponseHeaders(r.headers);
+      rh.set("Content-Type", "video/mp4");
+      rh.set("Accept-Ranges", "bytes");
+      return withCors(new Response(r.body, { status: r.status, headers: rh }), allowedOrigin);
+    } catch (e) {
+      return withCors(new Response(`mp4 error: ${e}`, { status: 502 }), allowedOrigin);
+    }
+  }
+
+  const chunkIdx = Math.floor(range.start / MP4_CHUNK_BYTES);
+  const chunkStart = chunkIdx * MP4_CHUNK_BYTES;
+  const chunkEnd = chunkStart + MP4_CHUNK_BYTES - 1;
+
+  // Unique stable cache key per (file URL, 8 MB chunk index)
+  const cacheKeyUrl = `https://mp4-chunk.cache/${chunkIdx}?u=${encodeURIComponent(target)}`;
+  const cache = caches.default;
+
+  let chunkBuf, totalSize = null;
+
+  try {
+    const cached = await cache.match(new Request(cacheKeyUrl));
+    if (cached) {
+      const xt = cached.headers.get("x-mp4-total");
+      if (xt) totalSize = +xt;
+      chunkBuf = await cached.arrayBuffer();
+    } else {
+      // Fetch the 8 MB superchunk from origin
+      const fh = new Headers(fetchHeaders);
+      fh.set("range", `bytes=${chunkStart}-${chunkEnd}`);
+      let upstream = null;
+      try {
+        upstream = await fetch(target, { headers: fh, redirect: "follow" });
+      } catch { /* will fall through to direct fallback below */ }
+
+      if (!upstream || (upstream.status !== 206 && upstream.status !== 200)) {
+        // Origin doesn't support ranges or errored — fall back to direct pass-through
+        const fh2 = new Headers(fetchHeaders);
+        if (rangeHeader) fh2.set("range", rangeHeader);
+        const r = await fetch(target, { headers: fh2, redirect: "follow" });
+        const rh = sanitizeResponseHeaders(r.headers);
+        rh.set("Content-Type", "video/mp4");
+        rh.set("Accept-Ranges", "bytes");
+        if (r.headers.get("content-range")) rh.set("Content-Range", r.headers.get("content-range"));
+        return withCors(new Response(r.body, { status: r.status, headers: rh }), allowedOrigin);
+      }
+
+      // Extract total file size from upstream Content-Range
+      const cr = upstream.headers.get("content-range");
+      if (cr) {
+        const tm = cr.match(/\/(\d+)$/);
+        if (tm) totalSize = +tm[1];
+      } else if (upstream.status === 200 && upstream.headers.get("content-length")) {
+        totalSize = +upstream.headers.get("content-length");
+      }
+
+      chunkBuf = await upstream.arrayBuffer();
+
+      // Write superchunk into CF Cache API (don't block the response)
+      const cacheHeaders = {
+        "Content-Type": "video/mp4",
+        "Cache-Control": "public, max-age=43200",
+        "Content-Length": String(chunkBuf.byteLength),
+      };
+      if (totalSize !== null) cacheHeaders["x-mp4-total"] = String(totalSize);
+      // Use a copy so we can still read chunkBuf below
+      cache.put(new Request(cacheKeyUrl), new Response(chunkBuf.slice(0), { headers: cacheHeaders })).catch(() => {});
+    }
+
+    // Slice the requested bytes out of the buffered superchunk
+    const offset = range.start - chunkStart;
+    const reqEnd = range.end !== null ? range.end : (range.start + MP4_CHUNK_BYTES - 1);
+    const requestedLen = reqEnd - range.start + 1;
+    const available = chunkBuf.byteLength - offset;
+    const serveLen = Math.min(requestedLen, available);
+
+    if (offset < 0 || offset >= chunkBuf.byteLength || serveLen <= 0) {
+      return withCors(new Response("Range Not Satisfiable", { status: 416 }), allowedOrigin);
+    }
+
+    const slice = chunkBuf.slice(offset, offset + serveLen);
+    const serveEnd = range.start + slice.byteLength - 1;
+    const totalStr = totalSize !== null ? String(totalSize) : "*";
+
+    return withCors(new Response(slice, {
+      status: 206,
+      headers: {
+        "Content-Type": "video/mp4",
+        "Content-Range": `bytes ${range.start}-${serveEnd}/${totalStr}`,
+        "Content-Length": String(slice.byteLength),
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "public, max-age=43200",
+      },
+    }), allowedOrigin);
+
+  } catch (e) {
+    console.error("[mp4-proxy] read-ahead error:", e);
+    // Last-resort fallback: plain pass-through
+    try {
+      const fh3 = new Headers(fetchHeaders);
+      if (rangeHeader) fh3.set("range", rangeHeader);
+      const r = await fetch(target, { headers: fh3, redirect: "follow" });
+      const rh = sanitizeResponseHeaders(r.headers);
+      rh.set("Content-Type", "video/mp4");
+      if (r.headers.get("content-range")) rh.set("Content-Range", r.headers.get("content-range"));
+      if (r.headers.get("accept-ranges")) rh.set("Accept-Ranges", r.headers.get("accept-ranges"));
+      return withCors(new Response(r.body, { status: r.status, headers: rh }), allowedOrigin);
+    } catch (e2) {
+      return withCors(new Response(`mp4 proxy error: ${e2}`, { status: 502 }), allowedOrigin);
+    }
+  }
+}
+
 // --- PROXY FUNCTIONS ---
 async function fetchUpstream(url, options, maxRetries = 2) {
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -264,7 +399,10 @@ export default {
       headers.delete("X-Proxy-Host");
       headers.delete("x-proxy-host");
 
-      if (reqUrl.pathname.includes("/ts-proxy") || reqUrl.pathname.includes("/mp4-proxy")) {
+      if (reqUrl.pathname.includes("/mp4-proxy")) {
+        const absolute = abs(target, host || target);
+        return mp4ReadAheadProxy(req, absolute, headers, allowedOrigin);
+      } else if (reqUrl.pathname.includes("/ts-proxy")) {
         return tsProxy(target, headers, host, allowedOrigin, base, requiredKey ? token : "");
       } else {
         return m3u8Proxy(target, headers, base, host, requiredKey ? token : "", allowedOrigin);

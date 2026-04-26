@@ -158,6 +158,10 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
   const mp4RetryResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [scrapingMsgIdx, setScrapingMsgIdx] = useState(0);
 
+  const stallLastTimeRef = useRef<number>(-1);
+  const stallCheckCountRef = useRef(0);
+  const stallTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
@@ -252,6 +256,8 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
       hlsRef.current?.destroy();
       hlsRef.current = null;
       startAtAppliedRef.current = false;
+      stallLastTimeRef.current = -1;
+      stallCheckCountRef.current = 0;
       setSubtitleTracks([]);
       setActiveSubtitleId(-1);
       setQualityLevels([]);
@@ -543,8 +549,52 @@ const NetflixPlayer: React.FC<NetflixPlayerProps> = ({
     return () => {
       hlsRef.current?.destroy();
       if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      if (stallTimerRef.current) clearInterval(stallTimerRef.current);
     };
   }, []);
+
+  // ── Stall detector ────────────────────────────────────────────────────────────
+  // Fires every 2s; if currentTime hasn't advanced for 5+ seconds while playing,
+  // attempts recovery: HLS recoverMediaError → MP4 reload → next source.
+  useEffect(() => {
+    if (stallTimerRef.current) clearInterval(stallTimerRef.current);
+
+    stallTimerRef.current = setInterval(() => {
+      const video = videoRef.current;
+      if (!video || video.paused || video.ended || video.readyState < 2) return;
+      if (isLoading) return;
+
+      const ct = video.currentTime;
+      if (ct === stallLastTimeRef.current) {
+        stallCheckCountRef.current += 1;
+        // 5 seconds stalled (checks every 2s, so count >= 2 means ~4-5s stalled)
+        if (stallCheckCountRef.current >= 2) {
+          stallCheckCountRef.current = 0;
+          stallLastTimeRef.current = -1;
+
+          const hls = hlsRef.current;
+          if (hls) {
+            hls.recoverMediaError();
+          } else {
+            // MP4: resume-reload
+            const resumeAt = video.currentTime;
+            setIsLoading(true);
+            video.removeAttribute("crossorigin");
+            video.load();
+            video.currentTime = resumeAt;
+            void video.play().catch(() => {});
+          }
+        }
+      } else {
+        stallLastTimeRef.current = ct;
+        stallCheckCountRef.current = 0;
+      }
+    }, 2000);
+
+    return () => {
+      if (stallTimerRef.current) clearInterval(stallTimerRef.current);
+    };
+  }, [isLoading]);
 
   // ── Fullscreen listener ───────────────────────────────────────────────────────
 
