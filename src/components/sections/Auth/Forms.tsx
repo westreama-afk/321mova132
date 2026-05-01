@@ -11,7 +11,7 @@ import { getImageUrl } from "@/utils/movies";
 import { addToast, Card, CardBody, CardHeader, ScrollShadow, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { parseAsBoolean, parseAsStringLiteral, useQueryState } from "nuqs";
 import { useEffect, useMemo } from "react";
 import AuthForgotPasswordForm from "./ForgotPassword";
@@ -23,11 +23,17 @@ const ValidForms = ["login", "register", "forgot"] as const;
 
 export interface AuthFormProps {
   setForm: (form: (typeof ValidForms)[number]) => void;
+  referralCode?: string | null;
+  referralLocked?: boolean;
 }
 
 const AuthForms: React.FC = () => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const reset = pathname === "/auth/reset-password";
+
+  const referralCode = searchParams.get("ref")?.trim() || null;
+  const referralLocked = Boolean(referralCode);
 
   const [error, setError] = useQueryState("error", parseAsBoolean.withDefault(false));
   const [form, setForm] = useQueryState(
@@ -112,7 +118,13 @@ const AuthForms: React.FC = () => {
                   ) : (
                     {
                       login: <AuthLoginForm setForm={setForm} />,
-                      register: <AuthRegisterForm setForm={setForm} />,
+                      register: (
+                        <AuthRegisterForm
+                          setForm={setForm}
+                          referralCode={referralCode}
+                          referralLocked={referralLocked}
+                        />
+                      ),
                       forgot: <AuthForgotPasswordForm setForm={setForm} />,
                     }[form]
                   )}

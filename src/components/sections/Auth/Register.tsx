@@ -7,11 +7,13 @@ import PasswordInput from "@/components/ui/input/PasswordInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import GoogleLoginButton from "@/components/ui/button/GoogleLoginButton";
+import { useEffect } from "react";
 
-const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
+const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm, referralCode, referralLocked }) => {
   const {
     watch,
     register,
+    setValue,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -22,9 +24,15 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
       email: "",
       password: "",
       confirm: "",
-      referralCode: "",
+      referralCode: referralCode ?? "",
     },
   });
+
+  useEffect(() => {
+    if (referralCode) {
+      setValue("referralCode", referralCode, { shouldValidate: true, shouldDirty: false });
+    }
+  }, [referralCode, setValue]);
 
   const onSubmit = handleSubmit(async (data) => {
     const { success, message } = await signUp(data);
@@ -39,7 +47,7 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
   return (
     <div className="flex flex-col gap-5">
       <form className="flex flex-col gap-3" onSubmit={onSubmit}>
-        <p className="text-small text-foreground-500 mb-4 text-center">
+        <p className="mb-4 text-center text-small text-foreground-500">
           Join to track your favorites and watch history
         </p>
         <Input
@@ -95,8 +103,14 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
           label="Referral Code"
           placeholder="Optional referral code"
           variant="underlined"
-          isDisabled={isSubmitting}
+          isDisabled={isSubmitting || referralLocked}
+          isReadOnly={referralLocked}
         />
+        {referralLocked ? (
+          <p className="-mt-1 text-xs text-default-500">
+            This referral code was added from your invitation link.
+          </p>
+        ) : null}
         <Button
           className="mt-3 w-full"
           color="primary"
@@ -109,11 +123,11 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
       </form>
       <div className="flex items-center gap-4 py-2">
         <Divider className="flex-1" />
-        <p className="text-tiny text-default-500 shrink-0">OR</p>
+        <p className="shrink-0 text-tiny text-default-500">OR</p>
         <Divider className="flex-1" />
       </div>
       <GoogleLoginButton isDisabled={isSubmitting} />
-      <p className="text-small text-center">
+      <p className="text-center text-small">
         Already have an account?
         <Link
           isBlock
