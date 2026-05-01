@@ -201,9 +201,6 @@ export const syncHistory = async (
       )
       .select();
 
-    const todayRewardPoints = await getTodayRewardPoints(supabase, user.id);
-    const remainingToday = Math.max(0, WATCH_POINTS_DAILY_CAP - todayRewardPoints);
-
     const eligibleActiveSeconds = Math.min(durationToSave, normalizedCurrentTime);
     const currentMilestones = calculateWatchMilestones(eligibleActiveSeconds);
     const todayRewardPoints = await getTodayRewardPoints(supabase, user.id);
