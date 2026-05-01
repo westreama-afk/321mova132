@@ -22,6 +22,7 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
       email: "",
       password: "",
       confirm: "",
+      referralCode: "",
     },
   });
 
@@ -85,6 +86,15 @@ const AuthRegisterForm: React.FC<AuthFormProps> = ({ setForm }) => {
           label="Confirm Password"
           placeholder="Confirm your password"
           startContent={<LockPassword className="text-xl" />}
+          isDisabled={isSubmitting}
+        />
+        <Input
+          {...register("referralCode")}
+          isInvalid={!!errors.referralCode?.message}
+          errorMessage={errors.referralCode?.message}
+          label="Referral Code"
+          placeholder="Optional referral code"
+          variant="underlined"
           isDisabled={isSubmitting}
         />
         <Button

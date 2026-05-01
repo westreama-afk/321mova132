@@ -7,6 +7,7 @@ import { addToast } from "@heroui/react";
 
 type AuthUserData = User & {
   username: string;
+  is_admin: boolean;
 };
 
 const fetchUser = async (): Promise<AuthUserData | null> => {
@@ -35,16 +36,17 @@ const fetchUser = async (): Promise<AuthUserData | null> => {
   }
 
   if (user) {
-    const { data: username } = await supabase
+    const { data: profile } = await supabase
       .from("profiles")
-      .select("username")
+      .select("username, is_admin")
       .eq("id", user.id)
       .single();
 
-    if (username) {
+    if (profile) {
       AuthUser = {
         ...user,
-        username: username.username,
+        username: profile.username,
+        is_admin: Boolean(profile.is_admin),
       };
     }
   }

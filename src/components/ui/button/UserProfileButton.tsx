@@ -17,6 +17,7 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { MdAdminPanelSettings, MdCardGiftcard } from "react-icons/md";
 
 const UserProfileButton: React.FC = () => {
   const router = useRouter();
@@ -26,6 +27,20 @@ const UserProfileButton: React.FC = () => {
 
   const ITEMS: DropdownItemProps[] = useMemo(
     () => [
+      {
+        label: "Rewards",
+        href: "/rewards",
+        icon: <MdCardGiftcard className="text-lg" />,
+      },
+      ...(user?.is_admin
+        ? [
+            {
+              label: "Admin",
+              href: "/admin",
+              icon: <MdAdminPanelSettings className="text-lg" />,
+            },
+          ]
+        : []),
       {
         label: "Ad-Free",
         href: "/billing",
@@ -51,7 +66,7 @@ const UserProfileButton: React.FC = () => {
         className: "text-danger",
       },
     ],
-    [logout],
+    [logout, user?.is_admin],
   );
 
   if (isLoading) return null;
@@ -89,15 +104,16 @@ const UserProfileButton: React.FC = () => {
   if (guest) return ProfileButton;
 
   return (
-    <Dropdown showArrow closeOnSelect={false} className="w-10">
+    <Dropdown showArrow closeOnSelect={false} className="w-52">
       <DropdownTrigger className="w-10">{ProfileButton}</DropdownTrigger>
       <DropdownMenu
         aria-label="User profile dropdown"
         variant="flat"
         disabledKeys={logout ? ITEMS.map((i) => i.label) : undefined}
+        className="gap-1 p-2"
       >
         {ITEMS.map(({ label, icon, ...props }) => (
-          <DropdownItem key={label} startContent={icon} {...props}>
+          <DropdownItem key={label} startContent={icon} className="py-2" {...props}>
             {label}
           </DropdownItem>
         ))}

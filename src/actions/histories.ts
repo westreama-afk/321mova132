@@ -7,17 +7,22 @@ import { HistoryDetail } from "@/types/movie";
 import { mutateMovieTitle, mutateTvShowTitle } from "@/utils/movies";
 import { createClient } from "@/utils/supabase/server";
 
+const WATCH_POINTS_DAILY_CAP = 50;
+const WATCH_POINTS_MILESTONE_SECONDS = 20 * 60;
+const WATCH_POINTS_COOLDOWN_SECONDS = 600;
+
+const calculateWatchMilestones = (activeWatchSeconds: number) =>
+  Math.floor(Math.max(0, activeWatchSeconds) / WATCH_POINTS_MILESTONE_SECONDS);
+
 const normalizeDurationSeconds = (duration: number, lastPosition: number): number => {
   let normalizedDuration = Number.isFinite(duration) && duration > 0 ? duration : 0;
   const normalizedLastPosition =
     Number.isFinite(lastPosition) && lastPosition > 0 ? lastPosition : 0;
 
-  // Some providers report duration in milliseconds.
   if (normalizedDuration > 100000 && normalizedLastPosition > 0 && normalizedLastPosition < 100000) {
     normalizedDuration /= 1000;
   }
 
-  // Some providers report duration in minutes.
   if (normalizedDuration > 0 && normalizedDuration < 1000 && normalizedLastPosition > normalizedDuration * 2) {
     normalizedDuration *= 60;
   }
@@ -28,6 +33,20 @@ const normalizeDurationSeconds = (duration: number, lastPosition: number): numbe
 const isDurationReasonable = (duration: number, expectedDuration: number): boolean => {
   if (duration <= 0 || expectedDuration <= 0) return false;
   return duration >= expectedDuration * 0.35 && duration <= expectedDuration * 2.5;
+};
+
+const getTodayRewardPoints = async (supabase: Awaited<ReturnType<typeof createClient>>, userId: string) => {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const { data: watchLedger } = await supabase
+    .from("reward_ledger")
+    .select("points")
+    .eq("user_id", userId)
+    .gte("created_at", startOfDay.toISOString())
+    .like("entry_type", "watch_active_%");
+
+  return (watchLedger ?? []).reduce((sum, entry) => sum + Math.max(entry.points, 0), 0);
 };
 
 const getTmdbRuntimeSeconds = async (
@@ -76,33 +95,21 @@ export const syncHistory = async (
   try {
     const supabase = await createClient();
 
-    // Get current user
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return {
-        success: false,
-        message: "You must be logged in to save history",
-      };
+      return { success: false, message: "You must be logged in to save history" };
     }
 
-    // Validate required fields
     if (!data.mediaId || !data.mediaType) {
-      return {
-        success: false,
-        message: "Missing required fields",
-      };
+      return { success: false, message: "Missing required fields" };
     }
 
-    // Validate type
     if (!["movie", "tv"].includes(data.mediaType)) {
-      return {
-        success: false,
-        message: 'Invalid content type. Must be "movie" or "tv"',
-      };
+      return { success: false, message: 'Invalid content type. Must be "movie" or "tv"' };
     }
 
     const mediaId = Number(data.mediaId);
@@ -169,7 +176,6 @@ export const syncHistory = async (
       }
     }
 
-    // Insert or update history
     const { data: history, error } = await supabase
       .from("histories")
       .upsert(
@@ -195,26 +201,100 @@ export const syncHistory = async (
       )
       .select();
 
+    const todayRewardPoints = await getTodayRewardPoints(supabase, user.id);
+    const remainingToday = Math.max(0, WATCH_POINTS_DAILY_CAP - todayRewardPoints);
+
+    const eligibleActiveSeconds = Math.min(durationToSave, normalizedCurrentTime);
+    const currentMilestones = calculateWatchMilestones(eligibleActiveSeconds);
+    const todayRewardPoints = await getTodayRewardPoints(supabase, user.id);
+    const remainingToday = Math.max(0, WATCH_POINTS_DAILY_CAP - todayRewardPoints);
+    const watchEntryType = completed ? "watch_complete" : "watch_time";
+
+    const { data: lastWatchReward } = await supabase
+      .from("reward_ledger")
+      .select("created_at, metadata")
+      .eq("user_id", user.id)
+      .eq("entry_type", watchEntryType)
+      .order("created_at", { ascending: false })
+      .maybeSingle();
+
+    const lastMilestoneCount = Number(
+      (lastWatchReward?.metadata as Record<string, unknown> | null)?.milestones ?? 0,
+    );
+    const milestoneDelta = Math.max(0, currentMilestones - lastMilestoneCount);
+    const watchPoints = Math.min(remainingToday, milestoneDelta);
+
+    if (watchPoints > 0) {
+      const lastWatchRewardAt = lastWatchReward?.created_at ? new Date(lastWatchReward.created_at).getTime() : 0;
+      const canRewardAgain = !lastWatchRewardAt || Date.now() - lastWatchRewardAt >= WATCH_POINTS_COOLDOWN_SECONDS * 1000;
+
+      if (canRewardAgain) {
+        await supabase.rpc("ensure_reward_account", { p_user_id: user.id });
+        await supabase.rpc("increment_reward_account_balance", {
+          p_user_id: user.id,
+          p_points: watchPoints,
+        });
+        await supabase.from("reward_ledger").insert({
+          user_id: user.id,
+          entry_type: `watch_active_${currentMilestones * 20}m`,
+          points: watchPoints,
+          reference_id: history?.[0]?.id ?? null,
+          metadata: {
+            mediaId,
+            mediaType: data.mediaType,
+            season: data.season || 0,
+            episode: data.episode || 0,
+            currentTime: normalizedCurrentTime,
+            activeWatchSeconds: eligibleActiveSeconds,
+            milestones: currentMilestones,
+          },
+        });
+        await supabase
+          .from("reward_accounts")
+          .update({
+            watch_minutes: Math.floor(durationToSave / 60),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("user_id", user.id);
+      }
+    }
+
+    const { data: referral } = await supabase
+      .from("referrals")
+      .select("*")
+      .eq("referred_id", user.id)
+      .eq("status", "pending")
+      .maybeSingle();
+
+    if (referral && (completed || durationToSave >= 30 * 60)) {
+      const rewardPoints = 25;
+      await supabase.from("reward_ledger").insert({
+        user_id: referral.referrer_id,
+        entry_type: "referral_verified",
+        points: rewardPoints,
+        metadata: { referred_id: user.id, mediaId, mediaType: data.mediaType },
+      });
+      await supabase.rpc("increment_reward_account_balance", {
+        p_user_id: referral.referrer_id,
+        p_points: rewardPoints,
+      });
+      await supabase
+        .from("referrals")
+        .update({ status: "verified", verified_at: new Date().toISOString(), reward_points: rewardPoints })
+        .eq("id", referral.id);
+    }
+
     if (error) {
       console.info("History save error:", error);
-      return {
-        success: false,
-        message: "Failed to save history",
-      };
+      return { success: false, message: "Failed to save history" };
     }
 
     console.info("History saved:", history);
 
-    return {
-      success: true,
-      message: "History saved",
-    };
+    return { success: true, message: "History saved" };
   } catch (error) {
     console.info("Unexpected error:", error);
-    return {
-      success: false,
-      message: "An unexpected error occurred",
-    };
+    return { success: false, message: "An unexpected error occurred" };
   }
 };
 
@@ -222,17 +302,13 @@ export const getUserHistories = async (limit: number = 20): ActionResponse<Histo
   try {
     const supabase = await createClient();
 
-    // Get current user
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
+      return { success: false, message: "User not authenticated" };
     }
 
     const { data, error } = await supabase
@@ -244,57 +320,19 @@ export const getUserHistories = async (limit: number = 20): ActionResponse<Histo
 
     if (error) {
       console.info("History fetch error:", error);
-      return {
-        success: false,
-        message: "Failed to fetch history",
-      };
+      return { success: false, message: "Failed to fetch history" };
     }
 
-    const normalizedData = await Promise.all(
-      data.map(async (item) => {
-        let durationForList = normalizeDurationSeconds(item.duration, item.last_position);
-        const shouldValidateAgainstTmdb =
-          item.last_position > 0 &&
-          (durationForList <= 0 || durationForList > item.last_position * 6);
-
-        if (shouldValidateAgainstTmdb) {
-          const fallbackDuration = await getTmdbRuntimeSeconds(
-            item.type,
-            item.media_id,
-            item.season,
-            item.episode,
-          );
-
-          if (fallbackDuration > 0 && !isDurationReasonable(durationForList, fallbackDuration)) {
-            durationForList = fallbackDuration;
-          } else if (durationForList <= 0 && fallbackDuration > 0) {
-            durationForList = fallbackDuration;
-          }
-        }
-
-        if (durationForList <= 0) return item;
-        return durationForList === item.duration ? item : { ...item, duration: durationForList };
-      }),
-    );
-
-    return {
-      success: true,
-      data: normalizedData,
-    };
+    return { success: true, data };
   } catch (error) {
     console.info("Unexpected error:", error);
-    return {
-      success: false,
-      message: "An unexpected error occurred",
-    };
+    return { success: false, message: "An unexpected error occurred" };
   }
 };
 
 export const getMovieLastPosition = async (id: number): Promise<number> => {
   try {
     const supabase = await createClient();
-
-    // Get current user
     const {
       data: { user },
       error: userError,
@@ -330,8 +368,6 @@ export const getTvShowLastPosition = async (
 ): Promise<number> => {
   try {
     const supabase = await createClient();
-
-    // Get current user
     const {
       data: { user },
       error: userError,
@@ -365,24 +401,17 @@ export const getTvShowLastPosition = async (
 export const removeHistory = async (historyId: number): ActionResponse => {
   try {
     if (!historyId) {
-      return {
-        success: false,
-        message: "Missing history id",
-      };
+      return { success: false, message: "Missing history id" };
     }
 
     const supabase = await createClient();
-
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
+      return { success: false, message: "User not authenticated" };
     }
 
     const { error } = await supabase
@@ -393,21 +422,12 @@ export const removeHistory = async (historyId: number): ActionResponse => {
 
     if (error) {
       console.info("History remove error:", error);
-      return {
-        success: false,
-        message: "Failed to remove history",
-      };
+      return { success: false, message: "Failed to remove history" };
     }
 
-    return {
-      success: true,
-      message: "Removed from Continue Your Journey",
-    };
+    return { success: true, message: "Removed from Continue Your Journey" };
   } catch (error) {
     console.info("Unexpected error:", error);
-    return {
-      success: false,
-      message: "An unexpected error occurred",
-    };
+    return { success: false, message: "An unexpected error occurred" };
   }
 };

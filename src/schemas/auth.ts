@@ -9,6 +9,7 @@ const AuthFormSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters long"),
   loginPassword: z.string(),
   confirm: z.string().min(1, "Password confirmation is required"),
+  referralCode: z.string().trim().max(64).optional(),
 });
 
 const RegisterFormSchema = AuthFormSchema.omit({ loginPassword: true }).refine(
