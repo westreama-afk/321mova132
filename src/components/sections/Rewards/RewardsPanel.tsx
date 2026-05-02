@@ -4,6 +4,7 @@ import { Button, Card, CardBody, Input, Textarea, addToast } from "@heroui/react
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import type { RewardAccount, RewardLedgerEntry, RewardRequest, Referral } from "@/types/rewards";
+import { REWARD_POINTS_PER_USD, rewardUsdFromPoints } from "@/utils/rewardPayout";
 
 type RewardsResponse = {
   account: RewardAccount | null;
@@ -42,7 +43,6 @@ async function createRewardRequest(input: { requested_points: number; requested_
 const RewardsPanel = () => {
   const queryClient = useQueryClient();
   const [points, setPoints] = useState("500");
-  const [valueUsd, setValueUsd] = useState("5");
   const [payoutEmail, setPayoutEmail] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -52,10 +52,10 @@ const RewardsPanel = () => {
   });
 
   const payoutPreview = useMemo(() => {
-    const p = Number(points);
-    const v = Number(valueUsd);
-    return Number.isFinite(p) && Number.isFinite(v) ? { points: p, value: v } : null;
-  }, [points, valueUsd]);
+    const p = Math.round(Number(points));
+    if (!Number.isFinite(p) || p < 500) return null;
+    return { points: p, value: rewardUsdFromPoints(p) };
+  }, [points]);
 
   const copyReferralLink = async () => {
     if (!data?.referral_link) return;
@@ -121,13 +121,32 @@ const RewardsPanel = () => {
         <Card className="border border-default-200">
           <CardBody className="gap-4">
             <h2 className="text-xl font-semibold">Redeem manually</h2>
-            <div className="grid gap-3 md:grid-cols-2">
-              <Input label="Points to redeem" value={points} onValueChange={setPoints} />
-              <Input label="Gift card value (USD)" value={valueUsd} onValueChange={setValueUsd} />
-            </div>
+            <p className="text-sm text-default-500">
+              {REWARD_POINTS_PER_USD} points = $1.00. Gift card value is calculated from the points you redeem.
+            </p>
+            <Input label="Points to redeem" value={points} onValueChange={setPoints} min={500} />
+            <p className="text-sm text-default-600">
+              Gift card value:{" "}
+              <span className="font-semibold text-foreground">
+                {payoutPreview ? `$${payoutPreview.value.toFixed(2)}` : "—"}
+              </span>
+            </p>
             <Input label="PayPal email" value={payoutEmail} onValueChange={setPayoutEmail} />
             <Textarea label="Notes" value={notes} onValueChange={setNotes} />
-            <Button color="primary" isLoading={mutation.isPending} onPress={() => mutation.mutate({ requested_points: payoutPreview?.points ?? 0, requested_value_usd: payoutPreview?.value ?? 0, payout_email: payoutEmail, notes })}>
+            <Button
+              color="primary"
+              isLoading={mutation.isPending}
+              isDisabled={!payoutPreview || !payoutEmail.trim()}
+              onPress={() =>
+                payoutPreview &&
+                mutation.mutate({
+                  requested_points: payoutPreview.points,
+                  requested_value_usd: payoutPreview.value,
+                  payout_email: payoutEmail.trim(),
+                  notes,
+                })
+              }
+            >
               Submit request
             </Button>
           </CardBody>
