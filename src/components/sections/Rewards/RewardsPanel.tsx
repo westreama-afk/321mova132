@@ -6,6 +6,8 @@ import { useMemo, useState } from "react";
 import type { RewardAccount, RewardLedgerEntry, RewardRequest, Referral } from "@/types/rewards";
 import { REWARD_POINTS_PER_USD, rewardUsdFromPoints } from "@/utils/rewardPayout";
 
+const MIN_REDEMPTION_POINTS = 500;
+
 type RewardsResponse = {
   account: RewardAccount | null;
   ledger: RewardLedgerEntry[];
@@ -53,7 +55,7 @@ const RewardsPanel = () => {
 
   const payoutPreview = useMemo(() => {
     const p = Math.round(Number(points));
-    if (!Number.isFinite(p) || p < 500) return null;
+    if (!Number.isFinite(p) || p < MIN_REDEMPTION_POINTS) return null;
     return { points: p, value: rewardUsdFromPoints(p) };
   }, [points]);
 
@@ -124,13 +126,16 @@ const RewardsPanel = () => {
             <p className="text-sm text-default-500">
               {REWARD_POINTS_PER_USD} points = $1.00. Gift card value is calculated from the points you redeem.
             </p>
-            <Input label="Points to redeem" value={points} onValueChange={setPoints} min={500} />
+            <Input label="Points to redeem" value={points} onValueChange={setPoints} min={MIN_REDEMPTION_POINTS} />
             <p className="text-sm text-default-600">
               Gift card value:{" "}
               <span className="font-semibold text-foreground">
                 {payoutPreview ? `$${payoutPreview.value.toFixed(2)}` : "—"}
               </span>
             </p>
+            {!payoutPreview && Number.isFinite(Math.round(Number(points))) && Math.round(Number(points)) > 0 && (
+              <p className="text-sm text-danger">Minimum redemption is {MIN_REDEMPTION_POINTS} points.</p>
+            )}
             <Input label="PayPal email" value={payoutEmail} onValueChange={setPayoutEmail} />
             <Textarea label="Notes" value={notes} onValueChange={setNotes} />
             <Button
@@ -147,7 +152,7 @@ const RewardsPanel = () => {
                 })
               }
             >
-              Submit request
+              {mutation.isPending ? "Submitting..." : "Submit request"}
             </Button>
           </CardBody>
         </Card>
