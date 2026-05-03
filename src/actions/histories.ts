@@ -9,7 +9,6 @@ import { createClient } from "@/utils/supabase/server";
 
 const WATCH_POINTS_DAILY_CAP = 50;
 const WATCH_POINTS_MILESTONE_SECONDS = 20 * 60;
-const WATCH_POINTS_COOLDOWN_SECONDS = 600;
 
 const calculateWatchMilestones = (activeWatchSeconds: number) =>
   Math.floor(Math.max(0, activeWatchSeconds) / WATCH_POINTS_MILESTONE_SECONDS);
@@ -209,9 +208,9 @@ export const syncHistory = async (
 
     const { data: lastWatchReward } = await supabase
       .from("reward_ledger")
-      .select("created_at, metadata")
+      .select("metadata")
       .eq("user_id", user.id)
-      .eq("entry_type", watchEntryType)
+      .like("entry_type", "watch_active_%")
       .order("created_at", { ascending: false })
       .maybeSingle();
 
@@ -222,38 +221,33 @@ export const syncHistory = async (
     const watchPoints = Math.min(remainingToday, milestoneDelta);
 
     if (watchPoints > 0) {
-      const lastWatchRewardAt = lastWatchReward?.created_at ? new Date(lastWatchReward.created_at).getTime() : 0;
-      const canRewardAgain = !lastWatchRewardAt || Date.now() - lastWatchRewardAt >= WATCH_POINTS_COOLDOWN_SECONDS * 1000;
-
-      if (canRewardAgain) {
-        await supabase.rpc("ensure_reward_account", { p_user_id: user.id });
-        await supabase.rpc("increment_reward_account_balance", {
-          p_user_id: user.id,
-          p_points: watchPoints,
-        });
-        await supabase.from("reward_ledger").insert({
-          user_id: user.id,
-          entry_type: `watch_active_${currentMilestones * 20}m`,
-          points: watchPoints,
-          reference_id: history?.[0]?.id ?? null,
-          metadata: {
-            mediaId,
-            mediaType: data.mediaType,
-            season: data.season || 0,
-            episode: data.episode || 0,
-            currentTime: normalizedCurrentTime,
-            activeWatchSeconds: eligibleActiveSeconds,
-            milestones: currentMilestones,
-          },
-        });
-        await supabase
-          .from("reward_accounts")
-          .update({
-            watch_minutes: Math.floor(durationToSave / 60),
-            updated_at: new Date().toISOString(),
-          })
-          .eq("user_id", user.id);
-      }
+      await supabase.rpc("ensure_reward_account", { p_user_id: user.id });
+      await supabase.rpc("increment_reward_account_balance", {
+        p_user_id: user.id,
+        p_points: watchPoints,
+      });
+      await supabase.from("reward_ledger").insert({
+        user_id: user.id,
+        entry_type: `watch_active_${currentMilestones * 20}m`,
+        points: watchPoints,
+        reference_id: history?.[0]?.id ?? null,
+        metadata: {
+          mediaId,
+          mediaType: data.mediaType,
+          season: data.season || 0,
+          episode: data.episode || 0,
+          currentTime: normalizedCurrentTime,
+          activeWatchSeconds: eligibleActiveSeconds,
+          milestones: currentMilestones,
+        },
+      });
+      await supabase
+        .from("reward_accounts")
+        .update({
+          watch_minutes: Math.floor(durationToSave / 60),
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id);
     }
 
     const { data: referral } = await supabase
