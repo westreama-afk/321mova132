@@ -1163,6 +1163,7 @@ const HlsJsonPlayer: React.FC<HlsJsonPlayerProps> = ({
           mediaType,
           season,
           episode,
+          playerSource: "321movies",
         },
       };
 
