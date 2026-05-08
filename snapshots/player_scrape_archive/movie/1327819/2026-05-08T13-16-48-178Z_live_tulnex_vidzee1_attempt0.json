@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-05-08T13:16:48.178Z",
+  "family": "tulnex",
+  "provider": "vidzee1",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1327819"
+  },
+  "url": "https://api.tulnex.com/vidzee/movie/1327819?server=1",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

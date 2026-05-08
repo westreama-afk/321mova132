@@ -1,0 +1,15 @@
+{
+  "createdAt": "2026-05-08T13:16:47.599Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1327819"
+  },
+  "url": "https://movish.net/moviebox-embed/movie/1327819",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1
+}

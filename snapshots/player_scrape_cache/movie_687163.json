@@ -1,0 +1,222 @@
+{
+  "cachedAt": "2026-05-08T13:24:20.914Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Feb1fafa82220b0523c85103f9162c9b2.mp4%3Fsign%3D311c5c62c5b2637fe3f346e5d8e7ca2d%26t%3D1778240107&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "NovaCast",
+      "provider": "movish",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fyoru.midwesteagle.com%252Fvideo.m3u8%253Fq%253DTnFKeUZFM29qWnpWb013WnEtQzFHZzp4RFBwUi1uay1DWThFSGN1RFBtSDhLYWVXMTV2aVg2YzItSE05S1Y5ejRybC1YcDg0YU1UZXlPdlh5bV9EdENwa1dud2FTS0xWemwyNjZNbnUzMDlPUQ&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Blueforge 4K",
+      "provider": "lazuli",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fyoru.midwesteagle.com%252Fvideo.m3u8%253Ftype%253Dhls%2526q%253DUlNMLXZLNDQ1d2k2NDNOeG5uUmJ4dzp4blNqdTc3WkpOVVBUdGRIVUN6cFhwNjgtVW10RWppSzF0Y3k1QWU5QUd4MnlacVhyMkRrMFJ0N2V3c3RfVFBSNUE0dDI4NTlRYTF1RjVESGEzM211eE5QQnMzT3lxWHNMc2E4MlBQQ1lZT1h3N2NQM3BxTDZ5SVVQLXppcUxsT2E0eWtUcDVJb3JHaGY3bDVxWnBONDBWd3lUZHdUUms4VlJZUDU4ZTZfcmc%25253D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Blueforge 1080p",
+      "provider": "lazuli",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fyoru.midwesteagle.com%252Fvideo.m3u8%253Ftype%253Dhls%2526q%253DUE9CV1hSNnhTbjhrVHQ4YWYxVVZNdzo3dDR1Y2tuOWVGekc2YjFhd05Bb0gtY3VyNjJXcHFyaDlmekJSTTc0MHVZRGN6dDdxNXJubnhaQm83VWFwRzczaHF4a1RxY1ViVW5UOVp5MVFLQmFfY1dGbEtBNGZDakRRampJaG5yaDBlZHA2RkhRd0djWllGYzlNbEZRbktsZmJZamNUSEZLUTdEcTlXZy16UmNyc195NzhkVEVBdXFSamZ3T1loaEhpWjQ%25253D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Blueforge 720p",
+      "provider": "lazuli",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fyoru.midwesteagle.com%252Fvideo.m3u8%253Ftype%253Dhls%2526q%253DTTBidjF5UnNQNldQNzhlY0RmVkdKdzpSYjhyWk5WNVlWTkVnQmlzNW9GTzY2dXlBem1ReE5PNlYxM0RMOUNBeU5ORlFrbkVodFRaYzZ0eml2ZV9FMlpMOEgwbzltR3NzUFVvSndVaXVpUWw5amhvOThfQlhrTDlsLURyUS1OUGNnUFhGMVVaU3ctNmU3by16WHFfYVFPRVNkRUJ0QkdQcmhEUU9wTGFhb1piMjZmeTRSU0NHdFlLcWJUNzdHcWZzUFk%25253D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Blueforge 480p",
+      "provider": "lazuli",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fstorm.vodvidl.site%252Fproxy%252Ffile2%25252F7oVQpexrIUcTZRd5PGTwjxhYacR39a%257EZ7SfPrnZ8blsNPnsy4NQN%257E%25252BcU36hsm4LXK8jrTvolH%257EC4hQ7O%25252BIa8tffiRSEryDZ5QCtHPyDZddor1XqZYR3IhRXoQ17shJQvy51fqb3XWstIJATRfT%25252BZ4OHmZzXNcXD1RWghJ3JEt1E%25253D%25252FcGxheWxpc3QubTN1OA%25253D%25253D.m3u8%253Fheaders%253D%257B%252522referer%252522%253A%252522https%253A%252F%252Fvideostr.net%252F%252522%252C%252522origin%252522%253A%252522https%253A%252F%252Fvideostr.net%252522%257D%2526host%253Dhttps%253A%252F%252Fnightbreeze17.site%26h%3D%257B%2522Referer%2522%253A%2522https%253A%252F%252Fvidlink.pro%252F%2522%257D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Aurora auto",
+      "provider": "copper",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fvixsrc.to%252Fplaylist%252F699799%253Fb%253D1%2526token%253D259d2766433f190eb54da6784d9eb5db%2526expires%253D1783429791%2526h%253D1%2526lang%253Den%26h%3D%257B%2522Referer%2522%253A%2522https%253A%252F%252Fvixsrc.to%252F%2522%257D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Moonbeam auto",
+      "provider": "platinum",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fstreams.icefy.top%252F7254a6a20094f0692b561fe8c94c4586%252Fmaster.m3u8%26h%3D%257B%2522Referer%2522%253A%2522https%253A%252F%252Fstreams.icefy.top%252F%2522%257D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Northstar 1080p",
+      "provider": "flint",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DIIQqVcJ0aOCu5MICH8-25A%26t%3D1778251402%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Sunforge auto",
+      "provider": "citrine",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DIIQqVcJ0aOCu5MICH8-25A%26t%3D1778251402%26quality%3D1080p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Sunforge 1080p",
+      "provider": "citrine",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DIIQqVcJ0aOCu5MICH8-25A%26t%3D1778251402%26quality%3D720p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Sunforge 720p",
+      "provider": "citrine",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DIIQqVcJ0aOCu5MICH8-25A%26t%3D1778251402%26quality%3D360p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Sunforge 360p",
+      "provider": "citrine",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DrnU1eJhtAOTawBGjVMpM5w%26t%3D1778251403%26no_add%3D1%26KEY7%3Dweb_player%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Sunforge auto",
+      "provider": "citrine",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fsh1-source.shegu.net%3A8443%2Fvip%2Fp1%2Ftv_mp4_h264%2F7%2F6%2F76%2F1%2Ftv.76.S1E1.360p.H264.20190423031649.mp4%3FKEY1%3D0_o1O2yThGHsjs70b3KIWA%26KEY2%3D1602876449&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Sunforge auto",
+      "provider": "citrine",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fprxy.tulnex.com%252Fproxy%253Furl%253Dhttps%25253A%25252F%25252Fonlinecoachingacademy.site%25252FYgu4uHrIF%25252Fpl%25252FH4sIAAAAAAAAAwXBy3KCMBQA0F_KAzrSXRmFjkoqSW4i7CCBUgI0BRT163sORi0K2tbaFke7xga7CBlKCSZtUEVvtn0X48oEcM_VN62neJOJvWTgL3XavWUkuSu03SUu.ybxNwO8ZwiI6a0W1w8KYG_8ZeZGuy0jmJaHcIJk4Lnmp.IaL4XbPXPoXvqQB4b4pVbFLF2OCpTPDFsmnXcSRVrAcS9ArSfMfDUOpMKsUikKNDzOoJcw.4kojOuf0GaWU0Lh00sDiap0kpfED2riazENIGiMxWA7deh.hbYlT9zWOIW_9jxmiBf1eHwwFzwbeQylHhDTy1xNCteEn82.XGUanjK3IaUfvUrttXyh6B.sHu64QQEAAA--%25252Fmaster.m3u8%2526headers%253D%25257B%252522Origin%252522%25253A%252522https%25253A%25252F%25252Fbrightpathsignals.com%252522%25252C%252522Referer%252522%25253A%252522https%25253A%25252F%25252Fbrightpathsignals.com%25252F%252522%25252C%252522User-Agent%252522%25253A%252522Mozilla%25252F5.0%252520%2528Windows%252520NT%25252010.0%25253B%252520Win64%25253B%252520x64%2529%252520AppleWebKit%25252F537.36%252522%25252C%252522Accept%252522%25253A%252522*%25252F*%252522%25257D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Spinel auto",
+      "provider": "spinel",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D4HzQgUseLgBInkWdPKuB0g%26t%3D1778232912%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze auto",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D4HzQgUseLgBInkWdPKuB0g%26t%3D1778232912%26quality%3D1080p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze 1080p",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D4HzQgUseLgBInkWdPKuB0g%26t%3D1778232912%26quality%3D720p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze 720p",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D4HzQgUseLgBInkWdPKuB0g%26t%3D1778232912%26quality%3D360p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze 360p",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DCUM5Y1EDFKkRkexwSiScHw%26t%3D1778232912%26no_add%3D1%26KEY7%3Dweb_player%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze auto",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DxfGB2k65gFy40ACe8sjXxw%26t%3D1778232913%26no_add%3D1%26KEY7%3Dweb_player%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Opaline auto",
+      "provider": "opal",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DsqGZ5IH3OtKCkVLNLMQfFQ%26t%3D1778193068%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze auto",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DsqGZ5IH3OtKCkVLNLMQfFQ%26t%3D1778193068%26quality%3D1080p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze 1080p",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DsqGZ5IH3OtKCkVLNLMQfFQ%26t%3D1778193068%26quality%3D720p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze 720p",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DsqGZ5IH3OtKCkVLNLMQfFQ%26t%3D1778193068%26quality%3D360p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze 360p",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DO3Za1AFxewF3rmdQDuBazg%26t%3D1778193069%26no_add%3D1%26KEY7%3Dweb_player%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Seabreeze auto",
+      "provider": "coral",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D8UDkin-YnyPYF0OouD6wvA%26t%3D1778260201%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Opaline auto",
+      "provider": "opal",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D8UDkin-YnyPYF0OouD6wvA%26t%3D1778260201%26quality%3D1080p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Opaline 1080p",
+      "provider": "opal",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D8UDkin-YnyPYF0OouD6wvA%26t%3D1778260201%26quality%3D720p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Opaline 720p",
+      "provider": "opal",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3D8UDkin-YnyPYF0OouD6wvA%26t%3D1778260201%26quality%3D360p%26KEY7%3Dfebbox_video_quality_list_v4%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa%26platform%3Dweb&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Opaline 360p",
+      "provider": "opal",
+      "default": false
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fhls.shegu.net%2F38242047.m3u8%3Fsign%3DLri4nPDTxyA3WI-p9HlXFQ%26t%3D1778260202%26no_add%3D1%26KEY7%3Dweb_player%26KEY8%3D1681574%26IP%3D2a0d%3A2787%3A1b%3A12ba%3A%3Aa&headers=%7B%22Referer%22%3A%22https%3A%2F%2Fwww.febbox.com%2F%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Opaline auto",
+      "provider": "opal",
+      "default": false
+    }
+  ]
+}

@@ -21,6 +21,7 @@ const MOVISH_REFERER = "https://movish.net/";
 const SCRAPPER_BASE = "https://scrapper.rivestream.org";
 const SCRAPPER_ORIGIN = "https://rivestream.org";
 const SCRAPPER_REFERER = "https://rivestream.org/";
+const STREAMVAULT_BASE = "https://streamvaultsrc.click";
 const PROVIDERS = ["flowcast", "asiacloud", "primevids", "hindicast", "guru", "ophim"] as const;
 const PROVIDER_LABELS: Record<string, string> = {
   flowcast: "FlowCast",
@@ -29,6 +30,17 @@ const PROVIDER_LABELS: Record<string, string> = {
   hindicast: "HindiCast",
   guru: "Guru",
   ophim: "Ophim",
+};
+const STREAMVAULT_LABELS: Record<string, string> = {
+  flint: "Northstar",
+  copper: "Aurora",
+  platinum: "Moonbeam",
+  lazuli: "Blueforge",
+  citrine: "Sunforge",
+  coral: "Seabreeze",
+  opal: "Opaline",
+  marble: "Granite",
+  streamvault: "StreamVault",
 };
 const REQUEST_TIMEOUT_MS = 15000;
 const USER_AGENT =
@@ -253,6 +265,16 @@ interface ScrapperSource {
 
 interface ScrapperResponse {
   data: { sources: ScrapperSource[] } | null;
+}
+
+interface StreamVaultSseEntry {
+  url?: string;
+  url_b64?: string;
+  quality?: string | number;
+  type?: string;
+  provider?: string;
+  headers?: HeaderMap;
+  done?: boolean;
 }
 
 interface ScrapeRunContext {
@@ -744,6 +766,89 @@ const fetchVidlinkSources = async (
   }
 };
 
+const decodeBase64Maybe = (value: string): string | null => {
+  try {
+    return Buffer.from(value, "base64").toString("utf8");
+  } catch {
+    return null;
+  }
+};
+
+const fetchStreamVaultSources = async (
+  requestParams: ParsedMediaRequest,
+  runContext: ScrapeRunContext,
+): Promise<PlaylistSource[]> => {
+  const endpoint = requestParams.type === "movie"
+    ? `${STREAMVAULT_BASE}/api/embed-streams/sse/movie/${requestParams.id}`
+    : `${STREAMVAULT_BASE}/api/embed-streams/sse/tv/${requestParams.id}/${requestParams.season}/${requestParams.episode}`;
+
+  try {
+    const response = await fetchWithTimeout(endpoint, { cache: "no-store" }, REQUEST_TIMEOUT_MS);
+    if (!response?.ok) {
+      await archiveProviderResponse("streamvault", "streamvault", requestParams, runContext, {
+        url: endpoint,
+        status: response?.status ?? null,
+        ok: false,
+        sourceCount: 0,
+        error: response ? `HTTP ${response.status}` : "timeout",
+      });
+      return [];
+    }
+
+    const text = await response.text();
+    const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    const entries: StreamVaultSseEntry[] = [];
+    for (const line of lines) {
+      if (!line.startsWith("data:")) continue;
+      const raw = line.slice(5).trim();
+      if (!raw || raw === "[DONE]" || raw === '{"done":true}') continue;
+      try {
+        entries.push(JSON.parse(raw) as StreamVaultSseEntry);
+      } catch {}
+    }
+
+    const sources = entries
+      .filter((entry) => !entry.done)
+      .map((entry): PlaylistSource | null => {
+        let url = entry.url || "";
+        if (!url && entry.url_b64) url = decodeBase64Maybe(entry.url_b64) || "";
+        if (!url.startsWith("http")) return null;
+        const headers = normalizeHeaders(entry.headers);
+        const quality = entry.quality ? `${entry.quality}` : "";
+        const providerKey = (entry.provider || "streamvault").toLowerCase();
+        const providerLabel = STREAMVAULT_LABELS[providerKey] || entry.provider || "StreamVault";
+        const isMp4 = entry.type === "mp4" || /\.mp4(\?|$)/i.test(url);
+        return {
+          type: "hls",
+          file: isMp4 ? buildWorkerMp4ProxyUrl(url, headers) : buildWorkerM3u8ProxyUrl(url, headers),
+          label: quality ? `${providerLabel} ${quality}` : providerLabel,
+          provider: providerKey,
+        };
+      })
+      .filter((item): item is PlaylistSource => item !== null);
+
+    await archiveProviderResponse("streamvault", "streamvault", requestParams, runContext, {
+      url: endpoint,
+      status: response.status,
+      ok: true,
+      sourceCount: sources.length,
+      responseText: text,
+      extra: { providers: entries.map((entry) => entry.provider || "streamvault") },
+    });
+
+    return sources;
+  } catch (error) {
+    await archiveProviderResponse("streamvault", "streamvault", requestParams, runContext, {
+      url: endpoint,
+      status: null,
+      ok: false,
+      sourceCount: 0,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return [];
+  }
+};
+
 const fetchMovishSources = async (
   requestParams: ParsedMediaRequest,
   runContext: ScrapeRunContext,
@@ -869,9 +974,10 @@ export const GET = async (request: NextRequest) => {
 
   console.log(`[Rive Response] Processing ${requestParams.type} (${requestParams.id})`);
 
-  const [rivResults, tulnexResults, movishResult] = await Promise.all([
+  const [rivResults, tulnexResults, streamVaultSources, movishResult] = await Promise.all([
     Promise.allSettled(PROVIDERS.map((p) => fetchProviderSources(p, requestParams, runContext))),
     Promise.allSettled(TULNEX_PROVIDERS.map((p) => fetchTulnexProviderSources(p, requestParams, runContext))),
+    fetchStreamVaultSources(requestParams, runContext),
     fetchMovishSources(requestParams, runContext),
   ]);
 
@@ -904,6 +1010,9 @@ export const GET = async (request: NextRequest) => {
     }
   });
 
+  // Add StreamVault sources but don't log them separately
+  allSources.push(...streamVaultSources);
+
   // Add Movish sources (kept separate — excluded from cache due to time-limited signed URLs)
   const movishSources = Array.isArray(movishResult) ? movishResult : [];
   allSources.push(...movishSources);
@@ -917,7 +1026,6 @@ export const GET = async (request: NextRequest) => {
     // Top Priority: FlowCast
     if (provider === "flowcast") return 0;
 
-
     // Second Priority: NovaCast (Movish)
     if (provider === "movish") return 1;
 
@@ -930,11 +1038,14 @@ export const GET = async (request: NextRequest) => {
     // Fifth Priority: VidLink
     if (provider === "vidlink") return 4;
 
+    // Sixth Priority: StreamVault
+    if (provider === "streamvault") return 5;
+
     // Everything else (Fallbacks)
-    if (provider === "icefy" || provider === "hollymoviehd") return 4;
-    if (["primeshows", "vidzee0", "vidzee1", "allmovies"].includes(provider!)) return 5;
-    if (["hindicast", "ophim"].includes(provider!)) return 6;
-    return provider === "asiacloud" ? 7 : 6;
+    if (provider === "icefy" || provider === "hollymoviehd") return 6;
+    if (["primeshows", "vidzee0", "vidzee1", "allmovies"].includes(provider!)) return 7;
+    if (["hindicast", "ophim"].includes(provider!)) return 8;
+    return provider === "asiacloud" ? 9 : 8;
   };
 
   const orderedSources = dedupeSources(

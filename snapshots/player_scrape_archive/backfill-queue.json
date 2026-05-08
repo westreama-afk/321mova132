@@ -17,21 +17,6 @@
     "reason": "Missing priority providers: flowcast, guru, vidlink"
   },
   {
-    "requestKey": "movie_687163",
-    "request": {
-      "type": "movie",
-      "id": "687163"
-    },
-    "attempts": 0,
-    "dueAt": "2026-04-19T22:53:50.938Z",
-    "createdAt": "2026-04-19T16:53:50.938Z",
-    "updatedAt": "2026-04-19T16:53:50.938Z",
-    "missingProviders": [
-      "guru"
-    ],
-    "reason": "Missing priority providers: guru"
-  },
-  {
     "requestKey": "movie_1290821",
     "request": {
       "type": "movie",
@@ -248,5 +233,39 @@
       "guru"
     ],
     "reason": "Missing priority providers: flowcast, guru"
+  },
+  {
+    "requestKey": "movie_1327819",
+    "request": {
+      "type": "movie",
+      "id": "1327819"
+    },
+    "attempts": 0,
+    "dueAt": "2026-05-08T19:16:49.613Z",
+    "createdAt": "2026-05-08T13:16:49.613Z",
+    "updatedAt": "2026-05-08T13:16:49.613Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "primevids"
+    ],
+    "reason": "Missing priority providers: flowcast, primevids, guru"
+  },
+  {
+    "requestKey": "movie_687163",
+    "request": {
+      "type": "movie",
+      "id": "687163"
+    },
+    "attempts": 0,
+    "dueAt": "2026-05-08T19:24:20.904Z",
+    "createdAt": "2026-04-19T16:53:50.938Z",
+    "updatedAt": "2026-05-08T13:24:20.904Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "primevids"
+    ],
+    "reason": "Missing priority providers: flowcast, primevids, guru"
   }
 ]

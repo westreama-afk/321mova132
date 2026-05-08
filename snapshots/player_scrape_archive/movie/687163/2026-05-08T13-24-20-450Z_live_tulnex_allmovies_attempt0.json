@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-05-08T13:24:20.450Z",
+  "family": "tulnex",
+  "provider": "allmovies",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "687163"
+  },
+  "url": "https://api.tulnex.com/provider/allmovies/movie/687163?lang=english",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

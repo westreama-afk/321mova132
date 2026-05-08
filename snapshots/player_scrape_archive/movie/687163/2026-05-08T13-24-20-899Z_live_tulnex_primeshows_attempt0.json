@@ -1,0 +1,16 @@
+{
+  "createdAt": "2026-05-08T13:24:20.899Z",
+  "family": "tulnex",
+  "provider": "primeshows",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "687163"
+  },
+  "url": "https://api.tulnex.com/indra/movie/687163",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}
