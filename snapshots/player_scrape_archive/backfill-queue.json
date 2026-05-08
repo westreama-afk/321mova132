@@ -267,5 +267,24 @@
       "primevids"
     ],
     "reason": "Missing priority providers: flowcast, primevids, guru"
+  },
+  {
+    "requestKey": "tv_73586_s2_e4",
+    "request": {
+      "type": "tv",
+      "id": "73586",
+      "season": "2",
+      "episode": "4"
+    },
+    "attempts": 0,
+    "dueAt": "2026-05-08T19:33:22.888Z",
+    "createdAt": "2026-05-08T13:33:22.888Z",
+    "updatedAt": "2026-05-08T13:33:22.888Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "primevids"
+    ],
+    "reason": "Missing priority providers: flowcast, primevids, guru"
   }
 ]

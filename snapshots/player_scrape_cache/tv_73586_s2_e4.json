@@ -1,0 +1,19 @@
+{
+  "cachedAt": "2026-05-08T13:33:22.890Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2F9cc221c4b3235c1bbc8a04ed944aa09a.mp4%3Fsign%3D3af51626b840545fa80e1c66412595a5%26t%3D1778247020&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "NovaCast",
+      "provider": "movish",
+      "default": true
+    },
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/m3u8-proxy/playlist.m3u8?url=https%3A%2F%2Fstreamvaultsrc.click%2Fstream-proxy%2Fpl%3Fu%3Dhttps%253A%252F%252Fstreams.icefy.top%252F10694131a24324bb5eaf6cada49ae92b%252Fmaster.m3u8%26h%3D%257B%2522Referer%2522%253A%2522https%253A%252F%252Fstreams.icefy.top%252F%2522%257D&headers=%7B%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "Northstar 1080p",
+      "provider": "flint",
+      "default": false
+    }
+  ]
+}

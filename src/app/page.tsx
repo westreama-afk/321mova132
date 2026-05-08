@@ -5,7 +5,7 @@ const HomePageList = dynamic(() => import("@/components/sections/Home/List"));
 const AppDownload = dynamic(() => import("@/components/sections/Home/AppDownload"));
 
 const sponsorUrl =
-  "https://www.g2g.com/categories/cursor-ai-accounts/offer/G1777483927730ME?region_id=0f76ac42-3267-4d77-9fba-f9d9d719dac9&seller=VIPAI";
+  "https://api.synterolink.com/";
 
 const sponsorBanners = [
   {

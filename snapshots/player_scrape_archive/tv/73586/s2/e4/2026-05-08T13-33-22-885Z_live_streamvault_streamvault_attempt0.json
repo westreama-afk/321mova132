@@ -1,0 +1,23 @@
+{
+  "createdAt": "2026-05-08T13:33:22.885Z",
+  "family": "streamvault",
+  "provider": "streamvault",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "73586",
+    "season": "2",
+    "episode": "4"
+  },
+  "url": "https://streamvaultsrc.click/api/embed-streams/sse/tv/73586/2/4",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1,
+  "responseText": "data: {\"url\":\"\",\"quality\":\"1080p\",\"type\":\"hls\",\"provider\":\"Flint\",\"headers\":{},\"url_b64\":\"aHR0cHM6Ly9zdHJlYW12YXVsdHNyYy5jbGljay9zdHJlYW0tcHJveHkvcGw/dT1odHRwcyUzQSUyRiUyRnN0cmVhbXMuaWNlZnkudG9wJTJGMTA2OTQxMzFhMjQzMjRiYjVlYWY2Y2FkYTQ5YWU5MmIlMkZtYXN0ZXIubTN1OCZoPSU3QiUyMlJlZmVyZXIlMjIlM0ElMjJodHRwcyUzQSUyRiUyRnN0cmVhbXMuaWNlZnkudG9wJTJGJTIyJTdE\"}\n\ndata: {\"done\":true}\n\n",
+  "extra": {
+    "providers": [
+      "Flint"
+    ]
+  }
+}

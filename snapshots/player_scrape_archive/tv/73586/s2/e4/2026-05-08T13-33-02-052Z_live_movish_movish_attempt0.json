@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-05-08T13:33:02.052Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "73586",
+    "season": "2",
+    "episode": "4"
+  },
+  "url": "https://movish.net/moviebox-embed/tv/73586/2/4",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1
+}

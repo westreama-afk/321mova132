@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-05-08T13:33:04.562Z",
+  "family": "tulnex",
+  "provider": "vidzee0",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "73586",
+    "season": "2",
+    "episode": "4"
+  },
+  "url": "https://api.tulnex.com/vidzee/tv/73586/2/4?server=0",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}
