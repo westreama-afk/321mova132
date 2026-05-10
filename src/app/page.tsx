@@ -7,23 +7,6 @@ const AppDownload = dynamic(() => import("@/components/sections/Home/AppDownload
 const sponsorUrl =
   "https://api.synterolink.com/";
 
-const sponsorBanners = [
-  {
-    src: "/300x150.png",
-    alt: "Sponsor banner 300x150",
-    width: 300,
-    height: 150,
-    className: "h-[150px] w-[300px]",
-  },
-  {
-    src: "/300x200.png",
-    alt: "Sponsor banner 300x200",
-    width: 300,
-    height: 200,
-    className: "h-[200px] w-[300px]",
-  },
-];
-
 const HomePage: NextPage = () => {
   return (
     <div className="flex flex-col gap-3 md:gap-8">
@@ -39,7 +22,7 @@ const HomePage: NextPage = () => {
           aria-label="Visit sponsor offer"
         >
           <img
-            src="/300x150.png"
+            src="/abacock.png"
             alt="Sponsor banner"
             width={300}
             height={150}

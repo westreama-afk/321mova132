@@ -1,0 +1,8 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.synterolink.com",
+    "ANTHROPIC_AUTH_TOKEN": "sk-af77ce3bda54c3e28405067b1ca973a17526a105e08cec4cb3927a61b24d27a5",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0"
+  }
+}
