@@ -75,7 +75,7 @@ const signUpAction: AuthAction<RegisterFormInput> = async (data, supabase) => {
   if (signUpError) return { success: false, message: signUpError.message };
   if (!authData.user) return { success: false, message: "User not created. Please try again." };
 
-  const referralCode = data.referralCode?.trim();
+  const referralCode = data.referralCode?.trim().toUpperCase();
 
   const { error: profileError } = await supabase
     .from("profiles")
@@ -86,6 +86,22 @@ const signUpAction: AuthAction<RegisterFormInput> = async (data, supabase) => {
     return { success: false, message: "Could not create user profile. Please contact support." };
   }
 
+  let rewardAccountReady = false;
+
+  try {
+    const { error: rewardAccountError } = await supabase.rpc("ensure_reward_account", {
+      p_user_id: authData.user.id,
+    });
+
+    if (rewardAccountError) {
+      console.error("Reward account bootstrap error:", rewardAccountError);
+    } else {
+      rewardAccountReady = true;
+    }
+  } catch (error) {
+    console.error("Reward account bootstrap threw during signup:", error);
+  }
+
   if (referralCode) {
     const { data: referrerAccount } = await supabase
       .from("reward_accounts")
@@ -93,20 +109,26 @@ const signUpAction: AuthAction<RegisterFormInput> = async (data, supabase) => {
       .eq("referral_code", referralCode)
       .maybeSingle();
 
-    if (referrerAccount) {
-      await supabase.from("referrals").insert({
+    if (referrerAccount && referrerAccount.user_id !== authData.user.id) {
+      const { error: referralError } = await supabase.from("referrals").insert({
         referrer_id: referrerAccount.user_id,
         referred_id: authData.user.id,
         referral_code: referralCode,
       });
-      await supabase.from("reward_accounts").update({ referred_by: referrerAccount.user_id }).eq("user_id", authData.user.id);
-    }
-  }
 
-  try {
-    await supabase.rpc("ensure_reward_account", { p_user_id: authData.user.id });
-  } catch {
-    // Reward account bootstrap is best-effort during signup.
+      if (referralError) {
+        console.error("Referral creation error:", referralError);
+      } else if (rewardAccountReady) {
+        const { error: referredByError } = await supabase
+          .from("reward_accounts")
+          .update({ referred_by: referrerAccount.user_id })
+          .eq("user_id", authData.user.id);
+
+        if (referredByError) {
+          console.error("Reward account referral link error:", referredByError);
+        }
+      }
+    }
   }
 
   return { success: true, message: "Sign up successful. You can now sign in." };

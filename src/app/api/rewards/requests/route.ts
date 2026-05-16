@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
 import {
   REWARD_POINTS_PER_USD,
@@ -8,6 +9,7 @@ import {
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
+  const adminSupabase = createAdminClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -47,7 +49,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  await supabase.rpc("ensure_reward_account", { p_user_id: user.id });
+  await adminSupabase.rpc("ensure_reward_account", { p_user_id: user.id });
   const { data: account, error: accountError } = await supabase
     .from("reward_accounts")
     .select("points_balance")
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Not enough points" }, { status: 400 });
   }
 
-  const { error: spendError } = await supabase.rpc("increment_reward_account_spent", {
+  const { error: spendError } = await adminSupabase.rpc("increment_reward_account_spent", {
     p_user_id: user.id,
     p_points: requested_points,
   });
@@ -71,7 +73,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: spendError.message }, { status: 500 });
   }
 
-  const { error: ledgerError } = await supabase.from("reward_ledger").insert({
+  const { error: ledgerError } = await adminSupabase.from("reward_ledger").insert({
     user_id: user.id,
     entry_type: "reward_request_hold",
     points: -requested_points,

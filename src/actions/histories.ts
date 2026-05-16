@@ -5,6 +5,7 @@ import { UnifiedPlayerEventData } from "@/hooks/usePlayerEvents";
 import { ActionResponse, ContentType } from "@/types";
 import { HistoryDetail } from "@/types/movie";
 import { mutateMovieTitle, mutateTvShowTitle } from "@/utils/movies";
+import { createAdminClient } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
 
 const WATCH_POINTS_DAILY_CAP = 50;
@@ -34,7 +35,10 @@ const isDurationReasonable = (duration: number, expectedDuration: number): boole
   return duration >= expectedDuration * 0.35 && duration <= expectedDuration * 2.5;
 };
 
-const getTodayRewardPoints = async (supabase: Awaited<ReturnType<typeof createClient>>, userId: string) => {
+const getTodayRewardPoints = async (
+  supabase: Awaited<ReturnType<typeof createClient>> | ReturnType<typeof createAdminClient>,
+  userId: string,
+) => {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
@@ -93,6 +97,7 @@ export const syncHistory = async (
 
   try {
     const supabase = await createClient();
+    const adminSupabase = createAdminClient();
 
     const {
       data: { user },
@@ -202,16 +207,21 @@ export const syncHistory = async (
 
     const eligibleActiveSeconds = Math.max(0, Math.floor(data.activeWatchSeconds ?? 0));
     const currentMilestones = calculateWatchMilestones(eligibleActiveSeconds);
-    const todayRewardPoints = await getTodayRewardPoints(supabase, user.id);
+    const todayRewardPoints = await getTodayRewardPoints(adminSupabase, user.id);
     const remainingToday = Math.max(0, WATCH_POINTS_DAILY_CAP - todayRewardPoints);
-    const watchEntryType = completed ? "watch_complete" : "watch_time";
     const is321MoviePlayer = data.playerSource === "321movies";
 
-    const { data: lastWatchReward } = await supabase
+    const { data: lastWatchReward } = await adminSupabase
       .from("reward_ledger")
       .select("metadata")
       .eq("user_id", user.id)
       .like("entry_type", "watch_active_%")
+      .contains("metadata", {
+        mediaId,
+        mediaType: data.mediaType,
+        season: data.season || 0,
+        episode: data.episode || 0,
+      })
       .order("created_at", { ascending: false })
       .maybeSingle();
 
@@ -223,7 +233,7 @@ export const syncHistory = async (
     const rewardKey = watchPoints > 0 ? `watch:${mediaId}:${data.mediaType}:${data.season || 0}:${data.episode || 0}:${currentMilestones}` : null;
 
     if (watchPoints > 0 && rewardKey) {
-      const { error: ledgerInsertError } = await supabase.from("reward_ledger").insert({
+      const { error: ledgerInsertError } = await adminSupabase.from("reward_ledger").insert({
         user_id: user.id,
         entry_type: `watch_active_${currentMilestones * 20}m`,
         points: watchPoints,
@@ -241,18 +251,19 @@ export const syncHistory = async (
       });
 
       if (!ledgerInsertError) {
-        await supabase.rpc("ensure_reward_account", { p_user_id: user.id });
-        await supabase.rpc("increment_reward_account_balance", {
+        await adminSupabase.rpc("increment_reward_account_balance", {
           p_user_id: user.id,
           p_points: watchPoints,
         });
-        await supabase
+        await adminSupabase
           .from("reward_accounts")
           .update({
             watch_minutes: Math.floor(durationToSave / 60),
             updated_at: new Date().toISOString(),
           })
           .eq("user_id", user.id);
+      } else {
+        console.error("Watch reward ledger insert failed:", ledgerInsertError);
       }
     }
 
@@ -265,20 +276,25 @@ export const syncHistory = async (
 
     if (referral && (completed || durationToSave >= 30 * 60)) {
       const rewardPoints = 25;
-      await supabase.from("reward_ledger").insert({
+      const { error: referralLedgerError } = await adminSupabase.from("reward_ledger").insert({
         user_id: referral.referrer_id,
         entry_type: "referral_verified",
         points: rewardPoints,
         metadata: { referred_id: user.id, mediaId, mediaType: data.mediaType },
       });
-      await supabase.rpc("increment_reward_account_balance", {
-        p_user_id: referral.referrer_id,
-        p_points: rewardPoints,
-      });
-      await supabase
-        .from("referrals")
-        .update({ status: "verified", verified_at: new Date().toISOString(), reward_points: rewardPoints })
-        .eq("id", referral.id);
+
+      if (!referralLedgerError) {
+        await adminSupabase.rpc("increment_reward_account_balance", {
+          p_user_id: referral.referrer_id,
+          p_points: rewardPoints,
+        });
+        await adminSupabase
+          .from("referrals")
+          .update({ status: "verified", verified_at: new Date().toISOString(), reward_points: rewardPoints })
+          .eq("id", referral.id);
+      } else {
+        console.error("Referral reward ledger insert failed:", referralLedgerError);
+      }
     }
 
     if (error) {
