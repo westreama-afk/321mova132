@@ -6,6 +6,10 @@ import { usePathname } from "next/navigation";
 
 const Sidebar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathName = usePathname();
+  if (pathName.startsWith("/admin")) {
+    return <div className="flex h-full">{children}</div>;
+  }
+
   const hrefs = siteConfig.navItems.map((item) => item.href);
   const shouldShowSidebar = hrefs.includes(pathName);
 

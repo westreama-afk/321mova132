@@ -26,9 +26,10 @@ const MoviePlayerSourceSelection = dynamic(() => import("./SourceSelection"));
 interface MoviePlayerProps {
   movie: MovieDetails;
   startAt?: number;
+  piracyEmbedUrl?: string | null;
 }
 
-const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt }) => {
+const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt, piracyEmbedUrl }) => {
   const router = useRouter();
   const [seen] = useLocalStorage<boolean>({
     key: ADS_WARNING_STORAGE_KEY,
@@ -38,7 +39,10 @@ const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt }) => {
   const { data: user, isLoading: isUserLoading } = useSupabaseUser();
   const isPremium = isPremiumUser(user);
 
-  const allPlayers = useMemo(() => getMoviePlayers(movie.id, startAt), [movie.id, startAt]);
+  const allPlayers = useMemo(
+    () => getMoviePlayers(movie.id, startAt, piracyEmbedUrl),
+    [movie.id, startAt, piracyEmbedUrl],
+  );
   const { isAdBlockDetected, isChecking: isAdBlockChecking } = useAdBlockDetector();
   const canUse321Player =
     !isUserLoading &&

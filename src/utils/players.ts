@@ -35,17 +35,30 @@ const get321TvPlaylistUrl = (
  * @returns {PlayersProps[]} - An array of objects, each containing
  * the title of the player and the corresponding source URL.
  */
-export const getMoviePlayers = (id: string | number, startAt?: number): PlayersProps[] => {
+export const getMoviePlayers = (
+  id: string | number,
+  startAt?: number,
+  piracyEmbedUrl?: string | null,
+): PlayersProps[] => {
+  const primary: PlayersProps = piracyEmbedUrl
+    ? {
+        title: "321movies",
+        source: piracyEmbedUrl,
+        recommended: true,
+        fast: true,
+        ads: true,
+      }
+    : {
+        title: "321movies",
+        source: get321MoviePlaylistUrl(id),
+        mode: "native_hls",
+        recommended: true,
+        fast: true,
+        ads: false,
+        resumable: true,
+      };
   return [
-    {
-      title: "321movies",
-      source: get321MoviePlaylistUrl(id),
-      mode: "native_hls",
-      recommended: true,
-      fast: true,
-      ads: false,
-      resumable: true,
-    },
+    primary,
     {
       title: "321Playerfallback",
       source: get321MoviePlaylistUrl(id),
@@ -196,17 +209,27 @@ export const getTvShowPlayers = (
   season: number,
   episode: number,
   startAt?: number,
+  piracyEmbedUrl?: string | null,
 ): PlayersProps[] => {
+  const primary: PlayersProps = piracyEmbedUrl
+    ? {
+        title: "321movies",
+        source: piracyEmbedUrl,
+        recommended: true,
+        fast: true,
+        ads: true,
+      }
+    : {
+        title: "321movies",
+        source: get321TvPlaylistUrl(id, season, episode),
+        mode: "native_hls",
+        recommended: true,
+        fast: true,
+        ads: false,
+        resumable: true,
+      };
   return [
-    {
-      title: "321movies",
-      source: get321TvPlaylistUrl(id, season, episode),
-      mode: "native_hls",
-      recommended: true,
-      fast: true,
-      ads: false,
-      resumable: true,
-    },
+    primary,
     {
       title: "321Playerfallback",
       source: get321TvPlaylistUrl(id, season, episode),

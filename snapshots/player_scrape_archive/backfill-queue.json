@@ -286,5 +286,24 @@
       "primevids"
     ],
     "reason": "Missing priority providers: flowcast, primevids, guru"
+  },
+  {
+    "requestKey": "tv_46952_s7_e6",
+    "request": {
+      "type": "tv",
+      "id": "46952",
+      "season": "7",
+      "episode": "6"
+    },
+    "attempts": 0,
+    "dueAt": "2026-05-18T17:58:51.002Z",
+    "createdAt": "2026-05-18T11:58:51.002Z",
+    "updatedAt": "2026-05-18T11:58:51.002Z",
+    "missingProviders": [
+      "flowcast",
+      "guru",
+      "primevids"
+    ],
+    "reason": "No playable sources found"
   }
 ]

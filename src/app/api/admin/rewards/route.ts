@@ -25,9 +25,23 @@ export async function GET(request: NextRequest) {
 
   const profileMap = new Map((profilesRes.data ?? []).map((profileRow) => [profileRow.id, profileRow.username]));
 
-  const filteredAccounts = (accountsRes.data ?? []).filter((account) =>
-    search ? account.user_id.toLowerCase().includes(search) || account.referral_code.toLowerCase().includes(search) : true,
-  );
+  const decoratedAccounts = (accountsRes.data ?? []).map((account) => ({
+    ...account,
+    username: profileMap.get(account.user_id) ?? null,
+    referred_by_username: account.referred_by ? profileMap.get(account.referred_by) ?? null : null,
+  }));
+
+  const filteredAccounts = decoratedAccounts.filter((account) => {
+    const username = account.username?.toLowerCase() ?? "";
+    const referredByUsername = account.referred_by_username?.toLowerCase() ?? "";
+
+    return search
+      ? account.user_id.toLowerCase().includes(search) ||
+          account.referral_code.toLowerCase().includes(search) ||
+          username.includes(search) ||
+          referredByUsername.includes(search)
+      : true;
+  });
 
   const filteredRequests = (requestsRes.data ?? []).filter((item) => {
     const username = profileMap.get(item.user_id)?.toLowerCase() ?? "";
@@ -41,6 +55,11 @@ export async function GET(request: NextRequest) {
     return matchesStatus && matchesSearch;
   });
 
+  const decoratedRequests = filteredRequests.map((item) => ({
+    ...item,
+    username: profileMap.get(item.user_id) ?? null,
+  }));
+
   const decoratedReferrals = (referralsRes.data ?? []).map((referral) => ({
     ...referral,
     referrer_username: profileMap.get(referral.referrer_id) ?? null,
@@ -53,7 +72,7 @@ export async function GET(request: NextRequest) {
   }));
 
   return NextResponse.json({
-    data: filteredRequests,
+    data: decoratedRequests,
     summary: {
       total_pending: (requestsRes.data ?? []).filter((item) => item.status === "pending").length,
       total_requests: requestsRes.data?.length ?? 0,

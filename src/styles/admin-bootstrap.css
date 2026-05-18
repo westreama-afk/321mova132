@@ -1,0 +1,260 @@
+.admin-body-active {
+  background:
+    radial-gradient(circle at top, rgba(13, 110, 253, 0.12), transparent 28%),
+    linear-gradient(180deg, #0d1525 0%, #0b1320 100%) !important;
+  color: #e6edf7;
+}
+
+.admin-route-shell {
+  min-height: 100dvh;
+}
+
+.admin-route-shell .container,
+.admin-route-shell .container-fluid,
+.admin-route-shell .row,
+.admin-route-shell .col,
+.admin-route-shell .col-12,
+.admin-route-shell .col-sm-6,
+.admin-route-shell .col-md-6,
+.admin-route-shell .col-lg-4,
+.admin-route-shell .col-lg-5,
+.admin-route-shell .col-lg-7,
+.admin-route-shell .col-lg-8,
+.admin-route-shell .col-xl-3,
+.admin-route-shell .col-xl-4,
+.admin-route-shell .col-xl-5,
+.admin-route-shell .col-xl-7,
+.admin-route-shell .col-xl-8 {
+  box-sizing: border-box;
+}
+
+.admin-bootstrap-shell {
+  color: #e6edf7;
+}
+
+.admin-bootstrap-shell .card {
+  background: linear-gradient(180deg, rgba(17, 28, 46, 0.96), rgba(11, 19, 32, 0.98));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  color: #e6edf7;
+}
+
+.admin-bootstrap-shell .card-header {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.admin-bootstrap-shell .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: #dbe6f4;
+  --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+  --bs-table-hover-bg: rgba(13, 110, 253, 0.09);
+  --bs-table-hover-color: #eff5ff;
+  --bs-table-border-color: rgba(148, 163, 184, 0.1);
+  margin-bottom: 0;
+}
+
+.admin-bootstrap-shell .table thead th {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: #9fb2ca !important;
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-bootstrap-shell .table td,
+.admin-bootstrap-shell .table th {
+  vertical-align: middle;
+  border-color: rgba(148, 163, 184, 0.08);
+}
+
+.admin-bootstrap-shell .table-primary {
+  --bs-table-bg: rgba(13, 110, 253, 0.16);
+  --bs-table-color: #f5f9ff;
+}
+
+.admin-bootstrap-shell .form-control,
+.admin-bootstrap-shell .form-select,
+.admin-bootstrap-shell .form-check-input {
+  background-color: rgba(9, 16, 28, 0.86);
+  border-color: rgba(148, 163, 184, 0.18);
+  color: #eef4fd;
+}
+
+.admin-bootstrap-shell .form-control:focus,
+.admin-bootstrap-shell .form-select:focus,
+.admin-bootstrap-shell .form-check-input:focus {
+  background-color: rgba(9, 16, 28, 0.95);
+  border-color: rgba(89, 155, 255, 0.7);
+  color: #ffffff;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.18);
+}
+
+.admin-bootstrap-shell .form-control::placeholder {
+  color: #71839a;
+}
+
+.admin-bootstrap-shell .form-check-label,
+.admin-bootstrap-shell .form-label,
+.admin-bootstrap-shell .lead,
+.admin-bootstrap-shell .display-6,
+.admin-bootstrap-shell .h5,
+.admin-bootstrap-shell .h4,
+.admin-bootstrap-shell .h3,
+.admin-bootstrap-shell h1,
+.admin-bootstrap-shell h2,
+.admin-bootstrap-shell h3,
+.admin-bootstrap-shell h4,
+.admin-bootstrap-shell h5 {
+  color: #f3f7fd;
+}
+
+.admin-bootstrap-shell .btn-outline-primary,
+.admin-bootstrap-shell .btn-outline-danger,
+.admin-bootstrap-shell .btn-outline-success,
+.admin-bootstrap-shell .btn-outline-secondary {
+  border-width: 1px;
+}
+
+.admin-bootstrap-shell .btn-outline-primary {
+  color: #8ec5ff;
+  border-color: rgba(13, 110, 253, 0.45);
+}
+
+.admin-bootstrap-shell .btn-outline-primary:hover,
+.admin-bootstrap-shell .btn-outline-primary:focus {
+  background-color: rgba(13, 110, 253, 0.18);
+  border-color: rgba(13, 110, 253, 0.65);
+  color: #ffffff;
+}
+
+.admin-bootstrap-shell .btn-outline-danger {
+  color: #ff9aa7;
+  border-color: rgba(220, 53, 69, 0.4);
+}
+
+.admin-bootstrap-shell .btn-outline-danger:hover,
+.admin-bootstrap-shell .btn-outline-danger:focus {
+  background-color: rgba(220, 53, 69, 0.16);
+  color: #fff3f5;
+}
+
+.admin-bootstrap-shell .btn-outline-success {
+  color: #89dfb5;
+  border-color: rgba(25, 135, 84, 0.45);
+}
+
+.admin-bootstrap-shell .btn-outline-success:hover,
+.admin-bootstrap-shell .btn-outline-success:focus {
+  background-color: rgba(25, 135, 84, 0.18);
+  color: #f1fff7;
+}
+
+.admin-bootstrap-shell .btn-outline-secondary {
+  color: #c1cede;
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.admin-bootstrap-shell .btn-outline-secondary:hover,
+.admin-bootstrap-shell .btn-outline-secondary:focus {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: #ffffff;
+}
+
+.admin-bootstrap-shell .text-bg-light {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #dce6f3 !important;
+}
+
+.admin-bootstrap-shell .border-bottom {
+  border-bottom-color: rgba(148, 163, 184, 0.12) !important;
+}
+
+.admin-bootstrap-hero {
+  background:
+    radial-gradient(circle at top right, rgba(13, 110, 253, 0.28), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(32, 201, 151, 0.15), transparent 25%),
+    linear-gradient(135deg, rgba(17, 27, 45, 0.98) 0%, rgba(10, 18, 31, 1) 100%);
+  border: 1px solid rgba(88, 166, 255, 0.18) !important;
+}
+
+.admin-metric-card {
+  background: linear-gradient(180deg, rgba(24, 38, 60, 0.96), rgba(11, 20, 34, 0.98));
+}
+
+.admin-kpi-value {
+  font-size: clamp(1.95rem, 2.8vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #f6f9ff;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table-wrap table {
+  min-width: 100%;
+  white-space: nowrap;
+}
+
+.admin-sidebar-card {
+  position: sticky;
+  top: 1rem;
+}
+
+.admin-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-status-pill.pending {
+  background: rgba(255, 193, 7, 0.14);
+  color: #ffcf66;
+}
+
+.admin-status-pill.approved,
+.admin-status-pill.verified,
+.admin-status-pill.rewarded,
+.admin-status-pill.fulfilled {
+  background: rgba(25, 135, 84, 0.14);
+  color: #88ddb4;
+}
+
+.admin-status-pill.rejected {
+  background: rgba(220, 53, 69, 0.14);
+  color: #ff9aa7;
+}
+
+.admin-muted {
+  color: #91a2b8;
+}
+
+.admin-panel-nav {
+  gap: 0.5rem;
+}
+
+.admin-panel-nav .btn {
+  border-radius: 999px;
+}
+
+.admin-note-box {
+  background: linear-gradient(180deg, rgba(13, 24, 40, 0.92), rgba(9, 16, 28, 0.96));
+  border: 1px dashed rgba(88, 166, 255, 0.28);
+  border-radius: 1rem;
+}
+
+@media (max-width: 991.98px) {
+  .admin-sidebar-card {
+    position: static;
+  }
+}

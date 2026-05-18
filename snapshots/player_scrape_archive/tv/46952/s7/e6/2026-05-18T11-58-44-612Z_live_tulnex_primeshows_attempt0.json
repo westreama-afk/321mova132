@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-05-18T11:58:44.612Z",
+  "family": "tulnex",
+  "provider": "primeshows",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "7",
+    "episode": "6"
+  },
+  "url": "https://api.tulnex.com/indra/tv/46952/7/6",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

@@ -25,8 +25,9 @@ const TopNavbar = () => {
   const tv = pathName.includes("/tv/");
   const player = pathName.includes("/player");
   const auth = pathName.includes("/auth");
+  const admin = pathName.startsWith("/admin");
 
-  if (auth || player) return null;
+  if (auth || player || admin) return null;
 
   return (
     <Navbar

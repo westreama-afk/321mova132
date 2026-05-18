@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-05-18T11:58:46.890Z",
+  "family": "tulnex",
+  "provider": "allmovies",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "7",
+    "episode": "6"
+  },
+  "url": "https://api.tulnex.com/provider/allmovies/tv/46952/7/6?lang=english",
+  "status": 500,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 500",
+  "responseBody": {
+    "error": "Request failed with status code 502"
+  },
+  "responseText": "{\"error\":\"Request failed with status code 502\"}"
+}

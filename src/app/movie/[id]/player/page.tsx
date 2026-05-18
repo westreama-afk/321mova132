@@ -34,13 +34,26 @@ const MoviePlayerPage: NextPage<Params<{ id: number }>> = ({ params }) => {
     refetchOnReconnect: false,
   });
 
-  if (isPending || isPendingStartAt) {
+  const { data: piracyEmbedUrl, isPending: isPendingPiracy } = useQuery({
+    queryFn: async () => {
+      const res = await fetch(`/api/player/piracy-cloud?type=movie&id=${id}`);
+      if (!res.ok) return null;
+      const data = (await res.json()) as { found: boolean; url: string | null };
+      return data.found ? data.url : null;
+    },
+    queryKey: ["movie-player-piracy", id],
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  if (isPending || isPendingStartAt || isPendingPiracy) {
     return <Spinner size="lg" className="absolute-center" variant="simple" />;
   }
 
   if (error || isEmpty(movie)) return notFound();
 
-  return <MoviePlayer movie={movie} startAt={startAt} />;
+  return <MoviePlayer movie={movie} startAt={startAt} piracyEmbedUrl={piracyEmbedUrl} />;
 };
 
 export default MoviePlayerPage;

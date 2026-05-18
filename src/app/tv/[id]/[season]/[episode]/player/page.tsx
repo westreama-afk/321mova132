@@ -48,7 +48,22 @@ const TvShowPlayerPage: NextPage<Params<{ id: number; season: number; episode: n
     refetchOnReconnect: false,
   });
 
-  if (isPendingTv || isPendingSeason || isPendingStartAt) {
+  const { data: piracyEmbedUrl, isPending: isPendingPiracy } = useQuery({
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/player/piracy-cloud?type=tv&id=${id}&season=${season}&episode=${episode}`,
+      );
+      if (!res.ok) return null;
+      const data = (await res.json()) as { found: boolean; url: string | null };
+      return data.found ? data.url : null;
+    },
+    queryKey: ["tv-show-player-piracy", id, season, episode],
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  if (isPendingTv || isPendingSeason || isPendingStartAt || isPendingPiracy) {
     return <Spinner size="lg" className="absolute-center" color="warning" variant="simple" />;
   }
 
@@ -87,6 +102,7 @@ const TvShowPlayerPage: NextPage<Params<{ id: number; season: number; episode: n
       nextEpisodeNumber={nextEpisodeNumber}
       prevEpisodeNumber={prevEpisodeNumber}
       startAt={startAt}
+      piracyEmbedUrl={piracyEmbedUrl}
     />
   );
 };

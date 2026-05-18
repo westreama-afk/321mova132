@@ -12,6 +12,8 @@ export type RewardAccount = {
   referral_count: number;
   created_at: string;
   updated_at: string;
+  username?: string | null;
+  referred_by_username?: string | null;
 };
 
 export type RewardLedgerEntry = {

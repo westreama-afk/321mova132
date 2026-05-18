@@ -38,6 +38,7 @@ export interface TvShowPlayerProps {
   nextEpisodeNumber: number | null;
   prevEpisodeNumber: number | null;
   startAt?: number;
+  piracyEmbedUrl?: string | null;
 }
 
 const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
@@ -46,6 +47,7 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
   episode,
   episodes,
   startAt,
+  piracyEmbedUrl,
   ...props
 }) => {
   const router = useRouter();
@@ -64,8 +66,8 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
 
   const { mobile } = useBreakpoints();
   const allPlayers = useMemo(
-    () => getTvShowPlayers(id, episode.season_number, episode.episode_number, startAt),
-    [episode.episode_number, episode.season_number, id, startAt],
+    () => getTvShowPlayers(id, episode.season_number, episode.episode_number, startAt, piracyEmbedUrl),
+    [episode.episode_number, episode.season_number, id, startAt, piracyEmbedUrl],
   );
   const { isAdBlockDetected, isChecking: isAdBlockChecking } = useAdBlockDetector();
   const canUse321Player =

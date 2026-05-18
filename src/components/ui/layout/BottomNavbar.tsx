@@ -8,6 +8,8 @@ import { Chip } from "@heroui/chip";
 
 const BottomNavbar = () => {
   const pathName = usePathname();
+  if (pathName.startsWith("/admin")) return null;
+
   const hrefs = siteConfig.navItems.map((item) => item.href);
   const show = hrefs.includes(pathName);
   const navItemCount = siteConfig.navItems.length;

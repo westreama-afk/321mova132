@@ -1,0 +1,32 @@
+{
+  "createdAt": "2026-05-18T11:58:44.497Z",
+  "family": "tulnex",
+  "provider": "vidzee1",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "46952",
+    "season": "7",
+    "episode": "6"
+  },
+  "url": "https://api.tulnex.com/vidzee/tv/46952/7/6?server=1",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 0,
+  "responseBody": {
+    "success": false,
+    "error": "No stream found",
+    "type": "tv",
+    "tmdbId": "46952"
+  },
+  "responseText": "{\"success\":false,\"error\":\"No stream found\",\"type\":\"tv\",\"tmdbId\":\"46952\"}",
+  "extra": {
+    "decryptedBody": {
+      "success": false,
+      "error": "No stream found",
+      "type": "tv",
+      "tmdbId": "46952"
+    }
+  }
+}
