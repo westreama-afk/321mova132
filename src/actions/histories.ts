@@ -444,3 +444,132 @@ export const removeHistory = async (historyId: number): ActionResponse => {
     return { success: false, message: "An unexpected error occurred" };
   }
 };
+
+const buildMediaHistoryRow = async (
+  userId: string,
+  mediaType: ContentType,
+  mediaId: number,
+  season: number,
+  episode: number,
+) => {
+  const media =
+    mediaType === "movie"
+      ? await tmdb.movies.details(mediaId)
+      : await tmdb.tvShows.details(mediaId);
+
+  return {
+    user_id: userId,
+    media_id: mediaId,
+    type: mediaType,
+    season,
+    episode,
+    adult: "adult" in media ? media.adult : false,
+    backdrop_path: media.backdrop_path,
+    poster_path: media.poster_path,
+    release_date: "release_date" in media ? media.release_date : media.first_air_date,
+    title: "title" in media ? mutateMovieTitle(media) : mutateTvShowTitle(media),
+    vote_average: media.vote_average,
+  };
+};
+
+/**
+ * Insert a "viewed" history row only if no row exists for this user/media/episode.
+ * Does NOT overwrite existing progress (last_position, duration, completed).
+ * Used for embed players (e.g. MixDrop) that can't report playback events.
+ */
+export const markMediaVisited = async (
+  mediaType: ContentType,
+  mediaId: number,
+  season: number = 0,
+  episode: number = 0,
+): ActionResponse => {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (userError || !user) return { success: false, message: "Not logged in" };
+
+    const { data: existing } = await supabase
+      .from("histories")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("media_id", mediaId)
+      .eq("type", mediaType)
+      .eq("season", season)
+      .eq("episode", episode)
+      .maybeSingle();
+
+    if (existing) return { success: true, message: "Already tracked" };
+
+    const row = await buildMediaHistoryRow(user.id, mediaType, mediaId, season, episode);
+    const { error } = await supabase.from("histories").insert(row);
+    if (error) return { success: false, message: error.message };
+    return { success: true };
+  } catch (error) {
+    console.info("markMediaVisited error:", error);
+    return { success: false, message: "Failed to mark visited" };
+  }
+};
+
+/**
+ * Mark an episode as completed. Updates existing row if present; otherwise creates one.
+ * Used by embed players when the user navigates to the next episode — we infer the
+ * previous one was watched.
+ */
+export const markEpisodeCompleted = async (
+  mediaType: ContentType,
+  mediaId: number,
+  season: number,
+  episode: number,
+): ActionResponse => {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (userError || !user) return { success: false, message: "Not logged in" };
+
+    const runtimeSeconds = await getTmdbRuntimeSeconds(mediaType, mediaId, season, episode);
+
+    const { data: existing } = await supabase
+      .from("histories")
+      .select("id, duration")
+      .eq("user_id", user.id)
+      .eq("media_id", mediaId)
+      .eq("type", mediaType)
+      .eq("season", season)
+      .eq("episode", episode)
+      .maybeSingle();
+
+    if (existing) {
+      const duration = existing.duration > 0 ? existing.duration : runtimeSeconds;
+      const { error } = await supabase
+        .from("histories")
+        .update({
+          completed: true,
+          last_position: duration,
+          duration,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", existing.id);
+      if (error) return { success: false, message: error.message };
+      return { success: true };
+    }
+
+    const row = await buildMediaHistoryRow(user.id, mediaType, mediaId, season, episode);
+    const { error } = await supabase.from("histories").insert({
+      ...row,
+      duration: runtimeSeconds,
+      last_position: runtimeSeconds,
+      completed: true,
+    });
+    if (error) return { success: false, message: error.message };
+    return { success: true };
+  } catch (error) {
+    console.info("markEpisodeCompleted error:", error);
+    return { success: false, message: "Failed to mark completed" };
+  }
+};

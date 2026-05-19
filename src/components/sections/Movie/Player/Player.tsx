@@ -15,6 +15,7 @@ import useSupabaseUser from "@/hooks/useSupabaseUser";
 import useAdBlockDetector from "@/hooks/useAdBlockDetector";
 import { isPremiumUser } from "@/utils/billing/premium";
 import { createPartyRoom } from "@/actions/party";
+import { markMediaVisited } from "@/actions/histories";
 import { useRouter } from "next/navigation";
 const AdsWarning = dynamic(() => import("@/components/ui/overlay/AdsWarning"));
 const PlayerAccessNotice = dynamic(() => import("@/components/ui/overlay/PlayerAccessNotice"));
@@ -94,7 +95,13 @@ const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt, piracyEmbedUr
   const PLAYER = useMemo(() => players[selectedSource] || players[0], [players, selectedSource]);
   const isPlaylistJsonPlayer = PLAYER.mode === "playlist_json";
   const isNativeHlsPlayer = PLAYER.mode === "native_hls";
+  const isMixDropPlayer = PLAYER.title === "MixDrop";
   const showServerButton = isPlaylistJsonPlayer || isNativeHlsPlayer;
+
+  useEffect(() => {
+    if (!isMixDropPlayer) return;
+    void markMediaVisited("movie", movie.id);
+  }, [isMixDropPlayer, movie.id]);
   const handlePrimaryPlayerError = useCallback(() => {
     const fallbackIndex = players.findIndex((_, index) => index > selectedSource);
     if (fallbackIndex < 0) return;

@@ -40,25 +40,26 @@ export const getMoviePlayers = (
   startAt?: number,
   piracyEmbedUrl?: string | null,
 ): PlayersProps[] => {
-  const primary: PlayersProps = piracyEmbedUrl
-    ? {
-        title: "321movies",
-        source: piracyEmbedUrl,
-        recommended: true,
-        fast: true,
-        ads: true,
-      }
-    : {
-        title: "321movies",
-        source: get321MoviePlaylistUrl(id),
-        mode: "native_hls",
-        recommended: true,
-        fast: true,
-        ads: false,
-        resumable: true,
-      };
-  return [
-    primary,
+  const players: PlayersProps[] = [];
+  if (piracyEmbedUrl) {
+    players.push({
+      title: "MixDrop",
+      source: piracyEmbedUrl,
+      recommended: true,
+      fast: true,
+      ads: true,
+    });
+  }
+  players.push(
+    {
+      title: "321movies",
+      source: get321MoviePlaylistUrl(id),
+      mode: "native_hls",
+      recommended: true,
+      fast: true,
+      ads: false,
+      resumable: true,
+    },
     {
       title: "321Playerfallback",
       source: get321MoviePlaylistUrl(id),
@@ -190,7 +191,8 @@ export const getMoviePlayers = (
       fast: true,
       ads: true,
     },
-  ];
+  );
+  return players;
 };
 
 /**
@@ -211,25 +213,26 @@ export const getTvShowPlayers = (
   startAt?: number,
   piracyEmbedUrl?: string | null,
 ): PlayersProps[] => {
-  const primary: PlayersProps = piracyEmbedUrl
-    ? {
-        title: "321movies",
-        source: piracyEmbedUrl,
-        recommended: true,
-        fast: true,
-        ads: true,
-      }
-    : {
-        title: "321movies",
-        source: get321TvPlaylistUrl(id, season, episode),
-        mode: "native_hls",
-        recommended: true,
-        fast: true,
-        ads: false,
-        resumable: true,
-      };
-  return [
-    primary,
+  const players: PlayersProps[] = [];
+  if (piracyEmbedUrl) {
+    players.push({
+      title: "MixDrop",
+      source: piracyEmbedUrl,
+      recommended: true,
+      fast: true,
+      ads: true,
+    });
+  }
+  players.push(
+    {
+      title: "321movies",
+      source: get321TvPlaylistUrl(id, season, episode),
+      mode: "native_hls",
+      recommended: true,
+      fast: true,
+      ads: false,
+      resumable: true,
+    },
     {
       title: "321Playerfallback",
       source: get321TvPlaylistUrl(id, season, episode),
@@ -361,5 +364,6 @@ export const getTvShowPlayers = (
       fast: true,
       ads: true,
     },
-  ];
+  );
+  return players;
 };

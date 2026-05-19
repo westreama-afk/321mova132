@@ -12,6 +12,7 @@ interface TvShowPlayerHeaderProps extends Omit<TvShowPlayerProps, "episodes" | "
   showServerButton?: boolean;
   onStartParty?: () => void;
   partyCreating?: boolean;
+  onNextEpisodeClick?: () => void;
 }
 
 const TvShowPlayerHeader: React.FC<TvShowPlayerHeaderProps> = ({
@@ -29,6 +30,7 @@ const TvShowPlayerHeader: React.FC<TvShowPlayerHeaderProps> = ({
   showServerButton = false,
   onStartParty,
   partyCreating = false,
+  onNextEpisodeClick,
 }) => {
   return (
     <div
@@ -66,6 +68,7 @@ const TvShowPlayerHeader: React.FC<TvShowPlayerHeaderProps> = ({
           disabled={!nextEpisodeNumber}
           label="Next Episode"
           tooltip="Next Episode"
+          onClick={onNextEpisodeClick}
           href={`/tv/${id}/${episode.season_number}/${nextEpisodeNumber}/player?src=${selectedSource}`}
         >
           <Next className="size-8 max-[360px]:size-7 sm:size-10" />

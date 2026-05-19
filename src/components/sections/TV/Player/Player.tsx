@@ -15,6 +15,7 @@ import useSupabaseUser from "@/hooks/useSupabaseUser";
 import useAdBlockDetector from "@/hooks/useAdBlockDetector";
 import { isPremiumUser } from "@/utils/billing/premium";
 import { createPartyRoom } from "@/actions/party";
+import { markEpisodeCompleted, markMediaVisited } from "@/actions/histories";
 const AdsWarning = dynamic(() => import("@/components/ui/overlay/AdsWarning"));
 const PlayerAccessNotice = dynamic(() => import("@/components/ui/overlay/PlayerAccessNotice"));
 const HlsJsonPlayer = dynamic(() => import("@/components/ui/player/HlsJsonPlayer"));
@@ -239,7 +240,18 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
   const PLAYER = useMemo(() => players[selectedSource] || players[0], [players, selectedSource]);
   const isPlaylistJsonPlayer = PLAYER.mode === "playlist_json";
   const isNativeHlsPlayer = PLAYER.mode === "native_hls";
+  const isMixDropPlayer = PLAYER.title === "MixDrop";
   const showServerButton = isPlaylistJsonPlayer || isNativeHlsPlayer;
+
+  useEffect(() => {
+    if (!isMixDropPlayer) return;
+    void markMediaVisited("tv", id, episode.season_number, episode.episode_number);
+  }, [isMixDropPlayer, id, episode.season_number, episode.episode_number]);
+
+  const handleNextEpisodeClick = useCallback(() => {
+    if (!isMixDropPlayer) return;
+    void markEpisodeCompleted("tv", id, episode.season_number, episode.episode_number);
+  }, [isMixDropPlayer, id, episode.season_number, episode.episode_number]);
   const handlePrimaryPlayerError = useCallback(() => {
     const fallbackIndex = players.findIndex((_, index) => index > selectedSource);
     if (fallbackIndex < 0) return;
@@ -287,6 +299,7 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
           onOpenEpisode={episodeHandlers.open}
           onStartParty={showServerButton ? handleStartParty : undefined}
           partyCreating={partyCreating}
+          onNextEpisodeClick={handleNextEpisodeClick}
           {...props}
         />
 
