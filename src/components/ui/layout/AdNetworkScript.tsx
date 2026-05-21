@@ -26,6 +26,10 @@ const AdNetworkScript: React.FC = () => {
         {`(function(){try{var s=document.createElement('script');s.dataset.zone='9408521';s.src='https://llvpn.com/tag.min.js';s.onload=function(){window.__AD_SCRIPTS_LOADED__=true};s.onerror=function(){window.__AD_CHECK_COMPLETE__=true;window.__ADBLOCK_DETECTED__=true};document.head.appendChild(s);}catch(e){}})();`}
       </Script>
 
+      <Script id="vignette-ad-tag" strategy="afterInteractive" data-cfasync="false">
+        {`(function(){try{var parent=[document.documentElement,document.body].filter(Boolean).pop();if(!parent)return;var s=parent.appendChild(document.createElement('script'));s.dataset.zone='11037231';s.onload=function(){window.__AD_SCRIPTS_LOADED__=true};s.onerror=function(){window.__AD_CHECK_COMPLETE__=true;window.__ADBLOCK_DETECTED__=true};s.src='https://dd133.com/vignette.min.js';}catch(e){}})();`}
+      </Script>
+
       <Script
         id="5gvci-ad-tag"
         src="https://5gvci.com/act/files/tag.min.js?z=10775744"
