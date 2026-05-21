@@ -41,15 +41,6 @@ export const getMoviePlayers = (
   piracyEmbedUrl?: string | null,
 ): PlayersProps[] => {
   const players: PlayersProps[] = [];
-  if (piracyEmbedUrl) {
-    players.push({
-      title: "MixDrop",
-      source: piracyEmbedUrl,
-      recommended: true,
-      fast: true,
-      ads: true,
-    });
-  }
   players.push(
     {
       title: "321movies",
@@ -192,6 +183,15 @@ export const getMoviePlayers = (
       ads: true,
     },
   );
+  if (piracyEmbedUrl) {
+    players.push({
+      title: "MixDrop",
+      source: piracyEmbedUrl,
+      recommended: true,
+      fast: true,
+      ads: true,
+    });
+  }
   return players;
 };
 
@@ -214,15 +214,6 @@ export const getTvShowPlayers = (
   piracyEmbedUrl?: string | null,
 ): PlayersProps[] => {
   const players: PlayersProps[] = [];
-  if (piracyEmbedUrl) {
-    players.push({
-      title: "MixDrop",
-      source: piracyEmbedUrl,
-      recommended: true,
-      fast: true,
-      ads: true,
-    });
-  }
   players.push(
     {
       title: "321movies",
@@ -365,5 +356,14 @@ export const getTvShowPlayers = (
       ads: true,
     },
   );
+  if (piracyEmbedUrl) {
+    players.push({
+      title: "MixDrop",
+      source: piracyEmbedUrl,
+      recommended: true,
+      fast: true,
+      ads: true,
+    });
+  }
   return players;
 };

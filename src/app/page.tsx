@@ -5,7 +5,7 @@ const HomePageList = dynamic(() => import("@/components/sections/Home/List"));
 const AppDownload = dynamic(() => import("@/components/sections/Home/AppDownload"));
 
 const sponsorUrl =
-  "https://api.synterolink.com/";
+  "https://rryy.cc/";
 
 const HomePage: NextPage = () => {
   return (
@@ -22,7 +22,7 @@ const HomePage: NextPage = () => {
           aria-label="Visit sponsor offer"
         >
           <img
-            src="/abacock.png"
+            src="/epic.jpg"
             alt="Sponsor banner"
             width={300}
             height={150}
