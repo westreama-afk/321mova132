@@ -14,16 +14,6 @@ interface PlaylistResponse {
   playlist?: Array<{ sources?: PlaylistSource[] }>;
 }
 
-interface SubtitleTrackResponse {
-  tracks?: Array<{
-    url?: string;
-    lang?: string;
-    label?: string;
-    format?: string;
-    isHearingImpaired?: boolean;
-  }>;
-}
-
 export interface VylaMediaRequest {
   type: VylaMediaType;
   id: string;
@@ -170,44 +160,20 @@ export const mapPlaylistToVylaSources = (payload: PlaylistResponse): VylaSource[
 };
 
 export const getVylaSubtitles = async (
-  origin: string,
+  _origin: string,
   request: VylaMediaRequest,
 ): Promise<VylaSubtitle[]> => {
-  const params = new URLSearchParams({
-    type: request.type,
-    id: request.id,
-  });
-
-  if (request.type === "tv") {
-    params.set("season", request.season || "1");
-    params.set("episode", request.episode || "1");
-  }
-
-  const response = await fetch(`${origin}/api/player/subtitles?${params.toString()}`, {
-    next: { revalidate: 21_600 },
-  });
-
-  const nativeTracks: VylaSubtitle[] = [];
-  if (response.ok) {
-    const payload = (await response.json()) as SubtitleTrackResponse;
-    nativeTracks.push(
-      ...(payload.tracks || [])
-        .filter((track) => track.url && track.label)
-        .map((track) => ({
-          file: track.url || "",
-          url: track.url || "",
-          label: track.label || track.lang || "Subtitle",
-          lang: track.lang || "unknown",
-          format: track.format || "vtt",
-          source: "Wyzie",
-          isHearingImpaired: Boolean(track.isHearingImpaired),
-        })),
+  let sourcePackTracks: Awaited<ReturnType<typeof fetchLocalSourcePackSubtitles>> = [];
+  try {
+    sourcePackTracks = await fetchLocalSourcePackSubtitles(request);
+  } catch (error) {
+    console.warn(
+      `[VylaSubtitles] Source-pack subtitles unavailable for ${request.type} ${request.id}:`,
+      error instanceof Error ? error.message : String(error),
     );
   }
 
-  const sourcePackTracks = await fetchLocalSourcePackSubtitles(request);
   const merged = [
-    ...nativeTracks,
     ...sourcePackTracks.map((track) => ({
       file: toSubtitleProxyUrl(track.url),
       url: toSubtitleProxyUrl(track.url),

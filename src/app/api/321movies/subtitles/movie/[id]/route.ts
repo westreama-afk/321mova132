@@ -9,6 +9,20 @@ export async function GET(
 ) {
   const { id } = await params;
   const origin = new URL(request.url).origin;
-  const subtitles = await getVylaSubtitles(origin, { type: "movie", id });
-  return NextResponse.json({ subtitles });
+  try {
+    const subtitles = await getVylaSubtitles(origin, { type: "movie", id });
+    return NextResponse.json(
+      { subtitles },
+      { headers: { "cache-control": "no-store, max-age=0" } },
+    );
+  } catch (error) {
+    console.warn(
+      `[321moviesSubtitles] Movie ${id} failed:`,
+      error instanceof Error ? error.message : String(error),
+    );
+    return NextResponse.json(
+      { subtitles: [], error: error instanceof Error ? error.message : "Subtitle scrape failed" },
+      { status: 200, headers: { "cache-control": "no-store, max-age=0" } },
+    );
+  }
 }

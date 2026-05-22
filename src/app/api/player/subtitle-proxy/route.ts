@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const ALLOWED_HOSTS = new Set([
-  "sub.wyzie.io",
   "sub.vdrk.site",
   "cache.vdrk.site",
   "fed-subs.pstream.mov",

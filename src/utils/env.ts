@@ -37,7 +37,6 @@ export const env = createEnv({
     SELLAUTH_YEARLY_VARIANT_ID: optionalNonEmptyString,
     SELLAUTH_MONTHLY_CHECKOUT_URL: optionalUrl,
     SELLAUTH_YEARLY_CHECKOUT_URL: optionalUrl,
-    WYZIE_API_KEY: optionalNonEmptyString,
     PLAYER_SCRAPE_BACKFILL_TOKEN: optionalNonEmptyString,
   },
   client: {
