@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 const AdsWarning = dynamic(() => import("@/components/ui/overlay/AdsWarning"));
 const PlayerAccessNotice = dynamic(() => import("@/components/ui/overlay/PlayerAccessNotice"));
 const HlsJsonPlayer = dynamic(() => import("@/components/ui/player/HlsJsonPlayer"));
-const NetflixPlayer = dynamic(() => import("@/components/ui/player/NetflixPlayer"));
+const VylaPlayer = dynamic(() => import("@/components/ui/player/VylaPlayer"));
 const MoviePlayerHeader = dynamic(() => import("./Header"));
 const MoviePlayerSourceSelection = dynamic(() => import("./SourceSelection"));
 
@@ -163,7 +163,7 @@ const MoviePlayer: React.FC<MoviePlayerProps> = ({ movie, startAt, piracyEmbedUr
                 openSourceMenuSignal={streamSourceMenuSignal}
               />
             ) : PLAYER.mode === "native_hls" ? (
-              <NetflixPlayer
+              <VylaPlayer
                 key={PLAYER.source}
                 playlistUrl={PLAYER.source}
                 mediaId={movie.id}

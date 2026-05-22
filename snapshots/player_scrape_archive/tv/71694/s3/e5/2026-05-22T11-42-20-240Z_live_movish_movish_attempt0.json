@@ -1,0 +1,17 @@
+{
+  "createdAt": "2026-05-22T11:42:20.240Z",
+  "family": "movish",
+  "provider": "movish",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "71694",
+    "season": "3",
+    "episode": "5"
+  },
+  "url": "https://movish.net/moviebox-embed/tv/71694/3/5",
+  "status": 200,
+  "ok": true,
+  "sourceCount": 1
+}

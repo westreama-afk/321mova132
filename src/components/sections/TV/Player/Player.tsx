@@ -19,7 +19,7 @@ import { markEpisodeCompleted, markMediaVisited } from "@/actions/histories";
 const AdsWarning = dynamic(() => import("@/components/ui/overlay/AdsWarning"));
 const PlayerAccessNotice = dynamic(() => import("@/components/ui/overlay/PlayerAccessNotice"));
 const HlsJsonPlayer = dynamic(() => import("@/components/ui/player/HlsJsonPlayer"));
-const NetflixPlayer = dynamic(() => import("@/components/ui/player/NetflixPlayer"));
+const VylaPlayer = dynamic(() => import("@/components/ui/player/VylaPlayer"));
 const TvShowPlayerHeader = dynamic(() => import("./Header"));
 const TvShowPlayerSourceSelection = dynamic(() => import("./SourceSelection"));
 const TvShowPlayerEpisodeSelection = dynamic(() => import("./EpisodeSelection"));
@@ -322,7 +322,7 @@ const TvShowPlayer: React.FC<TvShowPlayerProps> = ({
                 openSourceMenuSignal={streamSourceMenuSignal}
               />
             ) : PLAYER.mode === "native_hls" ? (
-              <NetflixPlayer
+              <VylaPlayer
                 key={PLAYER.source}
                 playlistUrl={PLAYER.source}
                 mediaId={id}

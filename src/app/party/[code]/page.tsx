@@ -13,7 +13,7 @@ import { useClipboard } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 
 const HlsJsonPlayer = dynamic(() => import("@/components/ui/player/HlsJsonPlayer"));
-const NetflixPlayer = dynamic(() => import("@/components/ui/player/NetflixPlayer"));
+const VylaPlayer = dynamic(() => import("@/components/ui/player/VylaPlayer"));
 
 type SyncSignal = { action: "play" | "pause" | "seek"; time?: number; version: number };
 type Member = { username: string; user_id: string };
@@ -305,7 +305,7 @@ export default function PartyRoomPage({ params }: Params<{ code: string }>) {
                 syncSignal={isHost ? undefined : syncSignal}
               />
             ) : player?.mode === "native_hls" ? (
-              <NetflixPlayer
+              <VylaPlayer
                 key={player.source}
                 playlistUrl={player.source}
                 mediaId={room.media_id}

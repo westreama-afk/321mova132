@@ -1,0 +1,12 @@
+{
+  "cachedAt": "2026-05-22T12:40:03.626Z",
+  "sources": [
+    {
+      "type": "hls",
+      "file": "https://small-cake-fdee.piracya.workers.dev/mp4-proxy?url=https%3A%2F%2Fbcdnxw.hakunaymatata.com%2Fresource%2Fc340a2d8f12e6475999e3037063407e5.mp4%3Fsign%3D3730889ad4bbdcd3ba20f5f0f64b6e42%26t%3D1779450201&headers=%7B%22Referer%22%3A%22https%3A%2F%2F123movienow.cc%2F%22%2C%22Origin%22%3A%22https%3A%2F%2F123movienow.cc%22%7D&k=j7wYkYhVgQn5x2L6k2M8hVQfD4zN3bP1aR7uT0cXyE6dZX4sW",
+      "label": "NovaCast",
+      "provider": "movish",
+      "default": true
+    }
+  ]
+}

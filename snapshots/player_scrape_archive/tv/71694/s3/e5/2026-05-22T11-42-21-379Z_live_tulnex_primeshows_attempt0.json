@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-05-22T11:42:21.379Z",
+  "family": "tulnex",
+  "provider": "primeshows",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "71694",
+    "season": "3",
+    "episode": "5"
+  },
+  "url": "https://api.tulnex.com/indra/tv/71694/3/5",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HMAC mismatch"
+}

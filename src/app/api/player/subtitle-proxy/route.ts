@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const ALLOWED_HOST = "sub.wyzie.io";
+const ALLOWED_HOSTS = new Set([
+  "sub.wyzie.io",
+  "sub.vdrk.site",
+  "cache.vdrk.site",
+  "fed-subs.pstream.mov",
+]);
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +30,7 @@ export const GET = async (request: NextRequest) => {
     return new NextResponse("Invalid url", { status: 400 });
   }
 
-  if (url.hostname !== ALLOWED_HOST) {
+  if (!ALLOWED_HOSTS.has(url.hostname)) {
     return new NextResponse("Forbidden", { status: 403 });
   }
 

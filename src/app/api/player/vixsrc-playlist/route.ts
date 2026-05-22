@@ -1,4 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  fetchLocalSourcePackStreams,
+  sourcePackProviderOrder,
+} from "@/server/sourcePack";
 import { encodePlayerStreamUrl } from "@/utils/playerUrlCodec";
 import {
   archiveScrapeResponse,
@@ -237,7 +241,7 @@ type HeaderMap = Record<string, string>;
 type ScrapePhase = "live" | "backfill";
 
 interface PlaylistSource {
-  type: "hls";
+  type: "hls" | "mp4";
   file: string;
   label: string;
   default?: boolean;
@@ -774,6 +778,38 @@ const decodeBase64Maybe = (value: string): string | null => {
   }
 };
 
+const fetchSourcePackSources = async (
+  requestParams: ParsedMediaRequest,
+  clientIp: string | null,
+): Promise<PlaylistSource[]> => {
+  try {
+    const streams = await fetchLocalSourcePackStreams(requestParams, clientIp);
+    const mapped = streams.map((source): PlaylistSource => {
+      const file = source.skipProxy
+        ? source.url
+        : source.kind === "mp4"
+          ? buildWorkerMp4ProxyUrl(source.url, source.headers)
+          : buildWorkerM3u8ProxyUrl(source.url, source.headers);
+
+      return {
+        type: source.kind,
+        file,
+        label: source.label,
+        provider: source.provider,
+      };
+    });
+
+    console.log(`[SourcePack] Added ${mapped.length} local sources for ${requestParams.type} ${requestParams.id}`);
+    return mapped;
+  } catch (error) {
+    console.warn(
+      `[SourcePack] Failed locally for ${requestParams.type} ${requestParams.id}:`,
+      error instanceof Error ? error.message : String(error),
+    );
+    return [];
+  }
+};
+
 const fetchStreamVaultSources = async (
   requestParams: ParsedMediaRequest,
   runContext: ScrapeRunContext,
@@ -938,6 +974,38 @@ const dedupeSources = (sources: PlaylistSource[]): PlaylistSource[] => {
   return sources.filter(s => !seen.has(s.file) && seen.add(s.file));
 };
 
+const providerOrder = (provider: string | undefined) => {
+  // Top Priority: NovaCast (Movish)
+  if (provider === "movish") return 0;
+
+  // Second Priority: FlowCast
+  if (provider === "flowcast") return 1;
+
+  // Third Priority: PrimeVids
+  if (provider === "primevids") return 2;
+
+  // Fourth Priority: Guru
+  if (provider === "guru") return 3;
+
+  // Fifth Priority: VidLink
+  if (provider === "vidlink") return 4;
+
+  // Sixth Priority: StreamVault
+  if (provider === "streamvault") return 5;
+
+  if (provider?.startsWith("sourcepack-")) return 20 + sourcePackProviderOrder(provider);
+
+  // Everything else (Fallbacks)
+  if (provider === "icefy" || provider === "hollymoviehd") return 6;
+  if (["primeshows", "vidzee0", "vidzee1", "allmovies"].includes(provider!)) return 7;
+  if (["hindicast", "ophim"].includes(provider!)) return 8;
+  return provider === "asiacloud" ? 9 : 8;
+};
+
+const orderAndMarkDefault = (sources: PlaylistSource[]): PlaylistSource[] =>
+  dedupeSources(sources.slice().sort((a, b) => providerOrder(a.provider) - providerOrder(b.provider)))
+    .map((source, index) => ({ ...source, default: index === 0 }));
+
 /**
  * ─── MAIN ROUTE HANDLER ──────────────────────────────────────────────────────
  */
@@ -947,6 +1015,8 @@ export const runtime = "nodejs";
 export const GET = async (request: NextRequest) => {
   const { searchParams } = request.nextUrl;
   const requestParams = parseMediaRequest(searchParams);
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const clientIp = forwardedFor?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || null;
   const runContext: ScrapeRunContext = {
     phase: searchParams.get("backfill") === "1" ? "backfill" : "live",
     attempt: Number.parseInt(searchParams.get("attempt") || "0", 10) || 0,
@@ -964,21 +1034,28 @@ export const GET = async (request: NextRequest) => {
   if (runContext.phase === "live") {
     const cached = await getCachedPlaylist(requestParams, 6 * 60 * 60 * 1000).catch(() => null);
     if (cached && cached.length > 0) {
-      console.log(`[Rive Response] Cache HIT for ${requestParams.type} (${requestParams.id}) — ${cached.length} sources`);
-      const encodedSources = cached.map((s) => ({ ...s, file: encodePlayerStreamUrl(s.file) }));
+      const sourcePackSources = await fetchSourcePackSources(requestParams, clientIp);
+      const mergedSources = orderAndMarkDefault([...cached, ...sourcePackSources]);
+      console.log(`[Rive Response] Cache HIT for ${requestParams.type} (${requestParams.id}) — ${cached.length} cached, ${sourcePackSources.length} source-pack`);
+      const encodedSources = mergedSources.map((s) => ({ ...s, file: encodePlayerStreamUrl(s.file) }));
       return NextResponse.json({ playlist: [{ sources: encodedSources }] }, {
-        headers: { "cache-control": "no-store, max-age=0", "x-playlist-cache": "hit" },
+        headers: {
+          "cache-control": "no-store, max-age=0",
+          "x-playlist-cache": "hit",
+          "x-source-pack-count": String(sourcePackSources.length),
+        },
       });
     }
   }
 
   console.log(`[Rive Response] Processing ${requestParams.type} (${requestParams.id})`);
 
-  const [rivResults, tulnexResults, streamVaultSources, movishResult] = await Promise.all([
+  const [rivResults, tulnexResults, streamVaultSources, movishResult, sourcePackSources] = await Promise.all([
     Promise.allSettled(PROVIDERS.map((p) => fetchProviderSources(p, requestParams, runContext))),
     Promise.allSettled(TULNEX_PROVIDERS.map((p) => fetchTulnexProviderSources(p, requestParams, runContext))),
     fetchStreamVaultSources(requestParams, runContext),
     fetchMovishSources(requestParams, runContext),
+    fetchSourcePackSources(requestParams, clientIp),
   ]);
 
   const allSources: PlaylistSource[] = [];
@@ -1017,50 +1094,23 @@ export const GET = async (request: NextRequest) => {
   const movishSources = Array.isArray(movishResult) ? movishResult : [];
   allSources.push(...movishSources);
 
-
   if (Object.keys(riveSourceCount).length > 0) {
     console.log(`[Rive] Summary:`, JSON.stringify(riveSourceCount, null, 2));
   }
 
-  const providerOrder = (provider: string | undefined) => {
-    // Top Priority: FlowCast
-    if (provider === "flowcast") return 0;
+  const nativeOrderedSources = orderAndMarkDefault(allSources);
 
-    // Second Priority: NovaCast (Movish)
-    if (provider === "movish") return 1;
-
-    // Third Priority: PrimeVids
-    if (provider === "primevids") return 2;
-
-    // Fourth Priority: Guru
-    if (provider === "guru") return 3;
-
-    // Fifth Priority: VidLink
-    if (provider === "vidlink") return 4;
-
-    // Sixth Priority: StreamVault
-    if (provider === "streamvault") return 5;
-
-    // Everything else (Fallbacks)
-    if (provider === "icefy" || provider === "hollymoviehd") return 6;
-    if (["primeshows", "vidzee0", "vidzee1", "allmovies"].includes(provider!)) return 7;
-    if (["hindicast", "ophim"].includes(provider!)) return 8;
-    return provider === "asiacloud" ? 9 : 8;
-  };
-
-  const orderedSources = dedupeSources(
-    allSources.slice().sort((a, b) => providerOrder(a.provider) - providerOrder(b.provider))
-  ).map((source, index) => ({ ...source, default: index === 0 }));
+  const orderedSources = orderAndMarkDefault([...nativeOrderedSources, ...sourcePackSources]);
 
   const missingPriorityProviders = BACKFILL_PRIORITY_PROVIDERS.filter(
     (provider) => !availablePriorityProviders.has(provider),
   );
-  const shouldScheduleBackfill = missingPriorityProviders.length > 0 || orderedSources.length === 0;
+  const shouldScheduleBackfill = missingPriorityProviders.length > 0 || nativeOrderedSources.length === 0;
 
   try {
     if (shouldScheduleBackfill && runContext.attempt < MAX_BACKFILL_ATTEMPTS) {
       const reason =
-        orderedSources.length === 0
+        nativeOrderedSources.length === 0
           ? "No playable sources found"
           : `Missing priority providers: ${missingPriorityProviders.join(", ")}`;
       await scheduleScrapeBackfill(requestParams, {
@@ -1083,7 +1133,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ error: "No sources found" }, { status: 502 });
   }
 
-  saveCachedPlaylist(requestParams, orderedSources).catch((e) =>
+  saveCachedPlaylist(requestParams, nativeOrderedSources).catch((e) =>
     console.error("[Cache] Save failed:", e instanceof Error ? e.message : String(e)),
   );
 
@@ -1103,6 +1153,10 @@ export const GET = async (request: NextRequest) => {
   const response = { playlist: [{ sources: encodedSources }] };
 
   return NextResponse.json(response, {
-    headers: { "cache-control": "no-store, max-age=0", "x-playlist-cache": "miss" },
+    headers: {
+      "cache-control": "no-store, max-age=0",
+      "x-playlist-cache": "miss",
+      "x-source-pack-count": String(sourcePackSources.length),
+    },
   });
 };

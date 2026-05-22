@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-05-22T12:38:05.281Z",
+  "family": "streamvault",
+  "provider": "streamvault",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "71694",
+    "season": "3",
+    "episode": "7"
+  },
+  "url": "https://streamvaultsrc.click/api/embed-streams/sse/tv/71694/3/7",
+  "status": 403,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 403"
+}

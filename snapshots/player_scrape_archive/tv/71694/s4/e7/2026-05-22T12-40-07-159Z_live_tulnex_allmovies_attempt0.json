@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-05-22T12:40:07.159Z",
+  "family": "tulnex",
+  "provider": "allmovies",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "71694",
+    "season": "4",
+    "episode": "7"
+  },
+  "url": "https://api.tulnex.com/provider/allmovies/tv/71694/4/7?lang=english",
+  "status": 500,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 500",
+  "responseBody": {
+    "error": "Request failed with status code 502"
+  },
+  "responseText": "{\"error\":\"Request failed with status code 502\"}"
+}

@@ -43,7 +43,7 @@ const QUEUE_FILE = path.join(ARCHIVE_ROOT, "backfill-queue.json");
 const CACHE_ROOT = path.join(process.cwd(), "snapshots", "player_scrape_cache");
 
 export interface CachedPlaylistSource {
-  type: "hls";
+  type: "hls" | "mp4";
   file: string;
   label: string;
   default?: boolean;

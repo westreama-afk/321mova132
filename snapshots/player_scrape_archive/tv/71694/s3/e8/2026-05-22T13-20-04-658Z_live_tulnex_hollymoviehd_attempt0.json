@@ -1,0 +1,22 @@
+{
+  "createdAt": "2026-05-22T13:20:04.658Z",
+  "family": "tulnex",
+  "provider": "hollymoviehd",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "71694",
+    "season": "3",
+    "episode": "8"
+  },
+  "url": "https://api.tulnex.com/provider/hollymoviehd/tv/71694/3/8",
+  "status": 500,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "HTTP 500",
+  "responseBody": {
+    "error": "Request failed with status code 502"
+  },
+  "responseText": "{\"error\":\"Request failed with status code 502\"}"
+}

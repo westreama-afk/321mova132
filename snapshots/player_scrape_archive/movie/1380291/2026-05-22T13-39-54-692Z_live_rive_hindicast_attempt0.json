@@ -1,0 +1,18 @@
+{
+  "createdAt": "2026-05-22T13:39:54.692Z",
+  "family": "rive",
+  "provider": "hindicast",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "movie",
+    "id": "1380291"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=hindicast&id=1380291",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "timeout",
+  "responseBody": null,
+  "responseText": null
+}

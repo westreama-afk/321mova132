@@ -1,0 +1,20 @@
+{
+  "createdAt": "2026-05-22T11:42:19.908Z",
+  "family": "rive",
+  "provider": "asiacloud",
+  "phase": "live",
+  "attempt": 0,
+  "request": {
+    "type": "tv",
+    "id": "71694",
+    "season": "3",
+    "episode": "5"
+  },
+  "url": "https://scrapper.rivestream.org/api/provider?provider=asiacloud&id=71694&season=3&episode=5",
+  "status": null,
+  "ok": false,
+  "sourceCount": 0,
+  "error": "timeout",
+  "responseBody": null,
+  "responseText": null
+}
