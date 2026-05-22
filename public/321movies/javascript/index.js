@@ -1,4 +1,4 @@
-var TMDB_KEY = '338a47b75eab45d9e64e67088f910f93';
+var TMDB_KEY = 'bbf181d94b396185d0abd97093fd48e0';
 var baseURL = "https://missourimonster-vyla.hf.space";
 
 var alive = true;
@@ -444,37 +444,65 @@ function fetchSubWithFallback(sub) {
 var langMap = {};
 var getLangCode, flagImg;
 
-fetch('https://restcountries.com/v3.1/all?fields=cca2,languages')
-    .then(function (res) {
-        return res.json();
-    })
-    .then(function (data) {
-        if (!Array.isArray(data)) {
-            return;
-        }
-        for (const country of data) {
-            const cCode = country.cca2?.toLowerCase();
-            const languages = country.languages || {};
+var langCodeFallback = {
+    english: 'us',
+    spanish: 'es',
+    french: 'fr',
+    german: 'de',
+    italian: 'it',
+    portuguese: 'pt',
+    brazilian: 'br',
+    dutch: 'nl',
+    polish: 'pl',
+    turkish: 'tr',
+    arabic: 'sa',
+    chinese: 'cn',
+    japanese: 'jp',
+    korean: 'kr',
+    hindi: 'in',
+    bengali: 'bd',
+    urdu: 'pk',
+    russian: 'ru',
+    ukrainian: 'ua',
+    greek: 'gr',
+    hebrew: 'il',
+    swedish: 'se',
+    norwegian: 'no',
+    danish: 'dk',
+    finnish: 'fi',
+    romanian: 'ro',
+    hungarian: 'hu',
+    czech: 'cz',
+    slovak: 'sk',
+    indonesian: 'id',
+    malay: 'my',
+    thai: 'th',
+    vietnamese: 'vn',
+    filipino: 'ph',
+    persian: 'ir',
+    farsi: 'ir',
+    serbian: 'rs',
+    croatian: 'hr',
+    bulgarian: 'bg',
+    estonian: 'ee',
+    latvian: 'lv',
+    lithuanian: 'lt',
+    slovenian: 'si',
+    tamil: 'in',
+    telugu: 'in'
+};
 
-            for (const [_, langName] of Object.entries(languages)) {
-                const key = langName.toLowerCase();
-                if (!langMap[key]) langMap[key] = new Set();
-                langMap[key].add(cCode);
-            }
-        }
+getLangCode = function (label) {
+    if (!label) return null;
+    var key = label.toLowerCase().replace(/[^a-z]/g, ' ').trim().split(' ')[0];
+    if (langMap[key]) return Array.from(langMap[key])[0];
+    return langCodeFallback[key] || null;
+};
 
-        getLangCode = function (label) {
-            if (!label) return null;
-            var key = label.toLowerCase().replace(/[^a-z]/g, ' ').trim().split(' ')[0];
-            return langMap[key] ? Array.from(langMap[key])[0] : null;
-        };
-
-        flagImg = function (code) {
-            if (!code) return '<span style="width:26px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa-solid fa-globe" style="font-size:13px;color:rgba(255,255,255,0.3);"></i></span>';
-            return '<img class="slg-flag" src="https://flagcdn.com/20x15/' + code + '.png" width="26" height="20" alt="">';
-        };
-
-    });
+flagImg = function (code) {
+    if (!code) return '<span style="width:26px;height:20px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa-solid fa-globe" style="font-size:13px;color:rgba(255,255,255,0.3);"></i></span>';
+    return '<img class="slg-flag" src="https://flagcdn.com/20x15/' + code + '.png" width="26" height="20" alt="">';
+};
 
 function play(raw, skipProxy, videoId) {
     (function () {

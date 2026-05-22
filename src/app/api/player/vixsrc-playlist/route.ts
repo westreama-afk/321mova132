@@ -974,6 +974,11 @@ const dedupeSources = (sources: PlaylistSource[]): PlaylistSource[] => {
   return sources.filter(s => !seen.has(s.file) && seen.add(s.file));
 };
 
+const normalizePlaylistSourceType = (source: PlaylistSource): PlaylistSource => {
+  const isMp4 = source.type === "mp4" || /\/mp4-proxy(?:\?|$)|\.mp4(?:[?#]|$)/i.test(source.file);
+  return { ...source, type: isMp4 ? "mp4" : "hls" };
+};
+
 const providerOrder = (provider: string | undefined) => {
   // Top Priority: NovaCast (Movish)
   if (provider === "movish") return 0;
@@ -1003,7 +1008,7 @@ const providerOrder = (provider: string | undefined) => {
 };
 
 const orderAndMarkDefault = (sources: PlaylistSource[]): PlaylistSource[] =>
-  dedupeSources(sources.slice().sort((a, b) => providerOrder(a.provider) - providerOrder(b.provider)))
+  dedupeSources(sources.map(normalizePlaylistSourceType).sort((a, b) => providerOrder(a.provider) - providerOrder(b.provider)))
     .map((source, index) => ({ ...source, default: index === 0 }));
 
 /**
@@ -1015,6 +1020,12 @@ export const runtime = "nodejs";
 export const GET = async (request: NextRequest) => {
   const { searchParams } = request.nextUrl;
   const requestParams = parseMediaRequest(searchParams);
+  const shouldEncodeUrls = searchParams.get("raw") !== "1";
+  const serializeSources = (sources: PlaylistSource[]) =>
+    sources.map((s) => ({
+      ...s,
+      file: shouldEncodeUrls ? encodePlayerStreamUrl(s.file) : s.file,
+    }));
   const forwardedFor = request.headers.get("x-forwarded-for");
   const clientIp = forwardedFor?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || null;
   const runContext: ScrapeRunContext = {
@@ -1037,7 +1048,7 @@ export const GET = async (request: NextRequest) => {
       const sourcePackSources = await fetchSourcePackSources(requestParams, clientIp);
       const mergedSources = orderAndMarkDefault([...cached, ...sourcePackSources]);
       console.log(`[Rive Response] Cache HIT for ${requestParams.type} (${requestParams.id}) — ${cached.length} cached, ${sourcePackSources.length} source-pack`);
-      const encodedSources = mergedSources.map((s) => ({ ...s, file: encodePlayerStreamUrl(s.file) }));
+      const encodedSources = serializeSources(mergedSources);
       return NextResponse.json({ playlist: [{ sources: encodedSources }] }, {
         headers: {
           "cache-control": "no-store, max-age=0",
@@ -1145,10 +1156,7 @@ export const GET = async (request: NextRequest) => {
       console.log(`  [${i}] ${s.label}: ${s.file.substring(0, 100)}...`);
     });
 
-  const encodedSources = orderedSources.map((s) => ({
-    ...s,
-    file: encodePlayerStreamUrl(s.file),
-  }));
+  const encodedSources = serializeSources(orderedSources);
 
   const response = { playlist: [{ sources: encodedSources }] };
 

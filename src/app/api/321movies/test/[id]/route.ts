@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getVylaSources } from "@/utils/vylaPlayerAdapter";
+import { GET as getPlaylist } from "@/app/api/player/vixsrc-playlist/route";
+import { mapPlaylistToVylaSources } from "@/utils/vylaPlayerAdapter";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -19,12 +20,19 @@ export async function GET(
   const type = season ? "tv" : "movie";
 
   try {
-    const sources = await getVylaSources(request.nextUrl.origin, {
-      type,
-      id,
-      season: season || "1",
-      episode: episode || "1",
-    });
+    const playlistUrl = new URL("/api/player/vixsrc-playlist", request.nextUrl.origin);
+    playlistUrl.searchParams.set("type", type);
+    playlistUrl.searchParams.set("id", id);
+    if (type === "tv") {
+      playlistUrl.searchParams.set("season", season || "1");
+      playlistUrl.searchParams.set("episode", episode || "1");
+    }
+    const playlistResponse = await getPlaylist(new NextRequest(playlistUrl, { headers: request.headers }));
+    if (!playlistResponse.ok) {
+      throw new Error(`Playlist request failed with HTTP ${playlistResponse.status}`);
+    }
+
+    const sources = mapPlaylistToVylaSources(await playlistResponse.json());
 
     const requestedSource = Number.isFinite(sourceIndex)
       ? sources[sourceIndex]

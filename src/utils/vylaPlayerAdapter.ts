@@ -128,7 +128,10 @@ export const getVylaSources = async (
     throw new Error(`Playlist request failed with HTTP ${response.status}`);
   }
 
-  const payload = (await response.json()) as PlaylistResponse;
+  return mapPlaylistToVylaSources((await response.json()) as PlaylistResponse);
+};
+
+export const mapPlaylistToVylaSources = (payload: PlaylistResponse): VylaSource[] => {
   const collected: Array<VylaSource & { priority: number; index: number }> = [];
 
   for (const item of payload.playlist || []) {

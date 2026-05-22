@@ -8,6 +8,40 @@
     var startAt = Number(params.get("startAt") || "0");
     var mediaType = season ? "tv" : "movie";
     var sourceCachePromise = null;
+    var SOURCE_ORDER = {
+        movish: 0,
+        flowcast: 1,
+        primevids: 2,
+        guru: 3,
+        vidlink: 4,
+        streamvault: 5,
+    };
+
+    function normalize(value) {
+        return (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+    }
+
+    function sourcePriority(source) {
+        var provider = normalize(source.provider);
+        var label = normalize(source.label);
+        if (provider === "movish" || label.indexOf("novacast") !== -1) return 0;
+        if (Object.prototype.hasOwnProperty.call(SOURCE_ORDER, provider)) return SOURCE_ORDER[provider];
+        if (provider.indexOf("sourcepack") === 0) return 20;
+        return 100;
+    }
+
+    function sourceKey(source) {
+        var provider = normalize(source.provider);
+        var label = normalize(source.label);
+        if (provider === "movish" || label.indexOf("novacast") !== -1) return "NovaCast";
+        return source.label || source.provider || "Source";
+    }
+
+    function sourceType(source) {
+        var file = source.file || "";
+        if (source.type === "mp4" || /\/mp4-proxy(?:\?|$)|\.mp4(?:[?#]|$)/i.test(file)) return "mp4";
+        return "hls";
+    }
 
     function toUrl(input) {
         var raw = typeof input === "string" ? input : input && input.url;
@@ -30,21 +64,68 @@
         return path + (search || "");
     }
 
+    function mapPlaylistSources(payload) {
+        var collected = [];
+        var playlist = Array.isArray(payload && payload.playlist) ? payload.playlist : [];
+
+        playlist.forEach(function (item) {
+            var itemSources = Array.isArray(item && item.sources) ? item.sources : [];
+            itemSources.forEach(function (source) {
+                if (!source || !source.file || (source.type !== "hls" && source.type !== "mp4")) return;
+
+                var key = sourceKey(source);
+                collected.push({
+                    source: key,
+                    sourceKey: key,
+                    label: source.label || key,
+                    provider: source.provider,
+                    url: source.file,
+                    raw_url: source.file,
+                    type: sourceType(source),
+                    timeout: 15000,
+                    _priority: sourcePriority(source),
+                    _index: collected.length,
+                });
+            });
+        });
+
+        var seen = {};
+        return collected
+            .filter(function (source) {
+                if (seen[source.url]) return false;
+                seen[source.url] = true;
+                return true;
+            })
+            .sort(function (a, b) {
+                return a._priority - b._priority || a._index - b._index;
+            })
+            .map(function (source) {
+                delete source._priority;
+                delete source._index;
+                return source;
+            });
+    }
+
     function loadSources() {
         if (!mediaId) return Promise.resolve([]);
         if (!sourceCachePromise) {
-            var path = mediaType === "tv"
-                ? "/api/321movies/tv?id=" + encodeURIComponent(mediaId) + "&season=" + encodeURIComponent(season || "1") + "&episode=" + encodeURIComponent(episode)
-                : "/api/321movies/movie?id=" + encodeURIComponent(mediaId);
+            var playlistParams = new URLSearchParams({
+                type: mediaType,
+                id: mediaId,
+                raw: "1",
+            });
 
-            sourceCachePromise = nativeFetch(path)
+            if (mediaType === "tv") {
+                playlistParams.set("season", season || "1");
+                playlistParams.set("episode", episode);
+            }
+
+            sourceCachePromise = nativeFetch("/api/player/vixsrc-playlist?" + playlistParams.toString())
                 .then(function (response) {
                     if (!response.ok) throw new Error("Source adapter HTTP " + response.status);
                     return response.json();
                 })
-                .then(function (data) {
-                    return Array.isArray(data.sources) ? data.sources : [];
-                })
+                .then(mapPlaylistSources)
                 .catch(function () {
                     sourceCachePromise = null;
                     return [];
@@ -123,11 +204,19 @@
             }
 
             if (url.pathname === "/api/movie") {
-                return nativeFetch(localApi("/api/321movies/movie", url.search), init);
+                return loadSources().then(function (sources) {
+                    return new Response(JSON.stringify({ sources: sources, subtitles: [], meta: { id: mediaId, type: "movie" } }), {
+                        headers: { "content-type": "application/json" },
+                    });
+                });
             }
 
             if (url.pathname === "/api/tv") {
-                return nativeFetch(localApi("/api/321movies/tv", url.search), init);
+                return loadSources().then(function (sources) {
+                    return new Response(JSON.stringify({ sources: sources, subtitles: [], meta: { id: mediaId, type: "tv", season: season, episode: episode } }), {
+                        headers: { "content-type": "application/json" },
+                    });
+                });
             }
 
             if (url.pathname.indexOf("/api/test/") === 0) {
@@ -246,7 +335,7 @@
             var observer = new MutationObserver(function () {
                 if (!errorScreen.classList.contains("show")) return;
                 window.parent.postMessage({
-                    type: "VYLA_PLAYER_FATAL_ERROR",
+                    type: "VYLA_PLAYER_ERROR_SCREEN",
                     message: errorScreen.textContent || "321movies player error",
                 }, "*");
             });
